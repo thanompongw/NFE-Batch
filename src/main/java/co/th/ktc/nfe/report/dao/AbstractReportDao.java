@@ -26,6 +26,8 @@ public abstract class AbstractReportDao extends JdbcDaoSupport {
 	
 	public abstract SqlRowSet query(Object[] parameter);
 	
+	public abstract SqlRowSet query(Object[] parameter,String sheetname);
+	
 	public abstract void success(Object[] parameter);
 	
 	public abstract void fail(Object[] parameter);

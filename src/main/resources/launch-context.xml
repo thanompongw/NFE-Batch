@@ -53,5 +53,18 @@
     <bean id="applicationRecieveGoodRightDao" class="co.th.ktc.nfe.report.dao.impl.ApplicationRecieveGoodRightDao">
 		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
     </bean>
+    
+    <bean id="approveReportDao" class="co.th.ktc.nfe.report.dao.impl.ApproveReportDao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
+    <bean id="applicationReceiveDao" class="co.th.ktc.nfe.report.dao.impl.ApplicationReceiveDao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
+    <bean id="cancelByOADDao" class="co.th.ktc.nfe.report.dao.impl.CancelByOADDao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
 
+    
 </beans>

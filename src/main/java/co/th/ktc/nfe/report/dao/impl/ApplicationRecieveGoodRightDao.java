@@ -1,11 +1,12 @@
 package co.th.ktc.nfe.report.dao.impl;
 
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import co.th.ktc.nfe.report.dao.AbstractReportDao;
 
-@Service("applicationRecieveGoodRightDao")
+@Service(value="applicationRecieveGoodRightDao")
 public class ApplicationRecieveGoodRightDao extends AbstractReportDao {
 
 	public ApplicationRecieveGoodRightDao() {
@@ -28,6 +29,11 @@ public class ApplicationRecieveGoodRightDao extends AbstractReportDao {
 	public void delete(Object[] parameter) {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public SqlRowSet query(Object[] parameter,String sheetname) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override

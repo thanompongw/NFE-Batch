@@ -46,6 +46,11 @@ public class BBCReportDao extends AbstractReportDao {
 		// TODO Auto-generated method stub
 
 	}
+	@Override
+	public SqlRowSet query(Object[] parameter,String sheetname) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	/* (non-Javadoc)
 	 * @see co.th.ktc.nfe.report.dao.AbstractReportDao#query(java.lang.Object[])

@@ -18,25 +18,24 @@ import co.th.ktc.nfe.common.CommonPOI;
 import co.th.ktc.nfe.common.DateTimeUtils;
 import co.th.ktc.nfe.report.bo.ReportBO;
 import co.th.ktc.nfe.report.dao.AbstractReportDao;
-import co.th.ktc.nfe.report.dao.impl.ApplicationRecieveGoodRightDao;
+import co.th.ktc.nfe.report.dao.impl.BBCReportDao;
 
 /**
  * @author Deedy
  *
  */
-@Component(value="applicationRecieveGoodRightService")
-public class ApplicationRecieveGoodRightBO implements ReportBO {
+@Component(value="BBCReportService")
+public class BBCReportBO implements ReportBO {
 	
-	private static Logger LOG = Logger.getLogger(ApplicationRecieveGoodRightBO.class);
+	private static Logger LOG = Logger.getLogger(BBCReportBO.class);
 	
-	private static final String REPORT_FILE_NAME = "ApplicationReceiveGoodrigthReport";
+	private static final String REPORT_FILE_NAME = "BBCReport";
 	
 	private Integer[] printDateRowColumn = new Integer[] {0, 10};
 	private Integer[] printTimeRowColumn = new Integer[] {1, 10};
 	private Integer[] reportDateRowColumn = new Integer[] {1, 5};
 	
-	@Autowired
-	private ApplicationRecieveGoodRightDao dao;
+	private BBCReportDao dao;
 	
 	@Autowired
 	private BatchConfiguration config;
@@ -44,9 +43,9 @@ public class ApplicationRecieveGoodRightBO implements ReportBO {
 	private CommonPOI poi;
 
 	/**
-	 * Default Constructor of ApplicationRecieveGoodRightBO Class.
+	 * Default Constructor of BBCReport Class.
 	 */
-	public ApplicationRecieveGoodRightBO() {
+	public BBCReportBO() {
 	}
 
 	public Integer execute(Map<String, String> parameter) {
@@ -59,6 +58,7 @@ public class ApplicationRecieveGoodRightBO implements ReportBO {
 			if (parameter == null || parameter.containsKey("REPORT_DATE")) {
 				parameter = new HashMap<String, String>();
 				currentDate = dao.getSetDate("DD/MM/YYYY");
+
 			} else {
 				currentDate = parameter.get("REPORT_DATE");
 			}
@@ -92,7 +92,6 @@ public class ApplicationRecieveGoodRightBO implements ReportBO {
 			//TODO: throws error to main function
 		}
 		return processStatus;
-		
 	}
 
 	public Workbook generateReport(Map<String, String> parameter) {
@@ -182,43 +181,47 @@ public class ApplicationRecieveGoodRightBO implements ReportBO {
 				poi.setObject(curSheet, 
 						  	  dataRows, 
 						  	  dataColumnIndex++,
-						  	  rowSet.getString("APP_DATETIME"));
+						  	  rowSet.getString("CUSTOMER_NAME"));
 				poi.setObject(curSheet, 
 						      dataRows, 
 						      dataColumnIndex++,
-						      rowSet.getString("GROUPLOAN_TYPE"));
+						      rowSet.getString("OPEN_DATE"));
 				poi.setObject(curSheet, 
 						  	  dataRows, 
 						  	  dataColumnIndex++,
-						  	  rowSet.getString("GROUPPRODUCT_TYPE"));
+						  	  rowSet.getString("AMOUNT"));
 				poi.setObject(curSheet, 
 						  	  dataRows, 
 						  	  dataColumnIndex++,
-						  	  rowSet.getString("APP_VSOURCE"));
+						  	  rowSet.getString("TERM"));
 				poi.setObject(curSheet, 
 						      dataRows, 
 						      dataColumnIndex++,
-						      rowSet.getString("APP_NO"));
+						      rowSet.getString("SOURCE_CODE"));
 				poi.setObject(curSheet, 
 						  	  dataRows, 
 						  	  dataColumnIndex++,
-						  	  rowSet.getString("APP_THAIFNAME"));
+						  	  rowSet.getString("BRANCH_CODE"));
 				poi.setObject(curSheet, 
 						      dataRows, 
 						      dataColumnIndex++,
-						      rowSet.getString("APP_THAILNAME"));
+						      rowSet.getString("AGENT_ID"));
 				poi.setObject(curSheet, 
 						  	  dataRows, 
 						  	  dataColumnIndex++,
-						  	  rowSet.getString("FULL_THAINAME"));
+						  	  rowSet.getString("APPLICATION_NO"));
 				poi.setObject(curSheet, 
 						      dataRows, 
 						      dataColumnIndex++,
-						      rowSet.getString("APP_CITIZENID"));
+						      rowSet.getString("COMMINTEREST"));
 				poi.setObject(curSheet, 
 						      dataRows, 
 						      dataColumnIndex++,
-						      rowSet.getString("APP_CHKNCB"));
+						      rowSet.getString("TAX"));
+				poi.setObject(curSheet, 
+						      dataRows, 
+						      dataColumnIndex++,
+						      rowSet.getString("PRODUCT_SUBPRODUCT"));
 				dataColumnIndex = 0;
 				dataRows++;
 			}

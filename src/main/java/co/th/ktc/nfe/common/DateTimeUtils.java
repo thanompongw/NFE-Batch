@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * @author Deedy
@@ -96,5 +97,10 @@ public class DateTimeUtils {
 		
 		return dateTimeTo;
 	}
+	public static Date toDate(String date, String format) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat(format,Locale.US);
+
+        return sdf.parse(date);
+    }
 
 }
