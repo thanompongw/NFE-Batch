@@ -86,7 +86,7 @@ public class ApplicationReceiveBO implements ReportBO {
 			currentDate = 
 					DateTimeUtils.convertFormatDateTime(currentDate, 
 														DateTimeUtils.DEFAULT_DATE_FORMAT, 
-														"ddMMyyyy");
+														"yyyyMMdd");
 			
 			poi.writeFile(report, fileName, dirPath, currentDate);
 		} catch (Exception e) {
@@ -156,8 +156,7 @@ public class ApplicationReceiveBO implements ReportBO {
 	                			rowSet,
 	                			NFEBatchConstants.BUNDLE_SHEET_NO,
 	                			NFEBatchConstants.BUNDLE_SHEET_NAME,
-	                			parameter);
-	
+	                			parameter);	
 			
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -27,11 +27,7 @@ public class ApproveBO implements ReportBO {
 	
 	private static Logger LOG = Logger.getLogger(ApproveBO.class);
 	
-	private static final String REPORT_FILE_NAME = "ApproveReportByDailyReport";
-	
-	private Integer[] printDateRowColumn = new Integer[] {0, 16};
-	private Integer[] printTimeRowColumn = new Integer[] {1, 16};
-	private Integer[] reportDateRowColumn = new Integer[] {1, 8};
+	private static final String REPORT_FILE_NAME = "ApproveByDailyReport";
 	
 	@Resource(name = "approveDao")
 	private AbstractReportDao dao;
@@ -87,7 +83,7 @@ public class ApproveBO implements ReportBO {
 			currentDate = 
 					DateTimeUtils.convertFormatDateTime(currentDate, 
 														DateTimeUtils.DEFAULT_DATE_FORMAT, 
-														"ddMMyyyy");
+														"yyyyMMdd");
 			
 			poi.writeFile(report, fileName, dirPath, currentDate);
 		} catch (Exception e) {

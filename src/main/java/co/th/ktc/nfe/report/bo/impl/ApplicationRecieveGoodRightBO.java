@@ -80,7 +80,7 @@ public class ApplicationRecieveGoodRightBO implements ReportBO {
 			currentDate = 
 					DateTimeUtils.convertFormatDateTime(currentDate, 
 														DateTimeUtils.DEFAULT_DATE_FORMAT, 
-														"ddMMyyyy");
+														"yyyyMMdd");
 			
 			poi.writeFile(report, fileName, dirPath, currentDate);
 		} catch (Exception e) {

@@ -10,13 +10,13 @@ import co.th.ktc.nfe.constants.NFEBatchConstants;
 import co.th.ktc.nfe.report.dao.AbstractReportDao;
 
 
-@Repository(value="approveDao")
-public class ApproveDao extends AbstractReportDao {
+@Repository(value = "cancelAfterApproveDao")
+public class CancelAfterApproveDao extends AbstractReportDao {
 
 	/**
 	 * 
 	 */
-	public ApproveDao() {
+	public CancelAfterApproveDao() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -75,7 +75,7 @@ public class ApproveDao extends AbstractReportDao {
 		sql.append("        FROM   NFE_APP_STATUSTRACKING ");
 		sql.append("        WHERE  STATUSTRACKING_ID > 0 ");
 		sql.append("        AND    STATUSTRACKING_APPNO = T1.APP_NO ");
-		sql.append("        AND    STATUSTRACKING_STATUS = '8F') AS DATE_APPROVE, ");
+		sql.append("        AND    STATUSTRACKING_STATUS = '9C') AS DATE_APPROVE, ");
 		sql.append("       T1.APP_NO AS APPLY_ID, ");
 		sql.append("       T4.APPROVE_CARDNO AS CARD_NO, ");
 		sql.append("       T1.APP_ENGFNAME || ' ' || T1.APP_ENGLNAME AS CUSTOMER_NAME, ");
@@ -185,7 +185,7 @@ public class ApproveDao extends AbstractReportDao {
 		sql.append("       JOIN NFE_APP_DATAANALYSIS T5  ");
 		sql.append("           ON T5.DTA_APPNO = T1.APP_NO ");
 		sql.append("WHERE  T1.APP_NO <> ' ' ");
-		sql.append("AND    T3.RESOLVE_STATUSCODE = '8A' ");
+		sql.append("AND    T3.RESOLVE_STATUSCODE = '9C' ");
 		sql.append("AND    T4.APPROVE_CREDITTYPE = 'M' ");
 		if (parameter != null && parameter.length > 0) {
 			if (parameter[0].equals(NFEBatchConstants.BUNDLE_GROUP_LOANTYPE)) {
@@ -216,7 +216,7 @@ public class ApproveDao extends AbstractReportDao {
 		sql.append("               FROM   NFE_APP_STATUSTRACKING ");
 		sql.append("               WHERE  STATUSTRACKING_ID > 0 ");
 		sql.append("               AND    STATUSTRACKING_APPNO = T1.APP_NO ");
-		sql.append("               AND    STATUSTRACKING_STATUS = '8F' ");
+		sql.append("               AND    STATUSTRACKING_STATUS = '9C' ");
 		sql.append("               AND    (STATUSTRACKING_ENDTIME BETWEEN TO_TIMESTAMP(?, 'DD/MM/YYYY HH24:MI:SS') ");
 		sql.append("                                                  AND TO_TIMESTAMP(?, 'DD/MM/YYYY HH24:MI:SS'))) ");
 		if (parameter.length > 4) {
@@ -227,7 +227,7 @@ public class ApproveDao extends AbstractReportDao {
 			sql.append("        FROM   NFE_APP_STATUSTRACKING ");
 			sql.append("        WHERE  STATUSTRACKING_ID > 0 ");
 			sql.append("        AND    STATUSTRACKING_APPNO = S1.APPSUP_APPNO ");
-			sql.append("        AND    STATUSTRACKING_STATUS = '8F') AS DATE_APPROVE, ");
+			sql.append("        AND    STATUSTRACKING_STATUS = '9C') AS DATE_APPROVE, ");
 			sql.append("       S1.APPSUP_APPNO AS APPLY_ID, ");
 			sql.append("       S4.APPROVE_CARDNO AS CARD_NO, ");
 			sql.append("       S1.APPSUP_ENGFNAME || ' ' || S1.APPSUP_ENGLNAME AS CUSTOMER_NAME, ");
@@ -283,7 +283,7 @@ public class ApproveDao extends AbstractReportDao {
 			sql.append("       LEFT JOIN NFE_APP_APPROVE S4  ");
 			sql.append("           ON S4.APPROVE_RESOLVEID = S3.RESOLVE_ID ");
 			sql.append("WHERE  S1.APPSUP_APPNO <> ' ' ");
-			sql.append("AND    S3.RESOLVE_STATUSCODE = '8A' ");
+			sql.append("AND    S3.RESOLVE_STATUSCODE = '9C' ");
 			sql.append("AND    S4.APPROVE_CREDITTYPE = 'S' ");
 			sql.append("AND    EXISTS (SELECT 'X' ");
 			sql.append("               FROM   NFE_MS_GROUPPRODUCT G,  ");
@@ -295,7 +295,7 @@ public class ApproveDao extends AbstractReportDao {
 			sql.append("               FROM   NFE_APP_STATUSTRACKING ");
 			sql.append("               WHERE  STATUSTRACKING_ID > 0 ");
 			sql.append("               AND    STATUSTRACKING_APPNO = S1.APPSUP_APPNO ");
-			sql.append("               AND    STATUSTRACKING_STATUS = '8F' ");
+			sql.append("               AND    STATUSTRACKING_STATUS = '9C' ");
 			sql.append("               AND    (STATUSTRACKING_ENDTIME BETWEEN TO_TIMESTAMP(?, 'DD/MM/YYYY HH24:MI:SS') ");
 			sql.append("                                                  AND TO_TIMESTAMP(?, 'DD/MM/YYYY HH24:MI:SS')))");
 			sql.append(") A ");

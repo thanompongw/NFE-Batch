@@ -13,11 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import co.th.ktc.nfe.report.bo.impl.ApproveBO;
+import co.th.ktc.nfe.report.bo.impl.CancelByOABO;
 
 @ContextConfiguration(locations={"/launch-context.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class ApproveReportTests extends TestCase {
+public class CancelByOATests extends TestCase {
 	
 	@Autowired
 	private JobLauncher jobLauncher;
@@ -26,7 +26,7 @@ public class ApproveReportTests extends TestCase {
 	private Job job;
 	
 	@Autowired
-	private ApproveBO bo;
+	private CancelByOABO bo;
 
 	@Test
 	public void testExecute() {

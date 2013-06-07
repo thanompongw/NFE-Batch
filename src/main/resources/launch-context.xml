@@ -54,7 +54,7 @@
 		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
     </bean>
     
-    <bean id="approveReportDao" class="co.th.ktc.nfe.report.dao.impl.ApproveReportDao">
+    <bean id="approveDao" class="co.th.ktc.nfe.report.dao.impl.ApproveDao">
 		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
     </bean>
     
@@ -62,7 +62,15 @@
 		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
     </bean>
     
-    <bean id="cancelByOADDao" class="co.th.ktc.nfe.report.dao.impl.CancelByOADDao">
+    <bean id="bbcDao" class="co.th.ktc.nfe.report.dao.impl.BBCDao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
+    <bean id="cancelByOADao" class="co.th.ktc.nfe.report.dao.impl.CancelByOADao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
+    <bean id="cancelAfterApproveDao" class="co.th.ktc.nfe.report.dao.impl.CancelAfterApproveDao">
 		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
     </bean>
 
