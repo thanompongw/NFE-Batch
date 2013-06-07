@@ -25,18 +25,18 @@ import co.th.ktc.nfe.report.dao.AbstractReportDao;
  * @author Deedy
  *
  */
-@Service(value = "applicationRecieveGoodRightService")
-public class ApplicationRecieveGoodRightBO implements ReportBO {
+@Service(value="clOfYearlyIncome10Service")
+public class CLOfYearlyIncome10BO implements ReportBO {
 	
-	private static Logger LOG = Logger.getLogger(ApplicationRecieveGoodRightBO.class);
+	private static Logger LOG = Logger.getLogger(CLOfYearlyIncome10BO.class);
 	
-	private static final String REPORT_FILE_NAME = "ApplicationReceiveGoodrigthReport";
+	private static final String REPORT_FILE_NAME = "CLM10YINCOME";
 	
-	private Integer[] printDateRowColumn = new Integer[] {0, 10};
-	private Integer[] printTimeRowColumn = new Integer[] {1, 10};
+	private Integer[] printDateRowColumn = new Integer[] {0, 11};
+	private Integer[] printTimeRowColumn = new Integer[] {1, 11};
 	private Integer[] reportDateRowColumn = new Integer[] {1, 6};
 	
-	@Resource(name = "applicationRecieveGoodRightDao")
+	@Resource(name = "clOfYearlyIncome10Dao")
 	private AbstractReportDao dao;
 	
 	@Autowired
@@ -45,9 +45,9 @@ public class ApplicationRecieveGoodRightBO implements ReportBO {
 	private CommonPOI poi;
 
 	/**
-	 * Default Constructor of ApplicationRecieveGoodRightBO Class.
+	 * Default Constructor of CLOfYearlyIncome10BO Class.
 	 */
-	public ApplicationRecieveGoodRightBO() {
+	public CLOfYearlyIncome10BO() {
 	}
 
 	public Integer execute(Map<String, String> parameter) {
@@ -165,54 +165,67 @@ public class ApplicationRecieveGoodRightBO implements ReportBO {
                             dataRows,
                             lastRow,
                             minColIdx,
-                            maxColIdx - 1
-                            );
-				//Seq.
+                            maxColIdx - 1);
+				//No.
 				poi.setObject(curSheet, 
 							  dataRows, 
 							  dataColumnIndex++,
 							  rowSet.getRow());
-				//Date Rec.
+				//CARDHOLDERNO.
 				poi.setObject(curSheet, 
 						  	  dataRows, 
 						  	  dataColumnIndex++,
-						  	  rowSet.getString("APP_DATETIME"));
+						  	  rowSet.getString("CARDHOLDERNO"));
+				//NAMES
 				poi.setObject(curSheet, 
 						      dataRows, 
 						      dataColumnIndex++,
-						      rowSet.getString("GROUPLOAN_TYPE"));
+						      rowSet.getString("NAMES"));
+				//CITIZENID
 				poi.setObject(curSheet, 
 						  	  dataRows, 
 						  	  dataColumnIndex++,
-						  	  rowSet.getString("GROUPPRODUCT_TYPE"));
+						  	  rowSet.getString("CITIZENID"));
+				//OPENDATE
 				poi.setObject(curSheet, 
 						  	  dataRows, 
 						  	  dataColumnIndex++,
-						  	  rowSet.getString("APP_VSOURCE"));
-				poi.setObject(curSheet, 
-						      dataRows, 
-						      dataColumnIndex++,
-						      rowSet.getString("APP_NO"));
+						  	  rowSet.getString("OPENDATE"));
+				//HOUSEHOLDLIMIT
 				poi.setObject(curSheet, 
 						  	  dataRows, 
 						  	  dataColumnIndex++,
-						  	  rowSet.getString("APP_THAIFNAME"));
+						  	  rowSet.getDouble("HOUSEHOLDLIMIT"));
+				//CARDLIMIT
 				poi.setObject(curSheet, 
 						      dataRows, 
 						      dataColumnIndex++,
-						      rowSet.getString("APP_THAILNAME"));
+						      rowSet.getDouble("CARDLIMIT"));
+				//ANNUALINCOME
 				poi.setObject(curSheet, 
 						  	  dataRows, 
 						  	  dataColumnIndex++,
-						  	  rowSet.getString("FULL_THAINAME"));
+						  	  rowSet.getDouble("ANNUALINCOME"));
+				//CUSTOMERTYPE
 				poi.setObject(curSheet, 
 						      dataRows, 
 						      dataColumnIndex++,
-						      rowSet.getString("APP_CITIZENID"));
+						      rowSet.getString("CUSTOMERTYPE"));
+				//CRLIMITANNUALINCOME10PERCENT
+				poi.setObject(curSheet, 
+						  	  dataRows, 
+						  	  dataColumnIndex++,
+						  	  rowSet.getDouble("CRLIMITANNUALINCOME10PERCENT"));
+				//LASTMAINTAINDATE
 				poi.setObject(curSheet, 
 						      dataRows, 
 						      dataColumnIndex++,
-						      rowSet.getString("APP_CHKNCB"));
+						      rowSet.getString("LASTMAINTAINDATE"));
+				//MAINTAINOPERID
+				poi.setObject(curSheet, 
+						      dataRows, 
+						      dataColumnIndex++,
+						      rowSet.getString("MAINTAINOPERID"));
 				dataColumnIndex = 0;
 				dataRows++;
 			}

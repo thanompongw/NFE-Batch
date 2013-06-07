@@ -73,6 +73,21 @@
     <bean id="cancelAfterApproveDao" class="co.th.ktc.nfe.report.dao.impl.CancelAfterApproveDao">
 		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
     </bean>
-
+    
+    <bean id="cancelByCAUDao" class="co.th.ktc.nfe.report.dao.impl.CancelByCAUDao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
+    <bean id="cauPerformanceDao" class="co.th.ktc.nfe.report.dao.impl.CAUPerformanceDao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
+    <bean id="clOfYearlyIncome10Dao" class="co.th.ktc.nfe.report.dao.impl.CLOfYearlyIncome10Dao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
+    <bean id="declineByCAUDao" class="co.th.ktc.nfe.report.dao.impl.DeclineByCAUDao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
     
 </beans>
