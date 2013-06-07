@@ -1,5 +1,8 @@
 package co.th.ktc.nfe.report;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import junit.framework.TestCase;
 
 import org.junit.Test;
@@ -27,8 +30,12 @@ public class ApplicationRecieveGoodRightTests extends TestCase {
 
 	@Test
 	public void testExecute() {
+		
+		Map<String, String> parameter = new HashMap<String, String>();
+		
+		parameter.put("REPORT_DATE", "01/04/2013");
 			
-		int status = bo.execute(null);
+		int status = bo.execute(parameter);
 		
 		if (status == 1) {
 			fail("Generate Report Error!!");

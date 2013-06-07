@@ -6,12 +6,12 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import co.th.ktc.nfe.report.bo.impl.ApproveReportBO;
+import co.th.ktc.nfe.report.bo.impl.ApproveBO;
 
 public class ApproveReportTask implements Tasklet {
 
 	@Autowired
-	private ApproveReportBO bo;
+	private ApproveBO bo;
 
 	/**
 	 * 

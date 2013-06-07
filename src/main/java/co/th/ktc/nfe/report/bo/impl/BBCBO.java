@@ -6,36 +6,38 @@ package co.th.ktc.nfe.report.bo.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import co.th.ktc.nfe.common.BatchConfiguration;
 import co.th.ktc.nfe.common.CommonPOI;
 import co.th.ktc.nfe.common.DateTimeUtils;
 import co.th.ktc.nfe.report.bo.ReportBO;
 import co.th.ktc.nfe.report.dao.AbstractReportDao;
-import co.th.ktc.nfe.report.dao.impl.BBCReportDao;
 
 /**
  * @author Deedy
  *
  */
-@Component(value="BBCReportService")
-public class BBCReportBO implements ReportBO {
+@Service(value = "BBCReportService")
+public class BBCBO implements ReportBO {
 	
-	private static Logger LOG = Logger.getLogger(BBCReportBO.class);
+	private static Logger LOG = Logger.getLogger(BBCBO.class);
 	
 	private static final String REPORT_FILE_NAME = "BBCReport";
 	
 	private Integer[] printDateRowColumn = new Integer[] {0, 10};
 	private Integer[] printTimeRowColumn = new Integer[] {1, 10};
-	private Integer[] reportDateRowColumn = new Integer[] {1, 5};
+	private Integer[] reportDateRowColumn = new Integer[] {1, 4};
 	
-	private BBCReportDao dao;
+	@Resource(name = "bbcDao")
+	private AbstractReportDao dao;
 	
 	@Autowired
 	private BatchConfiguration config;
@@ -45,7 +47,7 @@ public class BBCReportBO implements ReportBO {
 	/**
 	 * Default Constructor of BBCReport Class.
 	 */
-	public BBCReportBO() {
+	public BBCBO() {
 	}
 
 	public Integer execute(Map<String, String> parameter) {
@@ -55,7 +57,7 @@ public class BBCReportBO implements ReportBO {
 			
 			String currentDate = null;
 			
-			if (parameter == null || parameter.containsKey("REPORT_DATE")) {
+			if (parameter == null) {
 				parameter = new HashMap<String, String>();
 				currentDate = dao.getSetDate("DD/MM/YYYY");
 
@@ -83,7 +85,7 @@ public class BBCReportBO implements ReportBO {
 			currentDate = 
 					DateTimeUtils.convertFormatDateTime(currentDate, 
 														DateTimeUtils.DEFAULT_DATE_FORMAT, 
-														"dd_MM_yyyy");
+														"ddMMyyyy");
 			
 			poi.writeFile(report, fileName, dirPath, currentDate);
 		} catch (Exception e) {
@@ -98,10 +100,9 @@ public class BBCReportBO implements ReportBO {
 		
 		Workbook workbook = poi.getWorkBook();
 		int detailSheetNo = 0;
-		int templateDetailSheetNo = detailSheetNo;
 		
-		SqlRowSet rowSet = dao.query(new Object[] { parameter.get("DATE_FROM"),
-													parameter.get("DATE_TO")});
+		SqlRowSet rowSet = dao.query(new Object[] {parameter.get("DATE_FROM"),
+												   parameter.get("DATE_TO")});
 		
 		if (rowSet != null && rowSet.isBeforeFirst()) {
 			
@@ -109,19 +110,12 @@ public class BBCReportBO implements ReportBO {
 					DateTimeUtils.convertFormatDateTime(parameter.get("REPORT_DATE"), 
 														DateTimeUtils.DEFAULT_DATE_FORMAT, 
 														"dd-MM-yyyy");
-			
-        	workbook.cloneSheet(detailSheetNo);
-			workbook.setSheetName(detailSheetNo, sheetName);
-			
-			templateDetailSheetNo = workbook.getNumberOfSheets() - 1;
 
         	this.generateReport(workbook,
 								rowSet, 
 								detailSheetNo,
-								templateDetailSheetNo, 
+								sheetName, 
 								parameter);
-			
-			workbook.removeSheetAt(templateDetailSheetNo);
         } else {
         	//TODO: throws error to main function
         }
@@ -132,12 +126,16 @@ public class BBCReportBO implements ReportBO {
 	private void generateReport(Workbook workbook,
 							    SqlRowSet rowSet,
 							    int sheetNo,
-							    int templateSheetNo, 
+							    String sheetName, 
 							    Map<String, String> parameter) {
 		
-		Sheet curSheet = workbook.getSheetAt(sheetNo);
-		
 		try {
+			workbook.cloneSheet(sheetNo);
+			workbook.setSheetName(sheetNo, sheetName);
+			Sheet curSheet = workbook.getSheetAt(sheetNo);
+			
+			int templateSheetNo = workbook.getNumberOfSheets() - 1;
+			
 			//HEADER REPORT
 			// Print Date:
 			poi.setObject(curSheet, 
@@ -163,61 +161,63 @@ public class BBCReportBO implements ReportBO {
 			int dataColumnIndex = 0;
 			
 			 while (rowSet.next()) {
-	                if (!rowSet.isLast()) {
-	                    poi.copyRow(sheetNo,
-	                                templateSheetNo,
-	                                dataRows,
-	                                lastRow,
-	                                minColIx,
-	                                maxColIx - 1
-	                                );
-	                }
-				//Seq.
-				poi.setObject(curSheet, 
-							  dataRows, 
-							  dataColumnIndex++,
-							  rowSet.getRow());
-				//Date Rec.
+                poi.copyRow(sheetNo,
+                            templateSheetNo,
+                            dataRows,
+                            lastRow,
+                            minColIx,
+                            maxColIx - 1);
+				//CUSTOMER_NAME.
 				poi.setObject(curSheet, 
 						  	  dataRows, 
 						  	  dataColumnIndex++,
 						  	  rowSet.getString("CUSTOMER_NAME"));
+				//OPEN_DATE.
 				poi.setObject(curSheet, 
 						      dataRows, 
 						      dataColumnIndex++,
 						      rowSet.getString("OPEN_DATE"));
+				//AMOUNT.
 				poi.setObject(curSheet, 
 						  	  dataRows, 
 						  	  dataColumnIndex++,
-						  	  rowSet.getString("AMOUNT"));
+						  	  rowSet.getDouble("AMOUNT"));
+				//TERM.
 				poi.setObject(curSheet, 
 						  	  dataRows, 
 						  	  dataColumnIndex++,
-						  	  rowSet.getString("TERM"));
+						  	  rowSet.getInt("TERM"));
+				//SOURCE_CODE.
 				poi.setObject(curSheet, 
 						      dataRows, 
 						      dataColumnIndex++,
 						      rowSet.getString("SOURCE_CODE"));
+				//BRANCH_CODE.
 				poi.setObject(curSheet, 
 						  	  dataRows, 
 						  	  dataColumnIndex++,
 						  	  rowSet.getString("BRANCH_CODE"));
+				//AGENT_ID.
 				poi.setObject(curSheet, 
 						      dataRows, 
 						      dataColumnIndex++,
 						      rowSet.getString("AGENT_ID"));
+				//APPLICATION_NO.
 				poi.setObject(curSheet, 
 						  	  dataRows, 
 						  	  dataColumnIndex++,
 						  	  rowSet.getString("APPLICATION_NO"));
+				//COMMINTEREST.
 				poi.setObject(curSheet, 
 						      dataRows, 
 						      dataColumnIndex++,
-						      rowSet.getString("COMMINTEREST"));
+						      rowSet.getDouble("COMMINTEREST"));
+				//TAX.
 				poi.setObject(curSheet, 
 						      dataRows, 
 						      dataColumnIndex++,
-						      rowSet.getString("TAX"));
+						      rowSet.getDouble("TAX"));
+				//PRODUCT_SUBPRODUCT.
 				poi.setObject(curSheet, 
 						      dataRows, 
 						      dataColumnIndex++,
@@ -225,6 +225,7 @@ public class BBCReportBO implements ReportBO {
 				dataColumnIndex = 0;
 				dataRows++;
 			}
+			workbook.removeSheetAt(templateSheetNo);
 		} catch (Exception e) {
 			e.printStackTrace();
 			//TODO: throws error to main function

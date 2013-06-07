@@ -12,20 +12,19 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import co.th.ktc.nfe.common.BatchConfiguration;
 import co.th.ktc.nfe.common.CommonPOI;
 import co.th.ktc.nfe.common.DateTimeUtils;
-import co.th.ktc.nfe.constants.NFEBatchConstants;
 import co.th.ktc.nfe.report.bo.ReportBO;
 import co.th.ktc.nfe.report.dao.AbstractReportDao;
 
 
-@Component(value="cancelByOADService")
-public class CancelByOADBO implements ReportBO {
+@Service(value = "cancelByOAService")
+public class CancelByOABO implements ReportBO {
 	
-	private static Logger LOG = Logger.getLogger(CancelByOADBO.class);
+	private static Logger LOG = Logger.getLogger(CancelByOABO.class);
 	
 	private static final String REPORT_FILE_NAME = "CancelByOADreport";
 	public static final String CREDIT_CARD_SHEET_NAME = "Credit Card";
@@ -34,7 +33,7 @@ public class CancelByOADBO implements ReportBO {
     public static final String REVOLVING_LOAN_SHEET_NAME = "Revolving Loan";
 	
 	
-	@Resource(name="cancelByOADDao")
+	@Resource(name="cancelByOADao")
 	private AbstractReportDao dao;
 	
 	@Autowired
@@ -45,7 +44,7 @@ public class CancelByOADBO implements ReportBO {
 	/**
 	 * Default Constructor of CancelByOADBO Class.
 	 */
-	public CancelByOADBO() {
+	public CancelByOABO() {
 	}
 
 	public Integer execute(Map<String, String> parameter) {
@@ -71,11 +70,6 @@ public class CancelByOADBO implements ReportBO {
 			parameter.put("PRINT_TIME",DateTimeUtils.getCurrentDateTime(DateTimeUtils.DEFAULT_TIME_FORMAT));
 			parameter.put("DATE_FROM", fromTimestamp);
 			parameter.put("DATE_TO", toTimestamp);
-			
-			parameter.put("CREDIT_CARD_SHEET_NAME", NFEBatchConstants.CREDIT_CARD_SHEET_NAME);
-			parameter.put("BUNDLE_SHEET_NAME", NFEBatchConstants.BUNDLE_SHEET_NAME);
-			parameter.put("FIXED_LOAN_SHEET_NAME", NFEBatchConstants.FIXED_LOAN_SHEET_NAME);
-			parameter.put("REVOLVING_LOAN_SHEET_NAME", NFEBatchConstants.REVOLVING_LOAN_SHEET_NAME);
 			
 			// report
 			Workbook report = generateReport(parameter);
@@ -108,8 +102,7 @@ public class CancelByOADBO implements ReportBO {
 														parameter.get("CREDIT_CARD_SHEET_NAME"),
 														parameter.get("CREDIT_CARD_SHEET_NAME"),
 														parameter.get("DATE_FROM"),
-														parameter.get("DATE_TO")},
-														parameter.get("CREDIT_CARD_SHEET_NAME"));
+														parameter.get("DATE_TO") });
 
 			this.generateReport(workbook,
 	                rowSet,
@@ -122,8 +115,7 @@ public class CancelByOADBO implements ReportBO {
 												parameter.get("FIXED_LOAN_SHEET_NAME"),
 		    									parameter.get("FIXED_LOAN_SHEET_NAME"),
 	    										parameter.get("DATE_FROM"),
-												parameter.get("DATE_TO")},
-												parameter.get("FIXED_LOAN_SHEET_NAME"));
+												parameter.get("DATE_TO") });
 		    
 			this.generateReport(workbook,
 	                rowSet,
@@ -136,8 +128,7 @@ public class CancelByOADBO implements ReportBO {
 												parameter.get("REVOLVING_LOAN_SHEET_NAME"),
 												parameter.get("REVOLVING_LOAN_SHEET_NAME"),
 												parameter.get("DATE_FROM"),
-												parameter.get("DATE_TO")},
-												parameter.get("REVOLVING_LOAN_SHEET_NAME"));
+												parameter.get("DATE_TO") });
 			
 			this.generateReport(workbook,
 	                rowSet,
@@ -150,8 +141,7 @@ public class CancelByOADBO implements ReportBO {
 												parameter.get("BUNDLE_SHEET_NAME"),
 												parameter.get("BUNDLE_SHEET_NAME"),
 												parameter.get("DATE_FROM"),
-												parameter.get("DATE_TO")},
-												parameter.get("BUNDLE_SHEET_NAME"));
+												parameter.get("DATE_TO") });
 			
 			this.generateReport(workbook,
 	                rowSet,

@@ -1,10 +1,12 @@
 package co.th.ktc.nfe.report.dao.impl;
 
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.stereotype.Repository;
 
 import co.th.ktc.nfe.report.dao.AbstractReportDao;
 
-public class CancelByOADDao extends AbstractReportDao {
+@Repository(value = "cancelByOADao")
+public class CancelByOADao extends AbstractReportDao {
 
 	@Override
 	public void insert(Object[] parameter) {
@@ -26,12 +28,6 @@ public class CancelByOADDao extends AbstractReportDao {
 
 	@Override
 	public SqlRowSet query(Object[] parameter) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public SqlRowSet query(Object[] parameter, String sheetname) {
 		
 		StringBuilder sql = new StringBuilder();
 		
@@ -89,7 +85,7 @@ public class CancelByOADDao extends AbstractReportDao {
 		sql.append("                     AND T4.STATUSTRACKING_STATUS = '2C'  ");
 		sql.append("                  LEFT JOIN NFE_APP_MEMO T5  ");
 		sql.append("                     ON T5.MEMO_APPNO = T1.APP_NO ");
-		if (sheetname!= null && sheetname.equals("N")) {
+		if (true) {
 			sql.append(" WHERE  (EXISTS  ");
 			sql.append("                      (SELECT 'X'  ");
 			sql.append("                        FROM NFE_MS_GROUPPRODUCT G, NFE_MS_PRODUCT P  ");
@@ -110,9 +106,9 @@ public class CancelByOADDao extends AbstractReportDao {
 			sql.append("                         FROM NFE_MS_GROUPPRODUCT G, NFE_MS_PRODUCT P  ");
 			sql.append("                         WHERE G.GROUPPRODUCT_ID = P.PRODUCT_GROUPPRODUCTID  ");
 			sql.append("                              AND P.PRODUCT_ID = T2.APPPRODUCT_PRODUCTID  ");
-			sql.append("                              AND (G.GROUPPRODUCT_LOANTYPE IN (?, 'B')  ");
+			sql.append("                              AND (G.GROUPPRODUCT_LOANTYPE IN (?, ?)  ");
 			sql.append("                                   OR (G.GROUPPRODUCT_TYPE = 'B'  ");
-			sql.append("                                   AND G.GROUPPRODUCT_LOANTYPE IN (?, 'B'))))  ");
+			sql.append("                                   AND G.GROUPPRODUCT_LOANTYPE IN (?, ?))))  ");
 			sql.append("                OR EXISTS  ");
 			sql.append("                      (SELECT 'X'  ");
 			sql.append("                         FROM NFE_MS_GROUPPRODUCT  ");

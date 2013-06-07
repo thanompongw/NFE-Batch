@@ -1,12 +1,11 @@
 package co.th.ktc.nfe.report.dao.impl;
 
 import org.springframework.jdbc.support.rowset.SqlRowSet;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import co.th.ktc.nfe.report.dao.AbstractReportDao;
 
-@Service(value="applicationRecieveGoodRightDao")
+@Repository(value="applicationRecieveGoodRightDao")
 public class ApplicationRecieveGoodRightDao extends AbstractReportDao {
 
 	public ApplicationRecieveGoodRightDao() {
@@ -29,11 +28,6 @@ public class ApplicationRecieveGoodRightDao extends AbstractReportDao {
 	public void delete(Object[] parameter) {
 		// TODO Auto-generated method stub
 		
-	}
-	@Override
-	public SqlRowSet query(Object[] parameter,String sheetname) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -66,8 +60,8 @@ public class ApplicationRecieveGoodRightDao extends AbstractReportDao {
 		sql.append("                ELSE ' ' ");
 		sql.append("            END) AS GROUPLOAN_TYPE, ");
 		sql.append("        (SELECT GROUPPRODUCT_TYPE ");
-		sql.append("        FROM NFE_MS_GROUPPRODUCT ");
-		sql.append("        WHERE GROUPPRODUCT_ID = APP_GROUPPRODUCT) AS GROUPPRODUCT_TYPE, ");
+		sql.append("         FROM NFE_MS_GROUPPRODUCT ");
+		sql.append("         WHERE GROUPPRODUCT_ID = APP_GROUPPRODUCT) AS GROUPPRODUCT_TYPE, ");
 		sql.append("        APP_VSOURCE, ");
 		sql.append("        APP_NO, ");
 		sql.append("        APP_THAIFNAME, ");
@@ -78,7 +72,7 @@ public class ApplicationRecieveGoodRightDao extends AbstractReportDao {
 		sql.append("FROM NFE_APPLICATION ");
 		sql.append("WHERE APP_NO <> ' '  ");
 		sql.append("AND   (APP_DATETIME BETWEEN TO_TIMESTAMP(?, 'DD/MM/YYYY HH24:mi:ss') ");
-		sql.append("                    AND TO_TIMESTAMP(?, 'DD/MM/YYYY HH24:mi:ss')) ");
+		sql.append("                        AND TO_TIMESTAMP(?, 'DD/MM/YYYY HH24:mi:ss')) ");
 		sql.append("ORDER BY APP_NO ");
 		
 		SqlRowSet sqlRowSet =
