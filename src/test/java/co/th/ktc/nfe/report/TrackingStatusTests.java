@@ -3,8 +3,6 @@ package co.th.ktc.nfe.report;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Resource;
-
 import junit.framework.TestCase;
 
 import org.junit.Test;
@@ -15,11 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import co.th.ktc.nfe.report.bo.ReportBO;
+import co.th.ktc.nfe.report.bo.impl.TrackingStatusBO;
 
 @ContextConfiguration(locations={"/launch-context.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class ApplicationReceiveTests extends TestCase {
+public class TrackingStatusTests extends TestCase {
 	
 	@Autowired
 	private JobLauncher jobLauncher;
@@ -27,15 +25,15 @@ public class ApplicationReceiveTests extends TestCase {
 	@Autowired
 	private Job job;
 	
-	@Resource(name = "applicationReceiveService")
-	private ReportBO bo;
+	@Autowired
+	private TrackingStatusBO bo;
 
 	@Test
 	public void testExecute() {
 		
 		Map<String, String> parameter = new HashMap<String, String>();
 		
-		parameter.put("REPORT_DATE", "01/04/2013");
+		parameter.put("REPORT_DATE", "11/06/2013");
 			
 		int status = bo.execute(parameter);
 		

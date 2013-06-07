@@ -27,7 +27,7 @@ import co.th.ktc.nfe.report.dao.AbstractReportDao;
  * @author Deedy
  *
  */
-@Service(value = "applicationReceivereportService")
+@Service(value = "applicationReceiveService")
 public class ApplicationReceiveBO implements ReportBO {
 	
 	private static Logger LOG = Logger.getLogger(ApplicationReceiveBO.class);
@@ -53,7 +53,6 @@ public class ApplicationReceiveBO implements ReportBO {
 	public ApplicationReceiveBO() {
 	}
 	
-	@Override
 	public Integer execute(Map<String, String> parameter) {
 		Integer processStatus = 0;
 		try {
@@ -98,7 +97,6 @@ public class ApplicationReceiveBO implements ReportBO {
 
 	}
 
-	@Override
 	public Workbook generateReport(Map<String, String> parameter) {
 
 		Workbook workbook = poi.getWorkBook();

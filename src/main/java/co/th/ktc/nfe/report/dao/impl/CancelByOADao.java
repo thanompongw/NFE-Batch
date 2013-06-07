@@ -32,6 +32,12 @@ public class CancelByOADao extends AbstractReportDao {
 		
 		StringBuilder sql = new StringBuilder();
 		
+		if (parameter.length > 6) {
+			sql.append("SELECT A.* ");
+			sql.append("FROM ");
+			sql.append("( ");
+		}
+		
 		sql.append("SELECT (CASE ");
 		sql.append("            WHEN EXISTS (SELECT 'X' ");
 		sql.append("                         FROM   NFE_MS_GROUPPRODUCT ");
@@ -140,6 +146,90 @@ public class CancelByOADao extends AbstractReportDao {
 		sql.append("               AND    STATUSTRACKING_STATUS = '2C' ");
 		sql.append("               AND    (STATUSTRACKING_ENDTIME BETWEEN TO_TIMESTAMP(?, 'DD/MM/YYYY HH24:MI:SS') ");
 		sql.append("                                                  AND TO_TIMESTAMP(?, 'DD/MM/YYYY HH24:MI:SS'))) ");
+		if (parameter.length > 6) {
+			sql.append("UNION ALL ");
+			sql.append("SELECT (CASE  ");
+			sql.append("            WHEN EXISTS (SELECT 'X'  ");
+			sql.append("                         FROM   NFE_MS_GROUPPRODUCT  ");
+			sql.append("                         WHERE  GROUPPRODUCT_ID = S2.APP_GROUPPRODUCT  ");
+			sql.append("                         AND    GROUPPRODUCT_LOANTYPE IN ('C', 'B'))  ");
+			sql.append("            THEN 'CC'  ");
+			sql.append("            WHEN EXISTS (SELECT 'X'  ");
+			sql.append("                         FROM   NFE_MS_GROUPPRODUCT  ");
+			sql.append("                         WHERE  GROUPPRODUCT_ID = S2.APP_GROUPPRODUCT  ");
+			sql.append("                         AND    GROUPPRODUCT_LOANTYPE = 'F')   ");
+			sql.append("            THEN 'PL'  ");
+			sql.append("            WHEN EXISTS (SELECT 'X'  ");
+			sql.append("                         FROM   NFE_MS_GROUPPRODUCT  ");
+			sql.append("                         WHERE  GROUPPRODUCT_ID = S2.APP_GROUPPRODUCT  ");
+			sql.append("                         AND    GROUPPRODUCT_LOANTYPE = 'N')   ");
+			sql.append("            THEN 'BD'  ");
+			sql.append("            WHEN EXISTS (SELECT 'X'  ");
+			sql.append("                         FROM   NFE_MS_GROUPPRODUCT  ");
+			sql.append("                         WHERE  GROUPPRODUCT_ID = S2.APP_GROUPPRODUCT  ");
+			sql.append("                         AND    GROUPPRODUCT_LOANTYPE = 'R')   ");
+			sql.append("            THEN 'RL'  ");
+			sql.append("            ELSE ''  ");
+			sql.append("        END) AS GROUPLOAN_TYPE, ");
+			sql.append("       S2.APP_VSOURCE AS V_SOURCE, ");
+			sql.append("       S1.APPSUP_APPNO AS APPLICATION_NO, ");
+			sql.append("       S1.APPSUP_THAIFNAME || ' ' || S1.APPSUP_THAIlNAME AS THAINAME, ");
+			sql.append("       S2.APP_SOURCECODE AS SOURCECODE, ");
+			sql.append("       S2.APP_AGENT AS AGENT, ");
+			sql.append("       S2.APP_BRANCH AS BRANCH, ");
+			sql.append("       TO_CHAR(S2.APP_DATETIME, 'DD/MM/YYYY') AS RECDATE,  ");
+			sql.append("       (SELECT TO_CHAR(STATUSTRACKING_ENDTIME, 'DD/MM/YYYY')  ");
+			sql.append("        FROM   NFE_APP_STATUSTRACKING  ");
+			sql.append("        WHERE  STATUSTRACKING_ID > 0  ");
+			sql.append("        AND    STATUSTRACKING_APPNO = S1.APPSUP_APPNO  ");
+			sql.append("        AND    STATUSTRACKING_STATUS = '2C') AS CANCELDATE,  ");
+			sql.append("       (WITH MEMO AS   ");
+			sql.append("            (   ");
+			sql.append("                SELECT MEMO_DETAIL AS DETAIL,  ");
+			sql.append("                       MEMO_APPNO AS APPNO   ");
+			sql.append("                FROM   NFE_APP_MEMO  ");
+			sql.append("                WHERE  MEMO_TYPE  = 'M'  ");
+			sql.append("            )   ");
+			sql.append("            SELECT RTRIM(XMLAGG (XMLELEMENT(e, DETAIL||'/') ORDER BY APPNO).EXTRACT('//text()'), '/') AS MEMO_DETAIL  ");
+			sql.append("            FROM  MEMO    ");
+			sql.append("            WHERE APPNO = S1.APPSUP_APPNO  ");
+			sql.append("            GROUP BY APPNO   ");
+			sql.append("       ) AS MEMO,  ");
+			sql.append("       S2.APP_VAGENT AS VAGENT,  ");
+			sql.append("       (SELECT STATUSTRACKING_USER  ");
+			sql.append("        FROM   NFE_APP_STATUSTRACKING  ");
+			sql.append("        WHERE  STATUSTRACKING_ID > 0  ");
+			sql.append("        AND    STATUSTRACKING_APPNO = S1.APPSUP_APPNO ");
+			sql.append("        AND    STATUSTRACKING_STATUS = '2C') AS DONE_BY  ");
+			sql.append("FROM   NFE_APP_SUPPLEMENTARY S1 ");
+			sql.append("       LEFT JOIN NFE_APPLICATION S2   ");
+			sql.append("            ON  S1.APPSUP_ID > 0 ");
+			sql.append("            AND S2.APP_NO = S1.APPSUP_APPNO ");
+			sql.append("WHERE  S1.APPSUP_APPNO <> ' ' ");
+			sql.append("AND    (EXISTS (SELECT 'X' ");
+			sql.append("               FROM   NFE_MS_GROUPPRODUCT G,  ");
+			sql.append("                      NFE_MS_PRODUCT P ");
+			sql.append("               WHERE  G.GROUPPRODUCT_ID = P.PRODUCT_GROUPPRODUCTID ");
+			sql.append("               AND    P.PRODUCT_ID = S1.APPSUP_PRODUCT ");
+			sql.append("               AND    G.GROUPPRODUCT_LOANTYPE = 'C') ");
+			sql.append("        OR EXISTS (SELECT 'X' ");
+			sql.append("                   FROM    NFE_MS_GROUPPRODUCT ");
+			sql.append("                   WHERE   GROUPPRODUCT_ID = S2.APP_GROUPPRODUCT ");
+			sql.append("                   AND     GROUPPRODUCT_LOANTYPE = 'C')) ");
+			sql.append("AND    EXISTS (SELECT 'X' ");
+			sql.append("               FROM   NFE_APP_STATUSTRACKING ");
+			sql.append("               WHERE  STATUSTRACKING_ID > 0 ");
+			sql.append("               AND    STATUSTRACKING_APPNO = S1.APPSUP_APPNO ");
+			sql.append("               AND    STATUSTRACKING_STATUS = '2C' ");
+			sql.append("               AND    (STATUSTRACKING_ENDTIME BETWEEN TO_TIMESTAMP(?, 'DD/MM/YYYY HH24:MI:SS') ");
+			sql.append("                                                  AND TO_TIMESTAMP(?, 'DD/MM/YYYY HH24:MI:SS')))");
+			sql.append(") A ");
+			sql.append("ORDER BY A.V_SOURCE, ");
+			sql.append("         A.APPLICATION_NO ");
+		} else {
+			sql.append("ORDER BY V_SOURCE, ");
+			sql.append("         APPLICATION_NO ");
+		}
 
 		SqlRowSet sqlRowSet =
 				getJdbcTemplate().queryForRowSet(sql.toString(), parameter);

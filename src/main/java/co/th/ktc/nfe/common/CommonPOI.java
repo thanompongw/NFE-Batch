@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 
 import co.th.ktc.nfe.constants.NFEBatchConstants;
 
-@Component(value="commonPOI")
+@Component(value = "commonPOI")
 public class CommonPOI {
 
     Workbook wb;

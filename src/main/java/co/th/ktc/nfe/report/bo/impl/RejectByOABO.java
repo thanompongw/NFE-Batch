@@ -22,19 +22,19 @@ import co.th.ktc.nfe.report.bo.ReportBO;
 import co.th.ktc.nfe.report.dao.AbstractReportDao;
 
 
-@Service(value = "cancelByOAService")
-public class CancelByOABO implements ReportBO {
+@Service(value = "rejectByOAService")
+public class RejectByOABO implements ReportBO {
 	
-	private static Logger LOG = Logger.getLogger(CancelByOABO.class);
+	private static Logger LOG = Logger.getLogger(RejectByOABO.class);
 	
-	private static final String REPORT_FILE_NAME = "CancelByOADailyReport";
+	private static final String REPORT_FILE_NAME = "RejectDailyReport";
 	
-	private Integer[] printDateRowColumn = new Integer[] {0, 12};
-	private Integer[] printTimeRowColumn = new Integer[] {1, 12};
-	private Integer[] reportDateRowColumn = new Integer[] {1, 9};
+	private Integer[] printDateRowColumn = new Integer[] {0, 8};
+	private Integer[] printTimeRowColumn = new Integer[] {1, 8};
+	private Integer[] reportDateRowColumn = new Integer[] {1, 4};
 	
 	
-	@Resource(name="cancelByOADao")
+	@Resource(name = "rejectByOADao")
 	private AbstractReportDao dao;
 	
 	@Autowired
@@ -45,7 +45,7 @@ public class CancelByOABO implements ReportBO {
 	/**
 	 * Default Constructor of CancelByOADBO Class.
 	 */
-	public CancelByOABO() {
+	public RejectByOABO() {
 	}
 
 	public Integer execute(Map<String, String> parameter) {
@@ -103,10 +103,6 @@ public class CancelByOABO implements ReportBO {
 					   			  NFEBatchConstants.CREDIT_CARD_BL_GROUP_LOANTYPE,
 					   			  NFEBatchConstants.CREDIT_CARD_GROUP_LOANTYPE,
 					   			  NFEBatchConstants.CREDIT_CARD_BL_GROUP_LOANTYPE,
-					   			  NFEBatchConstants.CREDIT_CARD_GROUP_LOANTYPE,
-					   			  NFEBatchConstants.CREDIT_CARD_BL_GROUP_LOANTYPE,
-					   			  NFEBatchConstants.CREDIT_CARD_GROUP_LOANTYPE,
-					   			  NFEBatchConstants.CREDIT_CARD_BL_GROUP_LOANTYPE,
 					   			  parameter.get("DATE_FROM"),
 					   			  parameter.get("DATE_TO"),
 					   			  parameter.get("DATE_FROM"),
@@ -121,8 +117,6 @@ public class CancelByOABO implements ReportBO {
 			
 		    rowSet = dao.query(new Object[] { NFEBatchConstants.FIXED_LOAN_GROUP_LOANTYPE,
 		    								  NFEBatchConstants.FIXED_LOAN_GROUP_LOANTYPE,
-		    								  NFEBatchConstants.FIXED_LOAN_GROUP_LOANTYPE,
-		    								  NFEBatchConstants.FIXED_LOAN_GROUP_LOANTYPE,
 	    									  parameter.get("DATE_FROM"),
 											  parameter.get("DATE_TO") });
 
@@ -133,8 +127,6 @@ public class CancelByOABO implements ReportBO {
 	                			parameter);
 			
 		    rowSet = dao.query(new Object[] { NFEBatchConstants.REVOLVING_LOAN_GROUP_LOANTYPE,
-		    								  NFEBatchConstants.REVOLVING_LOAN_GROUP_LOANTYPE,
-		    								  NFEBatchConstants.REVOLVING_LOAN_GROUP_LOANTYPE,
 		    								  NFEBatchConstants.REVOLVING_LOAN_GROUP_LOANTYPE,
 	    									  parameter.get("DATE_FROM"),
 											  parameter.get("DATE_TO") });
@@ -214,7 +206,12 @@ public class CancelByOABO implements ReportBO {
 				poi.setObject(curSheet, 
 							  dataRows, 
 							  dataColumnIndex++,
-							  rowSet.getString("GROUPLOAN_TYPE"));
+							  rowSet.getString("DATE_REJECT"));
+				// GROUPLOAN_TYPE
+				poi.setObject(curSheet, 
+						      dataRows, 
+						      dataColumnIndex++,
+						      rowSet.getString("GROUPLOAN_TYPE"));
 				// V_SOURCE
 				poi.setObject(curSheet, 
 							  dataRows, 
@@ -230,46 +227,21 @@ public class CancelByOABO implements ReportBO {
 							  dataRows, 
 							  dataColumnIndex++,
 							  rowSet.getString("THAINAME"));
-				// SOURCECODE
-				poi.setObject(curSheet, 
-						      dataRows, 
-						      dataColumnIndex++,
-						      rowSet.getString("SOURCECODE"));
-				// AGENT
+				// CREDIT_TYPE
 				poi.setObject(curSheet, 
 							  dataRows, 
 							  dataColumnIndex++,
-							  rowSet.getString("AGENT"));
-				// BRANCH
+							  rowSet.getString("CREDIT_TYPE"));
+				// REASON_DESCRIPTION
 				poi.setObject(curSheet, 
 						      dataRows, 
 						      dataColumnIndex++,
-						      rowSet.getString("BRANCH"));
-				// RECDATE
+						      rowSet.getString("REASON_DESCRIPTION"));
+				// USER_ANALYST
 				poi.setObject(curSheet, 
 						      dataRows, 
 						      dataColumnIndex++,
-						      rowSet.getString("RECDATE"));
-				// CANCELDATE
-				poi.setObject(curSheet, 
-						      dataRows, 
-						      dataColumnIndex++,
-						      rowSet.getString("CANCELDATE"));
-				// MEMO
-				poi.setObject(curSheet, 
-						      dataRows, 
-						      dataColumnIndex++,
-						      rowSet.getString("MEMO"));
-				// VAGENT
-				poi.setObject(curSheet, 
-						      dataRows, 
-						      dataColumnIndex++,
-						      rowSet.getString("VAGENT"));
-				// DONE_BY
-				poi.setObject(curSheet, 
-							  dataRows, 
-							  dataColumnIndex++,
-							  rowSet.getString("DONE_BY"));
+						      rowSet.getString("USER_ANALYST"));
 		  	
 		        dataRows++;
 		        dataColumnIndex = 0;

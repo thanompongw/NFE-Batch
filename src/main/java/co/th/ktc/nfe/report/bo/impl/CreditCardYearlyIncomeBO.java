@@ -25,18 +25,18 @@ import co.th.ktc.nfe.report.dao.AbstractReportDao;
  * @author Deedy
  *
  */
-@Service(value = "applicationRecieveGoodRightService")
-public class ApplicationRecieveGoodRightBO implements ReportBO {
+@Service(value = "creditCardYearlyIncomeService")
+public class CreditCardYearlyIncomeBO implements ReportBO {
 	
-	private static Logger LOG = Logger.getLogger(ApplicationRecieveGoodRightBO.class);
+	private static Logger LOG = Logger.getLogger(CreditCardYearlyIncomeBO.class);
 	
-	private static final String REPORT_FILE_NAME = "ApplicationReceiveGoodrigthReport";
+	private static final String REPORT_FILE_NAME = "INCOME180000";
 	
-	private Integer[] printDateRowColumn = new Integer[] {0, 10};
-	private Integer[] printTimeRowColumn = new Integer[] {1, 10};
-	private Integer[] reportDateRowColumn = new Integer[] {1, 6};
+	private Integer[] printDateRowColumn = new Integer[] {0, 9};
+	private Integer[] printTimeRowColumn = new Integer[] {1, 9};
+	private Integer[] reportDateRowColumn = new Integer[] {1, 5};
 	
-	@Resource(name = "applicationRecieveGoodRightDao")
+	@Resource(name = "creditCardYearlyIncomeDao")
 	private AbstractReportDao dao;
 	
 	@Autowired
@@ -45,9 +45,9 @@ public class ApplicationRecieveGoodRightBO implements ReportBO {
 	private CommonPOI poi;
 
 	/**
-	 * Default Constructor of ApplicationRecieveGoodRightBO Class.
+	 * Default Constructor of CreditCardYearlyIncomeBO Class.
 	 */
-	public ApplicationRecieveGoodRightBO() {
+	public CreditCardYearlyIncomeBO() {
 	}
 
 	public Integer execute(Map<String, String> parameter) {
@@ -165,54 +165,57 @@ public class ApplicationRecieveGoodRightBO implements ReportBO {
                             dataRows,
                             lastRow,
                             minColIdx,
-                            maxColIdx - 1
-                            );
-				//Seq.
+                            maxColIdx - 1);
+				//No.
 				poi.setObject(curSheet, 
 							  dataRows, 
 							  dataColumnIndex++,
 							  rowSet.getRow());
-				//Date Rec.
+				//CARDHOLDERNO.
 				poi.setObject(curSheet, 
 						  	  dataRows, 
 						  	  dataColumnIndex++,
-						  	  rowSet.getString("APP_DATETIME"));
+						  	  rowSet.getString("CARDHOLDER_NO"));
+				//NAMES
 				poi.setObject(curSheet, 
 						      dataRows, 
 						      dataColumnIndex++,
-						      rowSet.getString("GROUPLOAN_TYPE"));
+						      rowSet.getString("NAMES"));
+				//CITIZENID
 				poi.setObject(curSheet, 
 						  	  dataRows, 
 						  	  dataColumnIndex++,
-						  	  rowSet.getString("GROUPPRODUCT_TYPE"));
+						  	  rowSet.getString("CITIZEN_ID"));
+				//OPENDATE
 				poi.setObject(curSheet, 
 						  	  dataRows, 
 						  	  dataColumnIndex++,
-						  	  rowSet.getString("APP_VSOURCE"));
-				poi.setObject(curSheet, 
-						      dataRows, 
-						      dataColumnIndex++,
-						      rowSet.getString("APP_NO"));
+						  	  rowSet.getString("OPENDATE"));
+				//CREDIT_LIMIT
 				poi.setObject(curSheet, 
 						  	  dataRows, 
 						  	  dataColumnIndex++,
-						  	  rowSet.getString("APP_THAIFNAME"));
-				poi.setObject(curSheet, 
-						      dataRows, 
-						      dataColumnIndex++,
-						      rowSet.getString("APP_THAILNAME"));
+						  	  rowSet.getDouble("CREDIT_LIMIT"));
+				//ANNUAL_INCOME
 				poi.setObject(curSheet, 
 						  	  dataRows, 
 						  	  dataColumnIndex++,
-						  	  rowSet.getString("FULL_THAINAME"));
+						  	  rowSet.getDouble("ANNUAL_INCOME"));
+				//CUSTOMER_TYPE
 				poi.setObject(curSheet, 
 						      dataRows, 
 						      dataColumnIndex++,
-						      rowSet.getString("APP_CITIZENID"));
+						      rowSet.getString("CUSTOMER_TYPE"));
+				//LAST_MAINTAIN_DATE
 				poi.setObject(curSheet, 
 						      dataRows, 
 						      dataColumnIndex++,
-						      rowSet.getString("APP_CHKNCB"));
+						      rowSet.getString("LAST_MAINTAIN_DATE"));
+				//MAINTAIN_OPER_ID
+				poi.setObject(curSheet, 
+						      dataRows, 
+						      dataColumnIndex++,
+						      rowSet.getString("MAINTAIN_OPER_ID"));
 				dataColumnIndex = 0;
 				dataRows++;
 			}
