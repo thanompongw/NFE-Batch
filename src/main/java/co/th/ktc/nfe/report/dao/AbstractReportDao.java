@@ -52,9 +52,11 @@ public abstract class AbstractReportDao extends JdbcDaoSupport {
 	private RowMapper<DateBean> rowMapper = new RowMapper<DateBean>() {
 
 		public DateBean mapRow(ResultSet rs, int i) throws SQLException {
+			
 			DateBean dateBean = new DateBean();
 			dateBean.setDateFrom(rs.getDate("B_DATE_FROM"));
 			dateBean.setDateTo(rs.getDate("B_DATE_TO"));
+			
 			return dateBean;
 		}
 	};
@@ -63,34 +65,33 @@ public abstract class AbstractReportDao extends JdbcDaoSupport {
 		
 		StringBuilder sql = new StringBuilder();
 		
-		sql.append("SELECT (CASE ");
+		sql.append("SELECT CAST((CASE ");
 		sql.append("            WHEN DIFF >= 0 ");
 		sql.append("            THEN B_DATE - DIFF ");
 		sql.append("            WHEN DIFF < 0 ");
 		sql.append("            THEN B_DATE + DIFF ");
 		sql.append("            ELSE B_DATE ");
-		sql.append("        END) AS B_DATE_FROM, ");
-		sql.append("       (CASE ");
+		sql.append("        END) AS DATE) AS B_DATE_FROM, ");
+		sql.append("       CAST((CASE ");
 		sql.append("            WHEN DIFF >= 0 OR DIFF < 0 ");
 		sql.append("            THEN B_DATE ");
 		sql.append("            ELSE B_DATE + DIFF ");
-		sql.append("        END) AS B_DATE_TO ");
+		sql.append("        END) AS DATE) AS B_DATE_TO ");
 		sql.append("FROM ");
 		sql.append("( ");
 		sql.append("SELECT B_DATE, ");
-		sql.append("       B_DATE - TO_DATE(LAG(TO_CHAR(B_DATE, 'DD/MM/YYYY'), 1, TO_CHAR(B_DATE, 'DD/MM/YYYY')) ");
-		sql.append("                        OVER (ORDER BY B_DATE), 'DD/MM/YYYY') - 1 AS DIFF ");
+		sql.append("       B_DATE - CAST(LAG(CAST(B_DATE AS DATE), 1, CAST(B_DATE AS DATE))  ");
+		sql.append("                     OVER (ORDER BY B_DATE) AS DATE) - 1 AS DIFF ");
 		sql.append("FROM   (SELECT TO_DATE(?, 'DD/MM/YYYY') - LEVEL + 1 AS B_DATE ");
 		sql.append("        FROM   DUAL ");
 		sql.append("        CONNECT BY LEVEL <= 100) ");
 		sql.append("WHERE  TO_CHAR(B_DATE, 'D') NOT IN (7, 1) ");
 		sql.append("AND    NOT EXISTS(SELECT 'X' ");
 		sql.append("                  FROM   NFE_HOLIDAY ");
-		sql.append("                  WHERE  HOLIDAY_DATE = TO_DATE(B_DATE, 'DD/MM/YYYY')) ");
+		sql.append("                  WHERE  HOLIDAY_DATE = CAST(B_DATE AS DATE)) ");
 		sql.append("AND    B_DATE >= (SELECT MIN(APP_DATETIME) ");
 		sql.append("                  FROM   NFE_APPLICATION ");
 		sql.append("                  WHERE  APP_NO <> ' ') ");
-		sql.append("AND    ROWNUM <= 60 ");
 		sql.append(") ");
 		
 		List<DateBean> businessDates = null;
@@ -98,6 +99,10 @@ public abstract class AbstractReportDao extends JdbcDaoSupport {
 		try {
 		
 			businessDates = getJdbcTemplate().query(sql.toString(), new Object[] {date}, rowMapper);
+			
+			while (businessDates.size() > 60) {
+				businessDates.remove(0);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

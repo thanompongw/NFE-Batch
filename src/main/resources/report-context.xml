@@ -137,4 +137,8 @@
 		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
     </bean>
     
+    <bean id="penrollDao" class="co.th.ktc.nfe.report.dao.impl.PenrollDao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
 </beans>

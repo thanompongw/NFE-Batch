@@ -35,7 +35,7 @@ public class AppliactionPending45DaysTests extends TestCase {
 		
 		Map<String, String> parameter = new HashMap<String, String>();
 		
-		parameter.put("REPORT_DATE", "28/06/2013");
+		parameter.put("REPORT_DATE", "03/07/2013");
 			
 		int status = bo.execute(parameter);
 		

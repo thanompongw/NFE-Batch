@@ -3,6 +3,7 @@
  */
 package co.th.ktc.nfe.report.bo.impl;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -103,12 +104,12 @@ public class ApplicationPending45DaysBO implements ReportBO {
 	public Workbook generateReport(Map<String, String> parameter) {
 
 		Workbook workbook = poi.getWorkBook();
-		
-		List<ApplicationPendingBean> pendingBeans = 
-				preparedDataList(parameter, 
-								 NFEBatchConstants.CREDIT_CARD_GROUP_LOANTYPE);
 
 		try {
+			
+			List<ApplicationPendingBean> pendingBeans = 
+					preparedDataList(parameter, 
+									 NFEBatchConstants.CREDIT_CARD_GROUP_LOANTYPE);
 			
 
 			this.generateReport(workbook,
@@ -116,40 +117,40 @@ public class ApplicationPending45DaysBO implements ReportBO {
 	                			NFEBatchConstants.CREDIT_CARD_SHEET_NO,
 	                			NFEBatchConstants.CREDIT_CARD_SHEET_NAME,
 	                			parameter);
-//			
-//		    rowSet = dao.query(new Object[] { NFEBatchConstants.FIXED_LOAN_GROUP_LOANTYPE,
-//		    								  NFEBatchConstants.FIXED_LOAN_GROUP_LOANTYPE,
-//	    									  parameter.get("DATE_FROM"),
-//											  parameter.get("DATE_TO") });
-//
-//			this.generateReport(workbook,
-//	                			rowSet,
-//	                			NFEBatchConstants.FIXED_LOAN_SHEET_NO,
-//	                			NFEBatchConstants.FIXED_LOAN_SHEET_NAME,
-//	                			parameter);
-//			
-//		    rowSet = dao.query(new Object[] { NFEBatchConstants.REVOLVING_LOAN_GROUP_LOANTYPE,
-//		    								  NFEBatchConstants.REVOLVING_LOAN_GROUP_LOANTYPE,
-//	    									  parameter.get("DATE_FROM"),
-//											  parameter.get("DATE_TO") });
-//
-//			this.generateReport(workbook,
-//	                			rowSet,
-//	                			NFEBatchConstants.REVOLVING_LOAN_SHEET_NO,
-//	                			NFEBatchConstants.REVOLVING_LOAN_SHEET_NAME,
-//	                			parameter);
-//			
-//		    rowSet = dao.query(new Object[] { NFEBatchConstants.BUNDLE_GROUP_LOANTYPE,
-//		    								  NFEBatchConstants.BUNDLE_GROUP_LOANTYPE,
-//	    									  parameter.get("DATE_FROM"),
-//											  parameter.get("DATE_TO") });
-//
-//			this.generateReport(workbook,
-//	                			rowSet,
-//	                			NFEBatchConstants.BUNDLE_SHEET_NO,
-//	                			NFEBatchConstants.BUNDLE_SHEET_NAME,
-//	                			parameter);	
-//			
+			
+			pendingBeans = 
+					preparedDataList(parameter, 
+									 NFEBatchConstants.FIXED_LOAN_GROUP_LOANTYPE);
+			
+
+			this.generateReport(workbook,
+								pendingBeans,
+	                			NFEBatchConstants.FIXED_LOAN_SHEET_NO,
+	                			NFEBatchConstants.FIXED_LOAN_SHEET_NAME,
+	                			parameter);
+			
+			pendingBeans = 
+					preparedDataList(parameter, 
+									 NFEBatchConstants.REVOLVING_LOAN_GROUP_LOANTYPE);
+			
+
+			this.generateReport(workbook,
+								pendingBeans,
+	                			NFEBatchConstants.REVOLVING_LOAN_SHEET_NO,
+	                			NFEBatchConstants.REVOLVING_LOAN_SHEET_NAME,
+	                			parameter);
+			
+			pendingBeans = 
+					preparedDataList(parameter, 
+									 NFEBatchConstants.BUNDLE_GROUP_LOANTYPE);
+			
+
+			this.generateReport(workbook,
+								pendingBeans,
+	                			NFEBatchConstants.BUNDLE_SHEET_NO,
+	                			NFEBatchConstants.BUNDLE_SHEET_NAME,
+	                			parameter);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -208,11 +209,6 @@ public class ApplicationPending45DaysBO implements ReportBO {
 				remainApps = new ArrayList<RemainBean>();
 				remainApp = totalRecieveApp;
 				
-				System.out.println("");
-
-				System.out.print("Receive Date : " + buDateTo + "  ");
-				System.out.print("Receive App : " + totalRecieveApp + "  ");
-				
 				for (int i = 0; i < remainDates.size(); i++) {
 					remainBean = new RemainBean();
 					remainDate = remainDates.get(i);
@@ -234,7 +230,7 @@ public class ApplicationPending45DaysBO implements ReportBO {
 					if (i == remainDates.size() - 1) {
 						sqlParemeters = 
 								new Object[] {NFEBatchConstants.FINAL_RESOLVE_STATUS_CODE,
-											  remainDateFrom + " 23:59:59",
+											  remainDateTo + " 23:59:59",
 											  buDateFrom + " 00:00:00",
 											  buDateTo + " 23:59:59",
 											  groupLoanType,
@@ -250,22 +246,15 @@ public class ApplicationPending45DaysBO implements ReportBO {
 											  groupLoanType};
 					}
 					
-					System.out.print("Final Date_" + (i + 1) + " : " + remainDateTo + "  ");
-					
 					rowSet = dao.query(sqlParemeters);
 					
 					if (rowSet.next()) {
 						totalFinalApp = rowSet.getInt(1);
 					}
-					System.out.print("Total Final App_" + (i + 1) + " : " + totalFinalApp + "  ");
 					
 					remainApp -= totalFinalApp;
 					
-					System.out.print("Remain App_" + (i + 1) + " : " + remainApp + "  ");
-					
 					percentage = (double) (remainApp.doubleValue() / totalRecieveApp.doubleValue());
-					
-					System.out.print("Remain App Per_" + (i + 1) + " : " + percentage + "  ");
 					
 					remainBean.setRemain(remainApp);
 					remainBean.setPercentage(percentage);
@@ -274,9 +263,7 @@ public class ApplicationPending45DaysBO implements ReportBO {
 				}
 				
 				pendingBean.setRemains(remainApps);
-				
 				pendingBeans.add(pendingBean);
-				
 			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -304,6 +291,20 @@ public class ApplicationPending45DaysBO implements ReportBO {
 			
 			int dataRows = lastRow - 1;
 			int dataColumnIndex = minColIdx;
+			
+			List<RemainBean> remainBeans = null;
+			RemainBean remain = null;
+			Integer grandTotalReceiveApp = 0;
+			
+			List<Integer> remains1 = new ArrayList<Integer>();
+			List<Integer> remains2 = new ArrayList<Integer>();
+			List<Integer> remains3 = new ArrayList<Integer>();
+			List<Integer> remains4 = new ArrayList<Integer>();
+			List<Integer> remains5 = new ArrayList<Integer>();
+			List<Integer> remains6 = new ArrayList<Integer>();
+			List<Integer> remains7 = new ArrayList<Integer>();
+			List<Integer> remains8 = new ArrayList<Integer>();
+			List<Integer> remains10 = new ArrayList<Integer>();
 	
 			for (ApplicationPendingBean pendingBean : pendingBeans) {
 				poi.copyRow(sheetNo,
@@ -323,7 +324,42 @@ public class ApplicationPending45DaysBO implements ReportBO {
 	                          dataColumnIndex++,
 	                          pendingBean.getTotalRecieveApp());
 	            
-	            for (RemainBean remain : pendingBean.getRemains()) {
+	            remainBeans = pendingBean.getRemains();
+	            for (int i = 0; i < remainBeans.size(); i++) {
+	            	remain = remainBeans.get(i);
+	            	
+	            	switch (i) {
+					case 0:
+						remains1.add(remain.getRemain());
+						break;
+					case 1:
+						remains2.add(remain.getRemain());
+						break;
+					case 2:
+						remains3.add(remain.getRemain());
+						break;
+					case 3:
+						remains4.add(remain.getRemain());
+						break;
+					case 4:
+						remains5.add(remain.getRemain());
+						break;
+					case 5:
+						remains6.add(remain.getRemain());
+						break;
+					case 6:
+						remains7.add(remain.getRemain());
+						break;
+					case 7:
+						remains8.add(remain.getRemain());
+						break;
+					case 8:
+						remains10.add(remain.getRemain());
+						break;
+
+					default:
+						break;
+					}
 		            
 		            // Remain App
 		            poi.setObject(curSheet,
@@ -352,13 +388,171 @@ public class ApplicationPending45DaysBO implements ReportBO {
 							lastRow,
 							minColIdx,
 							maxColIdx - 1);
+				
+				grandTotalReceiveApp += pendingBean.getTotalRecieveApp();
 			}
+			dataColumnIndex++;
+
+            // Grand Total Receive App
+            poi.setObject(curSheet,
+                          dataRows,
+                          dataColumnIndex++,
+                          grandTotalReceiveApp);
+            
+            Map<String, BigDecimal> totalRemain1 = calGrandTotalRemain(pendingBeans, remains1);
+
+            // Total Remain App day 1
+            poi.setObject(curSheet,
+                          dataRows,
+                          dataColumnIndex++,
+                          totalRemain1.get("TOTAL"));
+
+            // Total Percentage Remain App day 1
+            poi.setObject(curSheet,
+                          dataRows,
+                          dataColumnIndex++,
+                          totalRemain1.get("PERCENTAGE"));
+            
+            Map<String, BigDecimal> totalRemain2 = calGrandTotalRemain(pendingBeans, remains2);
+
+            // Total Remain App day 2
+            poi.setObject(curSheet,
+                          dataRows,
+                          dataColumnIndex++,
+                          totalRemain2.get("TOTAL"));
+
+            // Total Percentage Remain App day 2
+            poi.setObject(curSheet,
+                          dataRows,
+                          dataColumnIndex++,
+                          totalRemain2.get("PERCENTAGE"));
+            
+            Map<String, BigDecimal> totalRemain3 = calGrandTotalRemain(pendingBeans, remains3);
+
+            // Total Remain App day 3
+            poi.setObject(curSheet,
+                          dataRows,
+                          dataColumnIndex++,
+                          totalRemain3.get("TOTAL"));
+
+            // Total Percentage Remain App day 3
+            poi.setObject(curSheet,
+                          dataRows,
+                          dataColumnIndex++,
+                          totalRemain3.get("PERCENTAGE"));
+            
+            Map<String, BigDecimal> totalRemain4 = calGrandTotalRemain(pendingBeans, remains4);
+
+            // Total Remain App day 4
+            poi.setObject(curSheet,
+                          dataRows,
+                          dataColumnIndex++,
+                          totalRemain4.get("TOTAL"));
+
+            // Total Percentage Remain App day 4
+            poi.setObject(curSheet,
+                          dataRows,
+                          dataColumnIndex++,
+                          totalRemain4.get("PERCENTAGE"));
+            
+            Map<String, BigDecimal> totalRemain5 = calGrandTotalRemain(pendingBeans, remains5);
+
+            // Total Remain App day 5
+            poi.setObject(curSheet,
+                          dataRows,
+                          dataColumnIndex++,
+                          totalRemain5.get("TOTAL"));
+
+            // Total Percentage Remain App day 5
+            poi.setObject(curSheet,
+                          dataRows,
+                          dataColumnIndex++,
+                          totalRemain5.get("PERCENTAGE"));
+            
+            Map<String, BigDecimal> totalRemain6 = calGrandTotalRemain(pendingBeans, remains6);
+
+            // Total Remain App day 6
+            poi.setObject(curSheet,
+                          dataRows,
+                          dataColumnIndex++,
+                          totalRemain6.get("TOTAL"));
+
+            // Total Percentage Remain App day 6
+            poi.setObject(curSheet,
+                          dataRows,
+                          dataColumnIndex++,
+                          totalRemain6.get("PERCENTAGE"));
+            
+            Map<String, BigDecimal> totalRemain7 = calGrandTotalRemain(pendingBeans, remains7);
+
+            // Total Remain App day 7
+            poi.setObject(curSheet,
+                          dataRows,
+                          dataColumnIndex++,
+                          totalRemain7.get("TOTAL"));
+
+            // Total Percentage Remain App day 7
+            poi.setObject(curSheet,
+                          dataRows,
+                          dataColumnIndex++,
+                          totalRemain7.get("PERCENTAGE"));
+            
+            Map<String, BigDecimal> totalRemain8 = calGrandTotalRemain(pendingBeans, remains8);
+
+            // Total Remain App day 8
+            poi.setObject(curSheet,
+                          dataRows,
+                          dataColumnIndex++,
+                          totalRemain8.get("TOTAL"));
+
+            // Total Percentage Remain App day 8
+            poi.setObject(curSheet,
+                          dataRows,
+                          dataColumnIndex++,
+                          totalRemain8.get("PERCENTAGE"));
+            
+            Map<String, BigDecimal> totalRemain10 = calGrandTotalRemain(pendingBeans, remains10);
+
+            // Total Remain App day 10
+            poi.setObject(curSheet,
+                          dataRows,
+                          dataColumnIndex++,
+                          totalRemain10.get("TOTAL"));
+
+            // Total Percentage Remain App day 10
+            poi.setObject(curSheet,
+                          dataRows,
+                          dataColumnIndex++,
+                          totalRemain10.get("PERCENTAGE"));
 			
 			workbook.removeSheetAt(templateSheetNo);
 		} catch (SQLException sqlEx) {
 			sqlEx.printStackTrace();
             throw sqlEx;
         }
+	}
+	
+	private Map<String, BigDecimal> calGrandTotalRemain(List<ApplicationPendingBean> pendingBeans, 
+													 List<Integer> sumTotalRemains) {
+		
+		Integer sumTotalReceiveApp = 0;
+		Integer sumTotalRemain = 0;
+		ApplicationPendingBean pendingBean = null;
+		for (int i = 0; i < sumTotalRemains.size(); i++) {
+			pendingBean = pendingBeans.get(i);
+			sumTotalReceiveApp += pendingBean.getTotalRecieveApp();
+			sumTotalRemain += sumTotalRemains.get(i);
+		}
+		
+		Double totalPercentage = (double) (sumTotalRemain.doubleValue() 
+				                         / sumTotalReceiveApp.doubleValue());
+		
+		Map<String, BigDecimal> total = new HashMap<String, BigDecimal>();
+		
+		total.put("TOTAL", new BigDecimal(sumTotalRemain));
+		total.put("PERCENTAGE", new BigDecimal(totalPercentage));
+		
+		return total;
 	}
 
 }

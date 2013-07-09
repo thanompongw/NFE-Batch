@@ -104,7 +104,7 @@ public class OAPerformanceDao extends AbstractReportDao {
 		sql.append("ORDER BY T2.STATUSTRACKING_USER  ");
 
 		SqlRowSet sqlRowSet =
-				getJdbcTemplate().queryForRowSet(sql.toString(),parameter);
+				getJdbcTemplate().queryForRowSet(sql.toString(), parameter);
 		
 		return sqlRowSet;
 	}

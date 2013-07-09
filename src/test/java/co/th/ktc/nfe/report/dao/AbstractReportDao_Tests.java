@@ -36,15 +36,9 @@ public class AbstractReportDao_Tests {
 	 */
 	@Test
 	public void testGetBusinessBy60Days() {
-	}
-
-	/**
-	 * Test method for {@link co.th.ktc.nfe.report.dao.AbstractReportDao#getRemainDays(java.lang.String)}.
-	 */
-	@Test
-	public void testGetRemainDays() {
-		List<DateBean> remainDates = dao.getRemainDays("04/04/2013");
 		
+		List<DateBean> remainDates = dao.getBusinessBy60Days("03/07/2013");
+	
 		try {
 		
 			for (int i = 0; i < remainDates.size(); i++) {
@@ -56,6 +50,26 @@ public class AbstractReportDao_Tests {
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
+	}
+
+	/**
+	 * Test method for {@link co.th.ktc.nfe.report.dao.AbstractReportDao#getRemainDays(java.lang.String)}.
+	 */
+	@Test
+	public void testGetRemainDays() {
+//		List<DateBean> remainDates = dao.getRemainDays("04/04/2013");
+//		
+//		try {
+//		
+//			for (int i = 0; i < remainDates.size(); i++) {
+//				DateBean actualDate = remainDates.get(i);
+//				
+//				System.out.println(actualDate.getDateTo());
+//				
+//			}
+//		} catch (Exception e) {
+//			fail(e.getMessage());
+//		}
 	}
 
 }

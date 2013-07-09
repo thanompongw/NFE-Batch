@@ -17,9 +17,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import co.th.ktc.nfe.report.bo.ReportBO;
 
-@ContextConfiguration(locations={"/launch-context.xml"})
+@ContextConfiguration(locations={"/report-context.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class ApplicationReceiveTests extends TestCase {
+public class PenrollTests extends TestCase {
 	
 	@Autowired
 	private JobLauncher jobLauncher;
@@ -27,7 +27,7 @@ public class ApplicationReceiveTests extends TestCase {
 	@Autowired
 	private Job job;
 	
-	@Resource(name = "applicationReceiveService")
+	@Resource(name = "penrollService")
 	private ReportBO bo;
 
 	@Test
@@ -35,7 +35,7 @@ public class ApplicationReceiveTests extends TestCase {
 		
 		Map<String, String> parameter = new HashMap<String, String>();
 		
-		parameter.put("REPORT_DATE", "03/07/2013");
+		parameter.put("REPORT_DATE", "04/03/2013");
 			
 		int status = bo.execute(parameter);
 		
