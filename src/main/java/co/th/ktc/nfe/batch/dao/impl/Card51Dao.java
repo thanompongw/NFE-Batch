@@ -258,16 +258,16 @@ public class Card51Dao extends AbstractBatchDao {
 		sql.append("        RPAD(NVL((SELECT PIF_MARRIAGE_FNAME || ' ' || PIF_MARRIAGE_LNAME ");
 		sql.append("                  FROM   NFE_APP_PIF ");
 		sql.append("                  WHERE  PIF_APPNO = T1.APP_NO), ' '), 160, ' ') AS SPOUSE_NAME, ");
-		sql.append("        RPAD(T1.APP_NO, 20, ' ') AS APPLYNO, ");
+		sql.append("        RPAD(T1.APP_NO, 20, ' ') AS APPLY_NO, ");
 		sql.append("        RPAD(T1.APP_SOURCECODE, 6, ' ') AS SOURCE_CODE, ");
 		sql.append("        RPAD(T1.APP_AGENT, 20, ' ') AS AGEN_CODE, ");
-		sql.append("        RPAD(T1.APP_BRANCH, 3, ' ') AS BRANCHCODE, ");
+		sql.append("        RPAD(T1.APP_BRANCH, 3, ' ') AS BRANCH_CODE, ");
 		sql.append("        RPAD(NVL((SELECT A.ADDRTYPE_TNAME ");
 		sql.append("                  FROM   NFE_MS_ADDRTYPE A, ");
 		sql.append("                         NFE_APP_PIF P ");
 		sql.append("                  WHERE  A.ADDRTYPE_ID = P.PIF_ADDRTYPE_TYPE ");
 		sql.append("                  AND    P.PIF_APPNO = T1.APP_NO), ' '), 100, ' ') AS HOME_TYPE, ");
-		sql.append("        RPAD(' ', 100, ' ') AS HOMESTATUS, ");
+		sql.append("        RPAD(' ', 100, ' ') AS HOME_STATUS, ");
 		sql.append("        RPAD(' ', 25, ' ') AS PHONE, ");
 		sql.append("        RPAD(' ', 25, ' ') AS FAX, ");
 		sql.append("        RPAD((SELECT NVL(PIF_CURRENTADDR_MOBILENO, ' ') ");
@@ -354,7 +354,7 @@ public class Card51Dao extends AbstractBatchDao {
 		sql.append("               AND    STATUSTRACKING_APPNO = T1.APP_NO ");
 		sql.append("               AND    STATUSTRACKING_STATUS = '8F' ");
 		sql.append("               AND    (STATUSTRACKING_ENDTIME BETWEEN TO_TIMESTAMP(?, 'DD/MM/YYYY HH24:MI:SS') ");
-		sql.append("                                                  AND TO_TIMESTAMP(?'DD/MM/YYYY HH24:MI:SS'))) ");
+		sql.append("                                                  AND TO_TIMESTAMP(?, 'DD/MM/YYYY HH24:MI:SS'))) ");
 		sql.append("ORDER BY T4.APPROVE_CARDNO ");
 
 		SqlRowSet sqlRowSet =
@@ -371,7 +371,6 @@ public class Card51Dao extends AbstractBatchDao {
 		StringBuilder sql = new StringBuilder();
 		
 		sql.append("SELECT 'H0' || TO_CHAR(SYSDATE, 'YYYYMMDD') || LPAD(COUNT(1), 8, '0') || RPAD(' ', 3314, ' ') AS HEADER ");
-		sql.append("       COUNT(1) AS TOTAL_COUNT ");
 		sql.append("FROM   NFE_APPLICATION T1 ");
 		sql.append("       LEFT JOIN NFE_APP_PRODUCT T2  ");
 		sql.append("           ON  T2.APPPRODUCT_ID > 0  ");
@@ -398,7 +397,7 @@ public class Card51Dao extends AbstractBatchDao {
 		sql.append("               AND    STATUSTRACKING_APPNO = T1.APP_NO ");
 		sql.append("               AND    STATUSTRACKING_STATUS = '8F' ");
 		sql.append("               AND    (STATUSTRACKING_ENDTIME BETWEEN TO_TIMESTAMP(?, 'DD/MM/YYYY HH24:MI:SS') ");
-		sql.append("                                                  AND TO_TIMESTAMP(?'DD/MM/YYYY HH24:MI:SS'))) ");
+		sql.append("                                                  AND TO_TIMESTAMP(?, 'DD/MM/YYYY HH24:MI:SS'))) ");
 
 		SqlRowSet sqlRowSet =
 				getJdbcTemplate().queryForRowSet(sql.toString(), parameter);
