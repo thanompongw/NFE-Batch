@@ -29,9 +29,9 @@ public class DeclineByCAUBO implements ReportBO {
 	
 	private static final String REPORT_FILE_NAME = "DeclineCAUDailyReport";
 	
-	private Integer[] printDateRowColumn = new Integer[] {0, 9};
-	private Integer[] printTimeRowColumn = new Integer[] {1, 9};
-	private Integer[] reportDateRowColumn = new Integer[] {1, 6};
+	private Integer[] printDateRowColumn = new Integer[] {0, 14};
+	private Integer[] printTimeRowColumn = new Integer[] {1, 14};
+	private Integer[] reportDateRowColumn = new Integer[] {1, 9};
 	
 	
 	@Resource(name = "declineByCAUDao")
@@ -202,11 +202,6 @@ public class DeclineByCAUBO implements ReportBO {
 							  dataRows, 
 							  dataColumnIndex++,
 							  rowSet.getRow());
-				// TYPE
-				poi.setObject(curSheet, 
-							  dataRows, 
-							  dataColumnIndex++,
-							  rowSet.getString("TYPE"));
 				// GROUPLOAN_TYPE
 				poi.setObject(curSheet, 
 							  dataRows, 
@@ -232,21 +227,51 @@ public class DeclineByCAUBO implements ReportBO {
 							  dataRows, 
 							  dataColumnIndex++,
 							  rowSet.getString("CARD_TYPE"));
-				// REASON
-				poi.setObject(curSheet, 
-						      dataRows, 
-						      dataColumnIndex++,
-						      rowSet.getString("REASON"));
-				// APP_ANALYST
-				poi.setObject(curSheet, 
-							  dataRows, 
-							  dataColumnIndex++,
-							  rowSet.getString("APP_ANALYST"));
 				// SOURCE_CODE
 				poi.setObject(curSheet, 
 							  dataRows, 
 							  dataColumnIndex++,
 							  rowSet.getString("SOURCE_CODE"));
+				// AGENT_CODE
+				poi.setObject(curSheet, 
+						      dataRows, 
+						      dataColumnIndex++,
+						      rowSet.getString("AGENT_CODE"));
+				// BRANCH_CODE
+				poi.setObject(curSheet, 
+							  dataRows, 
+							  dataColumnIndex++,
+							  rowSet.getString("BRANCH_CODE"));
+				// PRODUCT_SUBPRODUCT
+				poi.setObject(curSheet, 
+						      dataRows, 
+						      dataColumnIndex++,
+						      rowSet.getString("PRODUCT_SUBPRODUCT"));
+				// REC_DATE
+				poi.setObject(curSheet, 
+						      dataRows, 
+						      dataColumnIndex++,
+						      rowSet.getString("REC_DATE"));
+				// CANCEL_DATE
+				poi.setObject(curSheet, 
+						      dataRows, 
+						      dataColumnIndex++,
+						      rowSet.getString("CANCEL_DATE"));
+				// REASON
+				poi.setObject(curSheet, 
+						      dataRows, 
+						      dataColumnIndex++,
+						      rowSet.getString("REASON"));
+				// MEMO_DETAIL
+				poi.setObject(curSheet, 
+						      dataRows, 
+						      dataColumnIndex++,
+						      rowSet.getString("MEMO_DETAIL"));
+				// APP_ANALYST
+				poi.setObject(curSheet, 
+							  dataRows, 
+							  dataColumnIndex++,
+							  rowSet.getString("APP_ANALYST"));
 		  	
 		        dataRows++;
 		        dataColumnIndex = 0;
