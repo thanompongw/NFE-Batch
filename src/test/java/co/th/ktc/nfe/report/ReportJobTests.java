@@ -21,7 +21,7 @@ import org.springframework.util.StopWatch;
  * @author Deedy
  *
  */
-@ContextConfiguration(locations={"/launch-context.xml"})
+@ContextConfiguration(locations={"/report-context.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class ReportJobTests {
 	

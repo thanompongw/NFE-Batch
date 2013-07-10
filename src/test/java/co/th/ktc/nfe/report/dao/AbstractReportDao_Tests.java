@@ -24,7 +24,7 @@ import co.th.ktc.nfe.report.domain.RemainBean;
  * @author temp_dev1
  *
  */
-@ContextConfiguration(locations={"/launch-context.xml"})
+@ContextConfiguration(locations={"/report-context.xml"})
  @RunWith(SpringJUnit4ClassRunner.class)
 public class AbstractReportDao_Tests {
 	

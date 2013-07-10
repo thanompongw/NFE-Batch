@@ -71,7 +71,7 @@ public class OAPerformanceBO implements ReportBO {
 			parameter.put("DATE_TO", toTimestamp);
 			
 			// generateReport
-		    report = generateReport(parameter);			
+		    report = generateReport(parameter);
 			
 			String fileName = REPORT_FILE_NAME;
 			String dirPath = config.getPathOutput();

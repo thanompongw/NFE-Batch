@@ -16,6 +16,7 @@ import co.th.ktc.nfe.batch.bo.BatchBO;
 import co.th.ktc.nfe.batch.dao.AbstractBatchDao;
 import co.th.ktc.nfe.common.BatchConfiguration;
 import co.th.ktc.nfe.common.DateTimeUtils;
+import co.th.ktc.nfe.common.FileUtils;
 
 /**
  * @author temp_dev1
@@ -26,11 +27,15 @@ public class Card51BO implements BatchBO {
 	
 	private static Logger LOG = Logger.getLogger(Card51BO.class);
 	
+	private static final String BATCH_FILE_NAME = "CARD51";
+	
 	@Autowired
 	private BatchConfiguration config;
 	
 	@Resource(name = "card51Dao")
 	private AbstractBatchDao dao;
+	
+	private FileUtils file;
 
 	/**
 	 * 
@@ -43,30 +48,49 @@ public class Card51BO implements BatchBO {
 	 * @see co.th.ktc.nfe.batch.bo.BatchBO#execute(java.util.Map)
 	 */
 	public Integer execute(Map<String, String> parameter) {
+		Integer processStatus = 0;
 		
-		String currentDate = null;
-	
-		if (parameter == null) {
-			parameter = new HashMap<String, String>();
-			currentDate = dao.getSetDate("DD/MM/YYYY");
-		} else {
-			currentDate = parameter.get("REPORT_DATE");
+		try {
+			file = new FileUtils();
+			String currentDate = null;
+		
+			if (parameter == null) {
+				parameter = new HashMap<String, String>();
+				currentDate = dao.getSetDate("DD/MM/YYYY");
+			} else {
+				currentDate = parameter.get("REPORT_DATE");
+			}
+			
+			String fromTimestamp = currentDate + " 00:00:00";
+			String toTimestamp = currentDate + " 23:59:59";
+			
+			parameter.put("DATE_FROM", fromTimestamp);
+			parameter.put("DATE_TO", toTimestamp);
+			
+			// generateReport
+		    write(parameter);
+			
+			String dirPath = config.getPathOutput();
+			
+			currentDate = 
+					DateTimeUtils.convertFormatDateTime(currentDate, 
+														DateTimeUtils.DEFAULT_DATE_FORMAT, 
+														"yyyyMMdd");
+			file.writeFile(BATCH_FILE_NAME, dirPath, currentDate);
+		} catch (Exception e) {
+			processStatus = 1;
+			e.printStackTrace();
+			//TODO: throws error to main function
 		}
 		
-		String fromTimestamp = currentDate + " 00:00:00";
-		String toTimestamp = currentDate + " 23:59:59";
-		
-		parameter.put("DATE_FROM", fromTimestamp);
-		parameter.put("DATE_TO", toTimestamp);
-		return null;
+		return processStatus;
 	}
 
 	/* (non-Javadoc)
 	 * @see co.th.ktc.nfe.batch.bo.BatchBO#write(java.util.Map)
 	 */
 	public void write(Map<String, String> parameter) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 }

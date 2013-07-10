@@ -15,7 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import co.th.ktc.nfe.report.bo.impl.ApproveBO;
 
-@ContextConfiguration(locations={"/launch-context.xml"})
+@ContextConfiguration(locations={"/report-context.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class ApproveTests extends TestCase {
 	

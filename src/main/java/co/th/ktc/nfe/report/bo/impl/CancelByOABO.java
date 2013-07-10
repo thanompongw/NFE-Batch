@@ -33,7 +33,6 @@ public class CancelByOABO implements ReportBO {
 	private Integer[] printTimeRowColumn = new Integer[] {1, 12};
 	private Integer[] reportDateRowColumn = new Integer[] {1, 9};
 	
-	
 	@Resource(name="cancelByOADao")
 	private AbstractReportDao dao;
 	
