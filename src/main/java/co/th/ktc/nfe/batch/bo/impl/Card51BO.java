@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import co.th.ktc.nfe.batch.bo.BatchBO;
 import co.th.ktc.nfe.batch.dao.AbstractBatchDao;
@@ -20,6 +21,7 @@ import co.th.ktc.nfe.common.DateTimeUtils;
  * @author temp_dev1
  *
  */
+@Service(value = "card51Service")
 public class Card51BO implements BatchBO {
 	
 	private static Logger LOG = Logger.getLogger(Card51BO.class);

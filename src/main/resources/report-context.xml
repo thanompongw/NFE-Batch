@@ -12,7 +12,8 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<context:property-placeholder location="classpath:batch.properties" />
-	<context:component-scan base-package="co.th.ktc.nfe" />
+	<context:component-scan base-package="co.th.ktc.nfe.report" />
+	<context:component-scan base-package="co.th.ktc.nfe.common" />
 	<context:annotation-config/>
 
     <jdbc:initialize-database data-source="dataSource" 
