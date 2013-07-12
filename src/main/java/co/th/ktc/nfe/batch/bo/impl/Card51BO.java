@@ -39,7 +39,7 @@ public class Card51BO implements BatchBO {
 	private FileUtils file;
 
 	/**
-	 * 
+	 *  
 	 */
 	public Card51BO() {
 	}
@@ -70,7 +70,7 @@ public class Card51BO implements BatchBO {
 			// generateReport
 		    write(parameter);
 			
-			String dirPath = config.getPathOutput();
+			String dirPath = config.getPathOutputCSP();
 			
 			currentDate = 
 					DateTimeUtils.convertFormatDateTime(currentDate, 
@@ -108,7 +108,7 @@ public class Card51BO implements BatchBO {
 		
 		if (rowSet.next()) {
 			file.setObject(rowSet.getString(1));
-			file.setObject("\r\n");
+			file.eol();
 		}
 	}
 
@@ -134,6 +134,7 @@ public class Card51BO implements BatchBO {
 			file.setObject(rowSet.getString("EMBOSSLINE1"));
 			file.setObject(rowSet.getString("EMBOSSLINE2"));
 			file.setObject(rowSet.getString("GENDER"));
+			file.setObject(rowSet.getString("DATE_OF_BIRTH"));
 			file.setObject(rowSet.getString("CARD_STATUS1"));
 			file.setObject(rowSet.getString("S4"));
 			file.setObject(rowSet.getString("ADDRESS1"));
@@ -198,7 +199,7 @@ public class Card51BO implements BatchBO {
 			file.setObject(rowSet.getString("S8"));
 			file.setObject(rowSet.getString("ISSUE_FLAG"));
 			file.setObject(rowSet.getString("REPLACEMENT_FLAG"));
-			file.setObject("\r\n");
+			file.eol();
 		}
 	}
 

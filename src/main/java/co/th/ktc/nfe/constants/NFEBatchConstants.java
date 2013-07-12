@@ -36,6 +36,6 @@ public interface NFEBatchConstants {
 
     public static final String XLS_REPORT_EXTENTION = ".xls";
     public static final String XLSX_REPORT_EXTENTION = ".xlsx";
-    public static final String TXT_FILE_EXTENTION = ".txt";
+    public static final String TXT_FILE_EXTENTION = ".TXT";
 	
 }

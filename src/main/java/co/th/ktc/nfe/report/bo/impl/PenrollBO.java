@@ -201,16 +201,16 @@ public class PenrollBO implements ReportBO {
 						      dataRows, 
 						      dataColumnIndex++,
 						      rowSet.getString("HOME_PROVINCE_NAME"));
-				//HOME_POSTAL_CODE.
-				poi.setObject(curSheet, 
-						      dataRows, 
-						      dataColumnIndex++,
-						      rowSet.getString("HOME_POSTAL_CODE"));
 				//HOME_COUNTRY.
 				poi.setObject(curSheet, 
 						      dataRows, 
 						      dataColumnIndex++,
 						      rowSet.getString("HOME_COUNTRY"));
+				//HOME_POSTAL_CODE.
+				poi.setObject(curSheet, 
+						      dataRows, 
+						      dataColumnIndex++,
+						      rowSet.getString("HOME_POSTAL_CODE"));
 				//COMPANY_NAME.
 				poi.setObject(curSheet, 
 						      dataRows, 

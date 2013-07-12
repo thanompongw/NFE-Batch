@@ -62,4 +62,28 @@
 		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
     </bean>
     
+    <bean id="autoReceiveApplicationDao" class="co.th.ktc.nfe.batch.dao.impl.AutoReceiveApplicationDao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
+    <bean id="declineLoanWeeklyDao" class="co.th.ktc.nfe.batch.dao.impl.DeclineLoanWeeklyDao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
+    <bean id="saleCommissionDao" class="co.th.ktc.nfe.batch.dao.impl.SaleCommissionDao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
+    <bean id="smsCCDao" class="co.th.ktc.nfe.batch.dao.impl.SMSCCDao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
+    <bean id="smsRLDao" class="co.th.ktc.nfe.batch.dao.impl.SMSRLDao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
+    <bean id="smsIncompleteDocDao" class="co.th.ktc.nfe.batch.dao.impl.SMSIncompleteDocDao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
 </beans>

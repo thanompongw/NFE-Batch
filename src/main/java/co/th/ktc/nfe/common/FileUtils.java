@@ -15,7 +15,7 @@ public class FileUtils {
      * Buffer size for transferring process
      */
     public static final int BUFFER_SIZE = 4096;
-    public static final String ENCODING = "UTF8";
+    public static final String ENCODING = "TIS620";
     
     public FileUtils() {
     	data = new StringBuilder();
@@ -84,5 +84,22 @@ public class FileUtils {
 		} else {
 			data.append(obj);
 		}
+	}
+	
+	public void setObject(Object obj, String delimiter) {
+		if (obj == null) {
+			data.append("");
+		} else {
+			data.append(obj);
+		}
+		data.append(delimiter);
+	}
+	
+	public void eol() {
+		if (data.charAt(data.length() - 1) == '|'
+				|| data.charAt(data.length() - 1) == ',') {
+			data.deleteCharAt(data.length() - 1);
+		}
+		data.append("\r\n");
 	}
 }

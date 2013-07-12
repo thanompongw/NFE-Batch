@@ -13,6 +13,12 @@ public class BatchConfiguration {
 	@Value("${batch.path.output}")
 	private String pathOutput;
 
+	@Value("${batch.path.output.CSP}")
+	private String pathOutputCSP;
+
+	@Value("${batch.path.output.SMS}")
+	private String pathOutputSMS;
+
 	@Value("${batch.path.temp}")
 	private String pathTemp;
 	
@@ -37,6 +43,20 @@ public class BatchConfiguration {
 	@Bean
 	public String getPathOutput() {
 		return pathOutput;
+	}
+
+	/**
+	 * @return the pathOutputCSP
+	 */
+	public String getPathOutputCSP() {
+		return pathOutputCSP;
+	}
+
+	/**
+	 * @return the pathOutputSMS
+	 */
+	public String getPathOutputSMS() {
+		return pathOutputSMS;
 	}
 
 	/**
