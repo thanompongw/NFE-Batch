@@ -7,7 +7,7 @@ import java.util.List;
  * @author temp_dev2
  *
  */
-public class MotranBean implements Serializable {
+public class MotranHeaderBean implements Serializable {
 
 
 	/**
@@ -25,13 +25,11 @@ public class MotranBean implements Serializable {
 	private String type;
 	private String productType;
 	private String filler;
-	
-	private List<MotranDetailBean> motranDetailBeans;
 
 	/**
 	 * Default Constructor of MotranBean class.
 	 */
-	public MotranBean() {
+	public MotranHeaderBean() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -173,20 +171,6 @@ public class MotranBean implements Serializable {
 	 */
 	public void setFiller(String filler) {
 		this.filler = filler;
-	}
-
-	/**
-	 * @return the motranDetailBeans
-	 */
-	public List<MotranDetailBean> getMotranDetailBeans() {
-		return motranDetailBeans;
-	}
-
-	/**
-	 * @param motranDetailBeans the motranDetailBeans to set
-	 */
-	public void setMotranDetailBeans(List<MotranDetailBean> motranDetailBeans) {
-		this.motranDetailBeans = motranDetailBeans;
 	}
 
 }

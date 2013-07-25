@@ -33,7 +33,8 @@ public class MotranDetailBean implements Serializable {
 	private String clearingHouseCode;
 	private Integer transferAmount;
 	private String receiverInformation;
-	private String otherInformationI;
+	private String appNo;
+	private String productCode;
 	private String otherInformationII;
 	private String referenceNo;
 	private String referenceRunningNo;	
@@ -285,17 +286,31 @@ public class MotranDetailBean implements Serializable {
 	}
 
 	/**
-	 * @return the otherInformationI
+	 * @return the appNo
 	 */
-	public String getOtherInformationI() {
-		return otherInformationI;
+	public String getAppNo() {
+		return appNo;
 	}
 
 	/**
-	 * @param otherInformationI the otherInformationI to set
+	 * @param appNo the appNo to set
 	 */
-	public void setOtherInformationI(String otherInformationI) {
-		this.otherInformationI = otherInformationI;
+	public void setAppNo(String appNo) {
+		this.appNo = appNo;
+	}
+
+	/**
+	 * @return the productCode
+	 */
+	public String getProductCode() {
+		return productCode;
+	}
+
+	/**
+	 * @param productCode the productCode to set
+	 */
+	public void setProductCode(String productCode) {
+		this.productCode = productCode;
 	}
 
 	/**

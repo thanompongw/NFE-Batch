@@ -20,7 +20,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import co.th.ktc.nfe.batch.bo.BatchBO;
-import co.th.ktc.nfe.batch.domain.MotranBean;
+import co.th.ktc.nfe.batch.domain.MotranHeaderBean;
+import co.th.ktc.nfe.batch.domain.MotranDetailBean;
 
 public class ReadMotranTests extends TestCase {
 
@@ -43,12 +44,23 @@ public class ReadMotranTests extends TestCase {
 			Object record = null;
 			// read records from "input.csv"
 			while ((record = in.read()) != null) {
-				MotranBean bean = (MotranBean) record;
+				if (in.getRecordName().equals("header")) {
+					MotranHeaderBean bean = (MotranHeaderBean) record;
 
-				System.out.println("" + bean.getTotalRecord());
+					System.out.println("Record Type : " + bean.getRecordType());
+					System.out.println("Effective Date : " + bean.getEffectiveDate());
+				} else {
+					MotranDetailBean bean = (MotranDetailBean) record;
+
+					System.out.println("Record Type : " + bean.getRecordType());
+					System.out.println("Effective Date : " + bean.getEffectiveDate());
+					System.out.println("App No : " + bean.getAppNo());
+					System.out.println("Product Code : " + bean.getProductCode());
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			fail(e.getMessage());
 		} finally {
 			if (in != null) {
 				in.close();
@@ -63,6 +75,8 @@ public class ReadMotranTests extends TestCase {
 				}
 			}
 		}
+		
+		assertTrue("Success", true);
 	}
 
 }
