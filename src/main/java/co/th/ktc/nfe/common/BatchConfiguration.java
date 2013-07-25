@@ -16,11 +16,38 @@ public class BatchConfiguration {
 	@Value("${batch.path.output.CSP}")
 	private String pathOutputCSP;
 
+	@Value("${batch.path.output.iNet}")
+	private String pathOutputINet;
+
 	@Value("${batch.path.output.SMS}")
 	private String pathOutputSMS;
 
 	@Value("${batch.path.temp}")
 	private String pathTemp;
+
+	@Value("${batch.FTP.host}")
+	private String ftpHost;
+
+	@Value("${batch.FTP.username}")
+	private String ftpUserName;
+
+	@Value("${batch.FTP.password}")
+	private String ftpPassword;
+
+	@Value("${batch.FTP.port}")
+	private String ftpPort;
+
+	@Value("${batch.FTP.CSP.host}")
+	private String ftpCSPHost;
+
+	@Value("${batch.FTP.CSP.username}")
+	private String ftpCSPUserName;
+
+	@Value("${batch.FTP.CSP.password}")
+	private String ftpCSPPassword;
+
+	@Value("${batch.FTP.CSP.port}")
+	private String ftpCSPPort;
 	
 	/**
 	 * Default Constructor of BatchConfiguration Class.
@@ -53,6 +80,13 @@ public class BatchConfiguration {
 	}
 
 	/**
+	 * @return the pathOutputINet
+	 */
+	public String getPathOutputINet() {
+		return pathOutputINet;
+	}
+
+	/**
 	 * @return the pathOutputSMS
 	 */
 	public String getPathOutputSMS() {
@@ -65,6 +99,62 @@ public class BatchConfiguration {
 	@Bean
 	public String getPathTemp() {
 		return pathTemp;
+	}
+
+	/**
+	 * @return the ftpHost
+	 */
+	public String getFtpHost() {
+		return ftpHost;
+	}
+
+	/**
+	 * @return the ftpUserName
+	 */
+	public String getFtpUserName() {
+		return ftpUserName;
+	}
+
+	/**
+	 * @return the ftpPassword
+	 */
+	public String getFtpPassword() {
+		return ftpPassword;
+	}
+
+	/**
+	 * @return the ftpPort
+	 */
+	public String getFtpPort() {
+		return ftpPort;
+	}
+
+	/**
+	 * @return the ftpCSPHost
+	 */
+	public String getFtpCSPHost() {
+		return ftpCSPHost;
+	}
+
+	/**
+	 * @return the ftpCSPUserName
+	 */
+	public String getFtpCSPUserName() {
+		return ftpCSPUserName;
+	}
+
+	/**
+	 * @return the ftpCSPPassword
+	 */
+	public String getFtpCSPPassword() {
+		return ftpCSPPassword;
+	}
+
+	/**
+	 * @return the ftpCSPPort
+	 */
+	public String getFtpCSPPort() {
+		return ftpCSPPort;
 	}
 
 }

@@ -1,0 +1,207 @@
+/**
+ * 
+ */
+package co.th.ktc.nfe.batch.bo.impl;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.stereotype.Service;
+
+import co.th.ktc.nfe.batch.bo.BatchBO;
+import co.th.ktc.nfe.batch.dao.AbstractBatchDao;
+import co.th.ktc.nfe.common.BatchConfiguration;
+import co.th.ktc.nfe.common.DateTimeUtils;
+import co.th.ktc.nfe.common.FTPFile;
+import co.th.ktc.nfe.common.FileUtils;
+import co.th.ktc.nfe.report.domain.DateBean;
+
+/**
+ * @author temp_dev1
+ *
+ */
+@Service(value = "disbursementService")
+public class DisbursementBO implements BatchBO {
+	
+	private static Logger LOG = Logger.getLogger(DisbursementBO.class);
+	
+	private static final String BATCH_FILE_NAME = "APSDISB01_D";
+	
+	@Autowired
+	private BatchConfiguration config;
+	
+	@Resource(name = "disbursementDao")
+	private AbstractBatchDao dao;
+
+	@Autowired
+	private FileUtils file;
+
+	@Autowired
+	private FTPFile ftpFile;
+
+	/**
+	 *  
+	 */
+	public DisbursementBO() {
+	}
+
+	/* (non-Javadoc)
+	 * @see co.th.ktc.nfe.batch.bo.BatchBO#execute(java.util.Map)
+	 */
+	public Integer execute(Map<String, String> parameter) {
+		Integer processStatus = 0;
+		
+		try {
+			file = new FileUtils();
+			String currentDate = null;
+		
+			if (parameter == null) {
+				parameter = new HashMap<String, String>();
+				currentDate = dao.getSetDate("DD/MM/YYYY");
+			} else {
+				currentDate = parameter.get("BATCH_DATE");
+			}
+			
+			DateBean dateBean = dao.getBusinessDay(currentDate);
+			
+			if (dateBean != null) {
+
+				String fromTimestamp = 
+						DateTimeUtils.toString(dateBean.getDateFrom(), 
+											   DateTimeUtils.DEFAULT_DATE_FORMAT)  + " 00:00:00";
+				String toTimestamp = 
+						DateTimeUtils.toString(dateBean.getDateTo(), 
+								   DateTimeUtils.DEFAULT_DATE_FORMAT) + " 23:59:59";
+				
+				parameter.put("DATE_FROM", fromTimestamp);
+				parameter.put("DATE_TO", toTimestamp);
+				
+				// generateReport
+			    write(parameter);
+				
+				String dirPath = config.getPathOutputINet();
+				
+				currentDate = 
+						DateTimeUtils.convertFormatDateTime(currentDate, 
+															DateTimeUtils.DEFAULT_DATE_FORMAT, 
+															"yyMMdd");
+				file.writeFile(BATCH_FILE_NAME, dirPath, currentDate);
+			}
+		} catch (Exception e) {
+			processStatus = 1;
+			e.printStackTrace();
+			//TODO: throws error to main function
+		}
+		
+		return processStatus;
+	}
+
+	/* (non-Javadoc)
+	 * @see co.th.ktc.nfe.batch.bo.BatchBO#write(java.util.Map)
+	 */
+	public void write(Map<String, String> parameter) {
+		
+		Integer totalRecord = dao.size(new Object[] {parameter.get("DATE_FROM"),
+										 	   	     parameter.get("DATE_TO")});
+		
+		Integer totalRound = new Integer((int) Math.ceil(totalRecord / 100.00));
+		
+		for (int i = 1; i <= totalRound; i++) {
+			
+			SqlRowSet rowSet = dao.queryHeader(new Object[] {i,
+					                                         parameter.get("DATE_FROM"),
+											 	   			 parameter.get("DATE_TO"),
+											 	   			 i,
+											 	   			 i});
+			
+			generateFileHeader(rowSet);
+
+			
+			rowSet = dao.queryDetail(new Object[] {i, 
+					                               parameter.get("DATE_FROM"),
+	                                               parameter.get("DATE_TO"),
+	                                               i,
+	                                               i});
+			
+			generateFileDetail(rowSet);
+		}
+	}
+
+	private void generateFileHeader(SqlRowSet rowSet) {
+		
+		if (rowSet.next()) {
+			file.setObject(rowSet.getString("FILE_TYPE"));
+			file.setObject(rowSet.getString("RECORD_TYPE"));
+			file.setObject(rowSet.getString("SEQ"));
+			file.setObject(rowSet.getString("DEFAULT_BANK_CODE"));
+			file.setObject(rowSet.getString("TOTAL_RECORD"));
+			file.setObject(rowSet.getString("TOTAL_BALANCE_TRANSFER"));
+			file.setObject(rowSet.getString("EFFECTIVE_DATE"));
+			file.setObject(rowSet.getString("TYPE"));
+			file.setObject(rowSet.getString("GROUPPRODUCT_TYPE"));
+			file.setObject(rowSet.getString("ZERO"));
+			file.eol();
+		}
+	}
+
+	private void generateFileDetail(SqlRowSet rowSet) {
+		
+		while (rowSet.next()) {
+			file.setObject(rowSet.getString("FILE_TYPE"));
+			file.setObject(rowSet.getString("RECORD_TYPE"));
+			file.setObject(rowSet.getString("BATCH_NUMBER"));
+			file.setObject(rowSet.getString("RECEIVING_BANK_CODE"));
+			file.setObject(rowSet.getString("RECEIVING_BANK_BRANCH"));
+			file.setObject(rowSet.getString("RECEIVING_BANK_ACCOUNT"));
+			file.setObject(rowSet.getString("SENDING_BANK_CODE_DEFAULT"));
+			file.setObject(rowSet.getString("SENDING_BANK_CODE"));
+			file.setObject(rowSet.getString("SENDING_ACCCOUNT_NO"));
+			file.setObject(rowSet.getString("EFFECTIVE_DATE"));
+			file.setObject(rowSet.getString("SERVICE_TYPE_CODE"));
+			file.setObject(rowSet.getString("CLEARIGNG_HOUSE_CODE"));
+			file.setObject(rowSet.getString("TRANSFER_AMOUNT"));
+			file.setObject(rowSet.getString("RECEIVER_INFORMATION"));
+			file.setObject(rowSet.getString("RECEIVER_ID"));
+			file.setObject(rowSet.getString("RECEIVER_NAME"));
+			file.setObject(rowSet.getString("SENDER_NAME"));
+			file.setObject(rowSet.getString("OTHER_INFORMATION_I"));
+			file.setObject(rowSet.getString("REFERENCE_NUMBER"));
+			file.setObject(rowSet.getString("OTHER_INFORMATION_II"));
+			file.setObject(rowSet.getString("REFERENCE_RUNNING_NUMBER"));
+			file.setObject(rowSet.getString("ZERO"));
+			file.eol();
+		}
+	}
+	
+	private String downloadFileMotran(String fileName) {
+		try {
+			String fileNameString = 
+				ftpFile.download(fileName, 
+				         		 dao.getConfigRemotePath(null), 
+				         		 config.getPathTemp(),
+				         		 config.getFtpHost(),
+				         		 config.getFtpUserName(),
+				         		 config.getFtpPassword(),
+				         		 Integer.parseInt(config.getFtpPort()));
+			return fileNameString;
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	private void insertMotran(String fileName) {
+		
+	}
+
+}

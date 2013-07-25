@@ -1,0 +1,50 @@
+<beanio xmlns="http://www.beanio.org/2012/03" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.beanio.org/2012/03 http://www.beanio.org/2012/03/mapping.xsd">
+
+	<!-- 'format' identifies the type of stream -->
+	<stream name="montran" format="fixedlength" minOccurs="1"
+		maxOccurs="unbounded" strict="true">
+		<!-- 'class' binds the header record to a java.util.HashMap -->
+		<record name="header" class="co.th.ktc.nfe.batch.domain.MotranBean"
+			minOccurs="1" maxLength="unbounded">
+			<!-- 'rid' indicates this field is used to identify the record -->
+			<field name="fileType" position="0" length="2" />
+			<field name="recordType" position="2" length="1" type="integer" literal="1" />
+			<field name="rowNo" position="3" length="6" type="integer" />
+			<field name="bankCode" position="9" length="3" />
+			<field name="totalRecord" position="12" length="3" type="integer" />
+			<field name="totalBanlanceTransfer" position="15" length="15" type="integer" />
+			<field name="effectiveDate" position="30" length="8" />
+			<field name="type" position="38" length="1" />
+			<field name="productType" position="39" length="8" />
+			<field name="filler" position="47" length="271" ignore="true" />
+			<segment name="motranDetailBeans" collection="list" 
+			minOccurs="0" maxOccurs="unbounded" class="co.th.ktc.nfe.batch.domain.MotranDetailBean" >
+				<!-- Detail records are bound to example.Contact -->
+				<!-- 'ignore' indicates this field is not bound to a bean property -->
+				<field name="fileType" position="0" length="2" />
+				<field name="recordType" position="2" length="1" type="integer" literal="2" />
+				<field name="setNo" position="3" length="6" type="integer" />
+				<field name="receivingBankCode" position="9" length="3" />
+				<field name="receivingBankBranch" position="12" length="4" />
+				<field name="receivingBankAccount" position="16" length="11" />
+				<field name="sendingBankCodeDefault" position="27" length="3" />
+				<field name="sendingBankCode" position="30" length="4" />
+				<field name="sendingBankAccount" position="34" length="3" />
+				<field name="effectiveDate" position="37" length="8" />
+				<field name="serviceType" position="45" length="2" />
+				<field name="clearingHouseCode" position="47" length="2" />
+				<field name="transferAmount" position="49" length="12" />
+				<field name="receiverInformation" position="61" length="8" />
+				<field name="receiverId" position="69" length="10" />
+				<field name="receiverName" position="79" length="42" />
+				<field name="senderName" position="121" length="60" />
+				<field name="otherInformationI" position="181" length="58" />
+				<field name="referenceNo" position="239" length="20" />
+				<field name="otherInformationII" position="259" length="22" />
+				<field name="referenceRunningNo" position="281" length="6" />
+				<field name="filler" position="287" length="23" ignore="true" />
+			</segment>
+		</record>
+	</stream>
+</beanio>

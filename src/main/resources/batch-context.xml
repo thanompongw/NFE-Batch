@@ -85,5 +85,61 @@
     <bean id="smsIncompleteDocDao" class="co.th.ktc.nfe.batch.dao.impl.SMSIncompleteDocDao">
 		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
     </bean>
+
+    <bean id="smsCLMainCardDao" class="co.th.ktc.nfe.batch.dao.impl.SMSCLMainCardDao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
+    <bean id="smsCLSupplementaryCardDao" class="co.th.ktc.nfe.batch.dao.impl.SMSCLSupplementaryCardDao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
+    <bean id="smsCLRevolvingLoanDao" class="co.th.ktc.nfe.batch.dao.impl.SMSCLRevolvingLoanDao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
+    <bean id="letterApproveRevolvingLoanLA01Dao" class="co.th.ktc.nfe.batch.dao.impl.LetterApproveRevolvingLoanLA01Dao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
+    <bean id="letterApprovePersonalLoanLA02Dao" class="co.th.ktc.nfe.batch.dao.impl.LetterApprovePersonalLoanLA02Dao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
+    <bean id="letterApprovePersonalLoanLA03Dao" class="co.th.ktc.nfe.batch.dao.impl.LetterApprovePersonalLoanLA03Dao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
+    <bean id="letterApproveCreditLimitLA04Dao" class="co.th.ktc.nfe.batch.dao.impl.LetterApproveCreditLimitLA04Dao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
+    <bean id="letterApproveCreditLimitLA05Dao" class="co.th.ktc.nfe.batch.dao.impl.LetterApproveCreditLimitLA05Dao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
+    <bean id="letterRejectLR01Dao" class="co.th.ktc.nfe.batch.dao.impl.LetterRejectLR01Dao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
+    <bean id="letterRejectLR02Dao" class="co.th.ktc.nfe.batch.dao.impl.LetterRejectLR02Dao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
+    <bean id="letterRejectLR03Dao" class="co.th.ktc.nfe.batch.dao.impl.LetterRejectLR03Dao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
+    <bean id="letterRejectLR04Dao" class="co.th.ktc.nfe.batch.dao.impl.LetterRejectLR04Dao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
+    <bean id="mediaClearingDao" class="co.th.ktc.nfe.batch.dao.impl.MediaClearingDao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
+    <bean id="disbursementDao" class="co.th.ktc.nfe.batch.dao.impl.DisbursementDao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
     
 </beans>

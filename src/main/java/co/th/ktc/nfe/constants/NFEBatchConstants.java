@@ -37,5 +37,11 @@ public interface NFEBatchConstants {
     public static final String XLS_REPORT_EXTENTION = ".xls";
     public static final String XLSX_REPORT_EXTENTION = ".xlsx";
     public static final String TXT_FILE_EXTENTION = ".TXT";
+    
+    public static final String SMS_BATCH_TYPE_MASTER_APPROVE = "MA";
+    public static final String SMS_BATCH_TYPE_MASTER_REJECT = "MR";
+    public static final String SMS_BATCH_TYPE_SUPPLEMENT_APPROVE = "SA";
+    public static final String SMS_BATCH_TYPE_SUPPLEMENT_REJECT = "SR";
+    public static final String SMS_BATCH_TYPE_REVOLVING = "RL";
 	
 }
