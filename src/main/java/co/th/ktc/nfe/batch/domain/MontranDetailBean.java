@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @author temp_dev2
  *
  */
-public class MotranDetailBean implements Serializable {
+public class MontranDetailBean implements Serializable {
 
 	/**
 	 * serialVersionUID.
@@ -37,14 +37,13 @@ public class MotranDetailBean implements Serializable {
 	private String productCode;
 	private String otherInformationII;
 	private String referenceNo;
-	private String referenceRunningNo;	
+	private String referenceRunningNo;
 	private String filler;
 
 	/**
 	 * Default Constructor of MotranDetailBean class.
 	 */
-	public MotranDetailBean() {
-		// TODO Auto-generated constructor stub
+	public MontranDetailBean() {
 	}
 
 	/**
@@ -261,7 +260,7 @@ public class MotranDetailBean implements Serializable {
 	 * @return the transferAmount
 	 */
 	public Integer getTransferAmount() {
-		return transferAmount;
+		return transferAmount / 100;
 	}
 
 	/**

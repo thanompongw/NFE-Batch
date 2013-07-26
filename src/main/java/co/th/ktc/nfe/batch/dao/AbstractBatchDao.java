@@ -149,4 +149,50 @@ public abstract class AbstractBatchDao extends JdbcDaoSupport {
 		return businessDates;
 
 	}
+	
+
+	
+	public String getMediaCleringDay(String effectiveDate) {
+		
+		StringBuilder sql = new StringBuilder();
+		
+		sql.append("SELECT TO_CHAR(CAST((CASE ");
+		sql.append("                         WHEN TO_CHAR((B_DATE - DIFF - 1), 'D') = 6 ");
+		sql.append("                         THEN B_DATE - DIFF - 1 ");
+		sql.append("                         ELSE B_DATE - DIFF ");
+		sql.append("                     END) AS DATE), 'YYMMDD') AS MEDIA_DATE ");
+		sql.append("FROM ");
+		sql.append("( ");
+		sql.append("SELECT B_DATE, ");
+		sql.append("       B_DATE - (CAST(LAG(CAST(B_DATE AS DATE), 1, CAST(B_DATE AS DATE))  ");
+		sql.append("                      OVER (ORDER BY B_DATE) AS DATE)) AS DIFF, ");
+		sql.append("       ROWNUM ");
+		sql.append("FROM   (SELECT (TO_DATE(?, 'DD/MM/YYYY') - LEVEL) AS B_DATE ");
+		sql.append("        FROM   DUAL ");
+		sql.append("        CONNECT BY LEVEL <= 10) ");
+		sql.append("WHERE  TO_CHAR(B_DATE, 'D') NOT IN (7, 1) ");
+		sql.append("AND    NOT EXISTS(SELECT 'X' ");
+		sql.append("                  FROM   NFE_HOLIDAY ");
+		sql.append("                  WHERE  HOLIDAY_DATE = CAST(B_DATE AS DATE)) ");
+		sql.append("ORDER BY ROWNUM ASC ");
+		sql.append(") ");
+		sql.append("WHERE ROWNUM <= 1 ");
+		
+		String mediaCleringDate = null;
+		
+		try {
+			
+			if (isDayoff(effectiveDate)) {
+				mediaCleringDate = getJdbcTemplate().queryForObject(sql.toString(), 
+						                                            new Object[] {effectiveDate},
+						                                            String.class);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return mediaCleringDate;
+
+	}
 }

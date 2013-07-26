@@ -53,7 +53,7 @@ public class PenrollBO implements ReportBO {
 			
 			String currentDate = null;
 			
-			if (parameter == null) {
+			if (parameter == null || parameter.isEmpty()) {
 				parameter = new HashMap<String, String>();
 				currentDate = dao.getSetDate("DD/MM/YYYY");
 

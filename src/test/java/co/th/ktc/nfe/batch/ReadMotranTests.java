@@ -4,24 +4,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.annotation.Resource;
 
 import junit.framework.TestCase;
 
 import org.beanio.BeanReader;
 import org.beanio.StreamFactory;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.omg.CosNaming._BindingIteratorImplBase;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import co.th.ktc.nfe.batch.bo.BatchBO;
+import co.th.ktc.nfe.batch.domain.MontranDetailBean;
 import co.th.ktc.nfe.batch.domain.MotranHeaderBean;
-import co.th.ktc.nfe.batch.domain.MotranDetailBean;
 
 public class ReadMotranTests extends TestCase {
 
@@ -49,13 +40,15 @@ public class ReadMotranTests extends TestCase {
 
 					System.out.println("Record Type : " + bean.getRecordType());
 					System.out.println("Effective Date : " + bean.getEffectiveDate());
+					System.out.println("Transfer Amount : " + bean.getTotalBanlanceTransfer());
 				} else {
-					MotranDetailBean bean = (MotranDetailBean) record;
+					MontranDetailBean bean = (MontranDetailBean) record;
 
 					System.out.println("Record Type : " + bean.getRecordType());
 					System.out.println("Effective Date : " + bean.getEffectiveDate());
 					System.out.println("App No : " + bean.getAppNo());
 					System.out.println("Product Code : " + bean.getProductCode());
+					System.out.println("Transfer Amount : " + bean.getTransferAmount());
 				}
 			}
 		} catch (Exception e) {

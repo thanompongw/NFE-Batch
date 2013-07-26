@@ -67,6 +67,10 @@ public class DisbursementBO implements BatchBO {
 				currentDate = parameter.get("BATCH_DATE");
 			}
 			
+			if (dao.isDayoff(currentDate)) {
+				//Throw Exception
+			}
+			
 			DateBean dateBean = dao.getBusinessDay(currentDate);
 			
 			if (dateBean != null) {
@@ -176,32 +180,6 @@ public class DisbursementBO implements BatchBO {
 			file.setObject(rowSet.getString("ZERO"));
 			file.eol();
 		}
-	}
-	
-	private String downloadFileMotran(String fileName) {
-		try {
-			String fileNameString = 
-				ftpFile.download(fileName, 
-				         		 dao.getConfigRemotePath(null), 
-				         		 config.getPathTemp(),
-				         		 config.getFtpHost(),
-				         		 config.getFtpUserName(),
-				         		 config.getFtpPassword(),
-				         		 Integer.parseInt(config.getFtpPort()));
-			return fileNameString;
-		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return null;
-	}
-	
-	private void insertMotran(String fileName) {
-		
 	}
 
 }

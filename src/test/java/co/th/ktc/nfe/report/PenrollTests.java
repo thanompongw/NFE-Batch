@@ -35,7 +35,7 @@ public class PenrollTests extends TestCase {
 		
 		Map<String, String> parameter = new HashMap<String, String>();
 		
-		parameter.put("REPORT_DATE", "03/07/2013");
+		parameter.put("REPORT_DATE", "11/05/2014");
 			
 		int status = bo.execute(parameter);
 		

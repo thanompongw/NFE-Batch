@@ -107,7 +107,7 @@ public class MotranHeaderBean implements Serializable {
 	 * @return the totalBanlanceTransfer
 	 */
 	public Integer getTotalBanlanceTransfer() {
-		return totalBanlanceTransfer;
+		return totalBanlanceTransfer / 100;
 	}
 
 	/**
