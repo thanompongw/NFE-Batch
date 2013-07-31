@@ -203,43 +203,4 @@ public class FileUtils {
 		data.append("\r\n");
 	}
 	
-	public String findFileByEffectiveDate(String fileName, 
-			                              String dirPath, 
-			                              String date,
-			                              String effectiveDate) {
-		
-		StringBuilder batchFileName = new StringBuilder();
-		String fileExtention = NFEBatchConstants.TXT_FILE_EXTENTION;
-		String outFile = "out";
-		
-		if (date == null || date.isEmpty()) {
-			batchFileName.append(fileName);
-			batchFileName.append(fileExtention);
-		} else {
-			batchFileName.append(fileName);
-			batchFileName.append(date);
-			batchFileName.append("_");
-			batchFileName.append(outFile);
-			batchFileName.append(fileExtention);
-		}
-		
-		String batchFileOutPath = new File(dirPath, 
-				batchFileName.toString()).getAbsolutePath();
-		
-		Pattern pattern = Pattern.compile("\\" + effectiveDate + "\\b", 
-				                          Pattern.CASE_INSENSITIVE);
-		
-		Scanner scanner = new Scanner(batchFileOutPath);
-		if (scanner.hasNextLine()) {
-		    String nextLine = scanner.nextLine();
-		    Matcher matcher = pattern.matcher(nextLine);
-		    
-		    if (matcher.find()) {
-		    	return batchFileName.toString();
-		    }
-		}
-		
-		return null;
-	}
-	
 }

@@ -12,7 +12,7 @@ import org.beanio.StreamFactory;
 import org.junit.Test;
 
 import co.th.ktc.nfe.batch.domain.MontranDetailBean;
-import co.th.ktc.nfe.batch.domain.MotranHeaderBean;
+import co.th.ktc.nfe.batch.domain.MontranHeaderBean;
 
 public class ReadMotranTests extends TestCase {
 
@@ -36,7 +36,7 @@ public class ReadMotranTests extends TestCase {
 			// read records from "input.csv"
 			while ((record = in.read()) != null) {
 				if (in.getRecordName().equals("header")) {
-					MotranHeaderBean bean = (MotranHeaderBean) record;
+					MontranHeaderBean bean = (MontranHeaderBean) record;
 
 					System.out.println("Record Type : " + bean.getRecordType());
 					System.out.println("Effective Date : " + bean.getEffectiveDate());

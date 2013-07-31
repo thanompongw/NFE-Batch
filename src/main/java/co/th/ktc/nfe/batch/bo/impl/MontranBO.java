@@ -3,10 +3,12 @@
  */
 package co.th.ktc.nfe.batch.bo.impl;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -90,7 +92,7 @@ public class MontranBO implements BatchBO {
 				String effectiveDate = 
 						DateTimeUtils.convertFormatDateTime(currentDate, 
 															DateTimeUtils.DEFAULT_DATE_FORMAT, 
-															"ddMMyyyy");
+															"ddMMyy");
 				List<MontranDetailBean> motranDetailBeans = 
 						read(mediaClearingDate, effectiveDate);
 				
@@ -117,17 +119,14 @@ public class MontranBO implements BatchBO {
 	}
 	
 	private List<MontranDetailBean> read(String mediaClearingDate, 
-			                            String effectiveDate) {
+			                             String effectiveDate) {
 		BeanReader in = null;
-		InputStream is = null;
 		List<MontranDetailBean> motranDetailBeans = new ArrayList<MontranDetailBean>();
 		try {
 			// create a BeanIO StreamFactory
 			StreamFactory factory = StreamFactory.newInstance();
-			// load the mapping file from the working directory
-			is = new FileInputStream("montran.xml");
-			
-			factory.load(is);
+			// load the mapping file from the working directory			
+			factory.loadResource("montran.xml");
 			
 			StringBuilder fileName = new StringBuilder();
 			fileName.append(BATCH_FILE_NAME);
@@ -139,8 +138,11 @@ public class MontranBO implements BatchBO {
 			String localTempPath = config.getPathTemp();
 			
 			File file = new File(localTempPath + fileName.toString());
+			InputStream is = new ByteArrayInputStream(
+					org.apache.commons.io.FileUtils.readFileToByteArray(file));
+			Reader reader = new InputStreamReader(is, Charset.forName(FileUtils.ENCODING_TIS620));
 			// create a BeanReader to read from "MEDIACLR_LNDISB_Dxxxxxx_out.TXT"
-			in = factory.createReader("montran", file);
+			in = factory.createReader("montran", reader);
 			Object record = null;
 			// read records from "input.csv"
 			while ((record = in.read()) != null) {
@@ -160,15 +162,6 @@ public class MontranBO implements BatchBO {
 			if (in != null) {
 				in.close();
 			}
-			
-			if (is != null) {
-				try {
-					is.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
 		}
 		return motranDetailBeans;
 	}
@@ -182,12 +175,12 @@ public class MontranBO implements BatchBO {
 		fileName.append("out");
 		fileName.append(NFEBatchConstants.TXT_FILE_EXTENTION);
 		
-		String remoteServerPath = config.getPathOutputINet();
+		String remoteServerPath = dao.getConfigRemotePath(null) + "/OLD/";
 		String localTempPath = config.getPathTemp();
 		String hostName = config.getFtpHost();
 		String userName = config.getFtpUserName();
 		String password = config.getFtpPassword();
-		Integer port = Integer.valueOf(config.getFtpHost());
+		Integer port = Integer.valueOf(config.getFtpPort());
 		
 		try {
 			ftpFile.download(fileName.toString(), 
@@ -209,28 +202,7 @@ public class MontranBO implements BatchBO {
 		Object[] parameter = null;
 		
 		for (MontranDetailBean montranDetailBean : montranDetailBeans) {
-			parameter = new Object[] {montranDetailBean.getAppNo(),
-									  montranDetailBean.getFileType(),
-									  montranDetailBean.getRecordType(),
-									  montranDetailBean.getSetNo(),
-									  montranDetailBean.getReceivingBankCode(),
-									  montranDetailBean.getReceivingBankBranch(),
-									  montranDetailBean.getReceivingBankAccount(),
-									  montranDetailBean.getReceiverId(),
-									  montranDetailBean.getReceiverName(),
-									  montranDetailBean.getSendingBankCodeDefault(),
-									  montranDetailBean.getSendingBankCode(),
-									  montranDetailBean.getSendingBankAccount(),
-									  montranDetailBean.getSenderName(),
-									  montranDetailBean.getServiceType(),
-									  montranDetailBean.getEffectiveDate(),
-									  montranDetailBean.getClearingHouseCode(),
-									  montranDetailBean.getTransferAmount(),
-									  montranDetailBean.getReceiverInformation(),
-									  montranDetailBean.getProductCode(),
-									  montranDetailBean.getOtherInformationII(),
-									  montranDetailBean.getReferenceNo(),
-									  montranDetailBean.getReferenceRunningNo()};
+			parameter = new Object[] {montranDetailBean};
 			dao.insert(parameter);
 		}
 	}

@@ -109,46 +109,35 @@ public class DisbursementBO implements BatchBO {
 	 * @see co.th.ktc.nfe.batch.bo.BatchBO#write(java.util.Map)
 	 */
 	public void write(Map<String, String> parameter) {
-		
-		Integer totalRecord = dao.size(new Object[] {parameter.get("DATE_FROM"),
-										 	   	     parameter.get("DATE_TO")});
-		
-		Integer totalRound = new Integer((int) Math.ceil(totalRecord / 100.00));
-		
-		for (int i = 1; i <= totalRound; i++) {
 			
-			SqlRowSet rowSet = dao.queryHeader(new Object[] {i,
-					                                         parameter.get("DATE_FROM"),
-											 	   			 parameter.get("DATE_TO"),
-											 	   			 i,
-											 	   			 i});
-			
-			generateFileHeader(rowSet);
+		SqlRowSet rowSet = dao.queryHeader(null);
+		
+		generateFileHeader(rowSet);
 
-			
-			rowSet = dao.queryDetail(new Object[] {i, 
-					                               parameter.get("DATE_FROM"),
-	                                               parameter.get("DATE_TO"),
-	                                               i,
-	                                               i});
-			
-			generateFileDetail(rowSet);
-		}
+		rowSet = dao.queryDetail(new Object[] {parameter.get("DATE_FROM"),
+                                               parameter.get("DATE_TO")});
+		generateFileDetail(rowSet);
+
+		rowSet = dao.queryTrailer(new Object[] {parameter.get("DATE_FROM"),
+                                                parameter.get("DATE_TO")});
+		generateFileTrailer(rowSet);
 	}
 
 	private void generateFileHeader(SqlRowSet rowSet) {
 		
 		if (rowSet.next()) {
-			file.setObject(rowSet.getString("FILE_TYPE"));
 			file.setObject(rowSet.getString("RECORD_TYPE"));
-			file.setObject(rowSet.getString("SEQ"));
-			file.setObject(rowSet.getString("DEFAULT_BANK_CODE"));
-			file.setObject(rowSet.getString("TOTAL_RECORD"));
-			file.setObject(rowSet.getString("TOTAL_BALANCE_TRANSFER"));
-			file.setObject(rowSet.getString("EFFECTIVE_DATE"));
-			file.setObject(rowSet.getString("TYPE"));
-			file.setObject(rowSet.getString("GROUPPRODUCT_TYPE"));
-			file.setObject(rowSet.getString("ZERO"));
+			file.setObject(rowSet.getString("S1"));
+			file.setObject(rowSet.getString("H1"));
+			file.setObject(rowSet.getString("H2"));
+			file.setObject(rowSet.getString("H3"));
+			file.setObject(rowSet.getString("S2"));
+			file.setObject(rowSet.getString("H4"));
+			file.setObject(rowSet.getString("H5"));
+			file.setObject(rowSet.getString("H6"));
+			file.setObject(rowSet.getString("H7"));
+			file.setObject(rowSet.getString("S3"));
+			file.setObject(rowSet.getString("S4"));
 			file.eol();
 		}
 	}
@@ -156,28 +145,33 @@ public class DisbursementBO implements BatchBO {
 	private void generateFileDetail(SqlRowSet rowSet) {
 		
 		while (rowSet.next()) {
-			file.setObject(rowSet.getString("FILE_TYPE"));
 			file.setObject(rowSet.getString("RECORD_TYPE"));
-			file.setObject(rowSet.getString("BATCH_NUMBER"));
-			file.setObject(rowSet.getString("RECEIVING_BANK_CODE"));
-			file.setObject(rowSet.getString("RECEIVING_BANK_BRANCH"));
-			file.setObject(rowSet.getString("RECEIVING_BANK_ACCOUNT"));
-			file.setObject(rowSet.getString("SENDING_BANK_CODE_DEFAULT"));
-			file.setObject(rowSet.getString("SENDING_BANK_CODE"));
-			file.setObject(rowSet.getString("SENDING_ACCCOUNT_NO"));
-			file.setObject(rowSet.getString("EFFECTIVE_DATE"));
-			file.setObject(rowSet.getString("SERVICE_TYPE_CODE"));
-			file.setObject(rowSet.getString("CLEARIGNG_HOUSE_CODE"));
-			file.setObject(rowSet.getString("TRANSFER_AMOUNT"));
-			file.setObject(rowSet.getString("RECEIVER_INFORMATION"));
-			file.setObject(rowSet.getString("RECEIVER_ID"));
-			file.setObject(rowSet.getString("RECEIVER_NAME"));
-			file.setObject(rowSet.getString("SENDER_NAME"));
-			file.setObject(rowSet.getString("OTHER_INFORMATION_I"));
-			file.setObject(rowSet.getString("REFERENCE_NUMBER"));
-			file.setObject(rowSet.getString("OTHER_INFORMATION_II"));
-			file.setObject(rowSet.getString("REFERENCE_RUNNING_NUMBER"));
-			file.setObject(rowSet.getString("ZERO"));
+			file.setObject(rowSet.getString("CARD_NUMBER"));
+			file.setObject(rowSet.getString("MD_SCSTC"));
+			file.setObject(rowSet.getString("MD_AMT"));
+			file.setObject(rowSet.getString("MD_DESC"));
+			file.setObject(rowSet.getString("LODGEMENT_REFERENCE"));
+			file.setObject(rowSet.getString("TRACE_BSB"));
+			file.setObject(rowSet.getString("TRACE_ACCOUNT"));
+			file.setObject(rowSet.getString("NAME_OF_REMITTER"));
+			file.setObject(rowSet.getString("REASON_CODE"));
+			file.setObject(rowSet.getString("PROCESSING_DATE"));
+			file.eol();
+		}
+	}
+
+	private void generateFileTrailer(SqlRowSet rowSet) {
+		
+		if (rowSet.next()) {
+			file.setObject(rowSet.getString("RECORD_TYPE"));
+			file.setObject(rowSet.getString("BSB_CODE"));
+			file.setObject(rowSet.getString("S1"));
+			file.setObject(rowSet.getString("TOTAL_AMOUNT"));
+			file.setObject(rowSet.getString("TOTAL_CREDIT_AMOUNT"));
+			file.setObject(rowSet.getString("TOTAL_AMOUNT"));
+			file.setObject(rowSet.getString("S2"));
+			file.setObject(rowSet.getString("TOTAL_RECORD"));
+			file.setObject(rowSet.getString("S3"));
 			file.eol();
 		}
 	}

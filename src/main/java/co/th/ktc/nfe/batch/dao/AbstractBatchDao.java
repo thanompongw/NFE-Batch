@@ -35,6 +35,8 @@ public abstract class AbstractBatchDao extends JdbcDaoSupport {
 	
 	public abstract SqlRowSet queryHeader(Object[] parameter);
 	
+	public abstract SqlRowSet queryTrailer(Object[] parameter);
+	
 	public abstract void success(Object[] parameter);
 	
 	public abstract void fail(Object[] parameter);
@@ -44,11 +46,16 @@ public abstract class AbstractBatchDao extends JdbcDaoSupport {
 	}
 	
 	public String getConfigRemotePath(Object[] parameter) {
-
 		
-		String sql = "SELECT TO_CHAR(NFE_CURRENTDATE, ?) FROM NFE_SETDATE";
+		StringBuilder sql = new StringBuilder();
 		
-		String remoteServerPath = "/data02/PRD/KTBCORP/KTC/APS/";
+		sql.append("SELECT CONFIGURATION_VALUE || '/' ");
+		sql.append("FROM NFE_CONFIGURATION ");
+		sql.append("WHERE CONFIGURATION_NAME = 'Fixed_MEDIACLR_Path' ");
+		
+		String remoteServerPath = 
+				getJdbcTemplate().queryForObject(sql.toString(), 
+										 		 String.class);
 		
 		return remoteServerPath;
 	}

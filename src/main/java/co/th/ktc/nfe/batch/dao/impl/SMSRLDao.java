@@ -120,4 +120,10 @@ public class SMSRLDao extends AbstractBatchDao {
 
 	}
 
+	@Override
+	public SqlRowSet queryTrailer(Object[] parameter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

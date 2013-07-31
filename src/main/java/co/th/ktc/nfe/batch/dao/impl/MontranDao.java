@@ -11,6 +11,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 
 import co.th.ktc.nfe.batch.dao.AbstractBatchDao;
+import co.th.ktc.nfe.batch.domain.MontranDetailBean;
 
 /**
  * @author temp_dev1
@@ -30,7 +31,7 @@ public class MontranDao extends AbstractBatchDao {
 	 * @see co.th.ktc.nfe.batch.dao.AbstractBatchDao#insert(java.lang.Object[])
 	 */
 	@Override
-	public void insert(final Object[] parameter) {
+	public void insert(final Object[] parameters) {
 		StringBuilder sql = new StringBuilder();
 		
 		sql.append("INSERT INTO NFE_G_MONTRAN (MONTRAN_ID,  ");
@@ -78,36 +79,37 @@ public class MontranDao extends AbstractBatchDao {
 		sql.append("        ?, ");
 		sql.append("        ?, ");
 		sql.append("        ?, ");
-		sql.append("        ?, ");
 		sql.append("        ?) ");
+		
+		final MontranDetailBean montranDetailBean = (MontranDetailBean) parameters[0];
+		
 		getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
 			
 			int parameterIndex = 1;
-			int objIndex = 0;
 					
 			public void setValues(PreparedStatement pstm) throws SQLException {
-				pstm.setString(parameterIndex++, (String) parameter[objIndex++]);
-				pstm.setInt(parameterIndex++, (Integer) parameter[objIndex++]);
-				pstm.setInt(parameterIndex++, (Integer) parameter[objIndex++]);
-				pstm.setInt(parameterIndex++, (Integer) parameter[objIndex++]);
-				pstm.setString(parameterIndex++, (String) parameter[objIndex++]);
-				pstm.setString(parameterIndex++, (String) parameter[objIndex++]);
-				pstm.setString(parameterIndex++, (String) parameter[objIndex++]);
-				pstm.setString(parameterIndex++, (String) parameter[objIndex++]);
-				pstm.setString(parameterIndex++, (String) parameter[objIndex++]);
-				pstm.setString(parameterIndex++, (String) parameter[objIndex++]);
-				pstm.setString(parameterIndex++, (String) parameter[objIndex++]);
-				pstm.setString(parameterIndex++, (String) parameter[objIndex++]);
-				pstm.setString(parameterIndex++, (String) parameter[objIndex++]);
-				pstm.setInt(parameterIndex++, (Integer) parameter[objIndex++]);
-				pstm.setString(parameterIndex++, (String) parameter[objIndex++]);
-				pstm.setString(parameterIndex++, (String) parameter[objIndex++]);
-				pstm.setString(parameterIndex++, (String) parameter[objIndex++]);
-				pstm.setString(parameterIndex++, (String) parameter[objIndex++]);
-				pstm.setString(parameterIndex++, (String) parameter[objIndex++]);
-				pstm.setString(parameterIndex++, (String) parameter[objIndex++]);
-				pstm.setString(parameterIndex++, (String) parameter[objIndex++]);
-				pstm.setString(parameterIndex++, (String) parameter[objIndex++]);
+				pstm.setString(parameterIndex++, montranDetailBean.getAppNo());
+				pstm.setString(parameterIndex++, montranDetailBean.getFileType());
+				pstm.setInt(parameterIndex++, montranDetailBean.getRecordType());
+				pstm.setInt(parameterIndex++, montranDetailBean.getSetNo());
+				pstm.setString(parameterIndex++, montranDetailBean.getReceivingBankCode());
+				pstm.setString(parameterIndex++, montranDetailBean.getReceivingBankBranch());
+				pstm.setString(parameterIndex++, montranDetailBean.getReceivingBankAccount());
+				pstm.setString(parameterIndex++, montranDetailBean.getSendingBankCodeDefault());
+				pstm.setString(parameterIndex++, montranDetailBean.getSendingBankCode());
+				pstm.setString(parameterIndex++, montranDetailBean.getSendingBankAccount());
+				pstm.setString(parameterIndex++, montranDetailBean.getEffectiveDate());
+				pstm.setString(parameterIndex++, montranDetailBean.getServiceType());
+				pstm.setString(parameterIndex++, montranDetailBean.getClearingHouseCode());
+				pstm.setInt(parameterIndex++, montranDetailBean.getTransferAmount());
+				pstm.setString(parameterIndex++, montranDetailBean.getReceiverInformation());
+				pstm.setString(parameterIndex++, montranDetailBean.getReceiverId());
+				pstm.setString(parameterIndex++, montranDetailBean.getReceiverName());
+				pstm.setString(parameterIndex++, montranDetailBean.getSenderName());
+				pstm.setString(parameterIndex++, montranDetailBean.getProductCode());
+				pstm.setString(parameterIndex++, montranDetailBean.getReferenceNo());
+				pstm.setString(parameterIndex++, montranDetailBean.getOtherInformationII());
+				pstm.setString(parameterIndex++, montranDetailBean.getReferenceRunningNo());
 			}
 		});
 	}
@@ -173,6 +175,12 @@ public class MontranDao extends AbstractBatchDao {
 	public void fail(Object[] parameter) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public SqlRowSet queryTrailer(Object[] parameter) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

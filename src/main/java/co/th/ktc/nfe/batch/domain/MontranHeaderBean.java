@@ -7,7 +7,7 @@ import java.util.List;
  * @author temp_dev2
  *
  */
-public class MotranHeaderBean implements Serializable {
+public class MontranHeaderBean implements Serializable {
 
 
 	/**
@@ -29,7 +29,7 @@ public class MotranHeaderBean implements Serializable {
 	/**
 	 * Default Constructor of MotranBean class.
 	 */
-	public MotranHeaderBean() {
+	public MontranHeaderBean() {
 		// TODO Auto-generated constructor stub
 	}
 

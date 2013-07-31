@@ -142,4 +142,8 @@
 		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
     </bean>
     
+    <bean id="montranDao" class="co.th.ktc.nfe.batch.dao.impl.MontranDao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    
 </beans>

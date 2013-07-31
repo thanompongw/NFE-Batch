@@ -279,4 +279,10 @@ public class LetterApprovePersonalLoanLA02Dao extends AbstractBatchDao {
 
 	}
 
+	@Override
+	public SqlRowSet queryTrailer(Object[] parameter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

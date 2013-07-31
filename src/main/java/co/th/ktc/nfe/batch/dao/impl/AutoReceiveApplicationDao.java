@@ -156,4 +156,10 @@ public class AutoReceiveApplicationDao extends AbstractBatchDao {
 
 	}
 
+	@Override
+	public SqlRowSet queryTrailer(Object[] parameter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -5,7 +5,7 @@
 	<stream name="montran" format="fixedlength" minOccurs="1"
 		maxOccurs="unbounded" strict="true">
 		<!-- 'class' binds the header record to a java.util.HashMap -->
-		<record name="header" class="co.th.ktc.nfe.batch.domain.MotranHeaderBean"
+		<record name="header" class="co.th.ktc.nfe.batch.domain.MontranHeaderBean"
 			minOccurs="1" maxLength="unbounded" order="1">
 			<!-- 'rid' indicates this field is used to identify the record -->
 			<field name="fileType" position="0" length="2" />
@@ -19,8 +19,8 @@
 			<field name="productType" position="39" length="8" />
 			<field name="filler" position="47" length="271" ignore="true" />
 		</record>
-		<record name="motranDetailBeans"
-			minOccurs="0" maxOccurs="unbounded" class="co.th.ktc.nfe.batch.domain.MotranDetailBean" order="2">
+		<record name="detail"
+			minOccurs="0" maxOccurs="unbounded" class="co.th.ktc.nfe.batch.domain.MontranDetailBean" order="2">
 			<!-- Detail records are bound to example.Contact -->
 			<!-- 'ignore' indicates this field is not bound to a bean property -->
 			<field name="fileType" position="0" length="2" />
