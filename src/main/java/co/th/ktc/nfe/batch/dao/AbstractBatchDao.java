@@ -157,8 +157,6 @@ public abstract class AbstractBatchDao extends JdbcDaoSupport {
 
 	}
 	
-
-	
 	public String getMediaCleringDay(String effectiveDate) {
 		
 		StringBuilder sql = new StringBuilder();

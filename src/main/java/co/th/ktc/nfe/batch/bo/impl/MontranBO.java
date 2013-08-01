@@ -175,7 +175,7 @@ public class MontranBO implements BatchBO {
 		fileName.append("out");
 		fileName.append(NFEBatchConstants.TXT_FILE_EXTENTION);
 		
-		String remoteServerPath = dao.getConfigRemotePath(null) + "/OLD/";
+		String remoteServerPath = dao.getConfigRemotePath(null) + "OLD/";
 		String localTempPath = config.getPathTemp();
 		String hostName = config.getFtpHost();
 		String userName = config.getFtpUserName();

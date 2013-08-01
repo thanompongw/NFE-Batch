@@ -98,6 +98,8 @@ public class PenrollBO implements ReportBO {
 		int detailSheetNo = 0;
 		
 		SqlRowSet rowSet = dao.query(new Object[] {parameter.get("DATE_FROM"),
+												   parameter.get("DATE_TO"),
+												   parameter.get("DATE_FROM"),
 												   parameter.get("DATE_TO")});
 		
 		if (rowSet != null && rowSet.isBeforeFirst()) {

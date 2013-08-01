@@ -1,7 +1,7 @@
 /**
  * 
  */
-package co.th.ktc.nfe.batch.main;
+package co.th.ktc.nfe.batch.task;
 
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;

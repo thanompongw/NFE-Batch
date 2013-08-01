@@ -1,4 +1,4 @@
-package co.th.ktc.nfe.batch.main;
+package co.th.ktc.nfe.batch.task;
 
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
@@ -6,17 +6,17 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import co.th.ktc.nfe.report.bo.ReportBO;
+import co.th.ktc.nfe.report.bo.impl.ApproveBO;
 
-public class ApplicationReceiveTask implements Tasklet {
+public class ApproveReportTask implements Tasklet {
 
 	@Autowired
-	private ReportBO bo;
+	private ApproveBO bo;
 
 	/**
 	 * 
 	 */
-	public ApplicationReceiveTask() {
+	public ApproveReportTask() {
 	}
 
 	/*

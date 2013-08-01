@@ -71,16 +71,16 @@ public class DisbursementBO implements BatchBO {
 				//Throw Exception
 			}
 			
-			DateBean dateBean = dao.getBusinessDay(currentDate);
+			String mediaClearingDay = dao.getMediaCleringDay(currentDate);
 			
-			if (dateBean != null) {
+			if (mediaClearingDay != null && !mediaClearingDay.isEmpty()) {
 
-				String fromTimestamp = 
-						DateTimeUtils.toString(dateBean.getDateFrom(), 
-											   DateTimeUtils.DEFAULT_DATE_FORMAT)  + " 00:00:00";
+				String fromTimestamp =
+						DateTimeUtils.convertFormatDateTime(mediaClearingDay, 
+								"yyMMdd", DateTimeUtils.DEFAULT_DATE_FORMAT) + " 00:00:00";
 				String toTimestamp = 
-						DateTimeUtils.toString(dateBean.getDateTo(), 
-								   DateTimeUtils.DEFAULT_DATE_FORMAT) + " 23:59:59";
+						DateTimeUtils.convertFormatDateTime(mediaClearingDay, 
+								"yyMMdd", DateTimeUtils.DEFAULT_DATE_FORMAT) + " 23:59:59";
 				
 				parameter.put("DATE_FROM", fromTimestamp);
 				parameter.put("DATE_TO", toTimestamp);

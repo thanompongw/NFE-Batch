@@ -1,4 +1,4 @@
-package co.th.ktc.nfe.batch.main;
+package co.th.ktc.nfe.batch.task;
 
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
@@ -6,17 +6,17 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import co.th.ktc.nfe.report.bo.impl.ApproveBO;
+import co.th.ktc.nfe.report.bo.ReportBO;
 
-public class ApproveReportTask implements Tasklet {
+public class ApplicationReceiveTask implements Tasklet {
 
 	@Autowired
-	private ApproveBO bo;
+	private ReportBO bo;
 
 	/**
 	 * 
 	 */
-	public ApproveReportTask() {
+	public ApplicationReceiveTask() {
 	}
 
 	/*
@@ -26,7 +26,7 @@ public class ApproveReportTask implements Tasklet {
 	 * springframework.batch.core.StepContribution,
 	 * org.springframework.batch.core.scope.context.ChunkContext)
 	 */
-	public RepeatStatus execute(StepContribution contribution,ChunkContext chunkContext) 
+	public RepeatStatus execute(StepContribution step, ChunkContext context) 
 			throws Exception {
 		
 		Integer processStatus = bo.execute(null);
