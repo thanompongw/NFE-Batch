@@ -10,6 +10,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import co.th.ktc.nfe.batch.exception.CommonException;
+
 /**
  * @author Deedy
  * 
@@ -100,14 +102,18 @@ public class DateTimeUtils {
 		return dateTimeTo;
 	}
 
-	public static Date toDate(String date, String format) throws ParseException {
+	public static Date toDate(String date, String format) throws CommonException {
 		SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
 
-		return sdf.parse(date);
+		try {
+			return sdf.parse(date);
+		} catch (ParseException e) {
+			ErrorUtil.handleSystemException(e);
+		}
+		return null;
 	}
 
-	public static String toString(Date date, String format)
-			throws ParseException {
+	public static String toString(Date date, String format) {
 		SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
 
 		return sdf.format(date);
@@ -120,11 +126,12 @@ public class DateTimeUtils {
 		return cal.getTime();
 	}
 
-	public static String addDays(Date date, int days, String format) throws ParseException {
+	public static String addDays(Date date, 
+								 int days, 
+								 String format) throws ParseException {
 		
 		Date addedDate = addDays(date, days);
 		return toString(addedDate, format);
-		
 	}
 
 }

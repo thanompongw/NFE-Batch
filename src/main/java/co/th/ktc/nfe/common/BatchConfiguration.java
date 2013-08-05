@@ -48,6 +48,24 @@ public class BatchConfiguration {
 
 	@Value("${batch.FTP.CSP.port}")
 	private String ftpCSPPort;
+
+	@Value("${undefined_err}")
+	private String undefinedError;
+
+	@Value("${file_not_exist}")
+	private String fileNotExists;
+
+	@Value("${concurrency_by_locked}")
+	private String concurrencyLocked;
+
+	@Value("${data_used}")
+	private String dataUsed;
+
+	@Value("${con_failed}")
+	private String connectionFailed;
+
+	@Value("${nodata}")
+	private String dataNotFound;
 	
 	/**
 	 * Default Constructor of BatchConfiguration Class.
@@ -155,6 +173,48 @@ public class BatchConfiguration {
 	 */
 	public String getFtpCSPPort() {
 		return ftpCSPPort;
+	}
+
+	/**
+	 * @return the undefinedError
+	 */
+	public String getUndefinedError() {
+		return undefinedError;
+	}
+
+	/**
+	 * @return the fileNotExists
+	 */
+	public String getFileNotExists() {
+		return fileNotExists;
+	}
+
+	/**
+	 * @return the concurrencyLocked
+	 */
+	public String getConcurrencyLocked() {
+		return concurrencyLocked;
+	}
+
+	/**
+	 * @return the dataUsed
+	 */
+	public String getDataUsed() {
+		return dataUsed;
+	}
+
+	/**
+	 * @return the connectionFailed
+	 */
+	public String getConnectionFailed() {
+		return connectionFailed;
+	}
+
+	/**
+	 * @return the dataNotFound
+	 */
+	public String getDataNotFound() {
+		return dataNotFound;
 	}
 
 }

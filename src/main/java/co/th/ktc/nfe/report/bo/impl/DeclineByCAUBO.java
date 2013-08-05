@@ -1,7 +1,6 @@
 
 package co.th.ktc.nfe.report.bo.impl;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,9 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
 
+import co.th.ktc.nfe.batch.exception.BusinessError;
+import co.th.ktc.nfe.batch.exception.CommonException;
 import co.th.ktc.nfe.common.BatchConfiguration;
+import co.th.ktc.nfe.common.CommonLogger;
 import co.th.ktc.nfe.common.CommonPOI;
 import co.th.ktc.nfe.common.DateTimeUtils;
+import co.th.ktc.nfe.common.ErrorUtil;
 import co.th.ktc.nfe.constants.NFEBatchConstants;
 import co.th.ktc.nfe.report.bo.ReportBO;
 import co.th.ktc.nfe.report.dao.AbstractReportDao;
@@ -27,18 +30,20 @@ public class DeclineByCAUBO implements ReportBO {
 	
 	private static Logger LOG = Logger.getLogger(DeclineByCAUBO.class);
 	
+	private static final String FUNCTION_ID = "S3012";
+	
 	private static final String REPORT_FILE_NAME = "DeclineCAUDailyReport";
 	
-	private Integer[] printDateRowColumn = new Integer[] {0, 14};
-	private Integer[] printTimeRowColumn = new Integer[] {1, 14};
-	private Integer[] reportDateRowColumn = new Integer[] {1, 9};
+	private Integer[] printDateRowColumn = new Integer[] {0, 9};
+	private Integer[] printTimeRowColumn = new Integer[] {1, 9};
+	private Integer[] reportDateRowColumn = new Integer[] {1, 6};
 	
 	
 	@Resource(name = "declineByCAUDao")
 	private AbstractReportDao dao;
 	
 	@Autowired
-	private BatchConfiguration config;
+	private BatchConfiguration batchConfig;
 	
 	private CommonPOI poi;
 
@@ -51,7 +56,7 @@ public class DeclineByCAUBO implements ReportBO {
 	public Integer execute(Map<String, String> parameter) {
 		Integer processStatus = 0;
 		try {
-			poi = new CommonPOI(REPORT_FILE_NAME, config.getPathTemplate());
+			poi = new CommonPOI(REPORT_FILE_NAME, batchConfig.getPathTemplate());
 			
 			String currentDate = null;
 			
@@ -65,6 +70,8 @@ public class DeclineByCAUBO implements ReportBO {
 			String fromTimestamp = currentDate + " 00:00:00";
 			String toTimestamp = currentDate + " 23:59:59";
 			
+			LOG.info("Report DateTime From : " + fromTimestamp);
+			LOG.info("Report DateTime To : " + toTimestamp);
 
 			parameter.put("REPORT_DATE", currentDate);
 			parameter.put("PRINT_DATE", DateTimeUtils.getCurrentDateTime(DateTimeUtils.DEFAULT_DATE_FORMAT));
@@ -76,7 +83,7 @@ public class DeclineByCAUBO implements ReportBO {
 			Workbook report = generateReport(parameter);
 			
 			String fileName = REPORT_FILE_NAME;
-			String dirPath = config.getPathOutput();
+			String dirPath = batchConfig.getPathOutput();
 			
 			currentDate = 
 					DateTimeUtils.convertFormatDateTime(currentDate, 
@@ -84,73 +91,76 @@ public class DeclineByCAUBO implements ReportBO {
 														"yyyyMMdd");
 			
 			poi.writeFile(report, fileName, dirPath, currentDate);
-		} catch (Exception e) {
+		} catch (CommonException ce) {
 			processStatus = 1;
-			e.printStackTrace();
-			//TODO: throws error to main function
+			for (BusinessError error : ce.getErrorList().getErrorList()) {
+				CommonLogger.log(NFEBatchConstants.REPORT_APP_ID, 
+								 NFEBatchConstants.SYSTEM_ID, 
+								 FUNCTION_ID, 
+								 error.getErrorkey(), 
+								 String.valueOf(processStatus), 
+								 error.getSubstitutionValues(), 
+								 NFEBatchConstants.ERROR, 
+								 DeclineByCAUBO.class);
+			}
 		}
 		return processStatus;
 		
 	}
 
-	public Workbook generateReport(Map<String, String> parameter) {
+	public Workbook generateReport(Map<String, String> parameter) throws CommonException {
 		
 		Workbook workbook = poi.getWorkBook();
-		
-		try {
-			Object[] sqlParemeters = 
-					new Object[] {NFEBatchConstants.CREDIT_CARD_GROUP_LOANTYPE,
-					   			  NFEBatchConstants.CREDIT_CARD_BL_GROUP_LOANTYPE,
-					   			  NFEBatchConstants.CREDIT_CARD_GROUP_LOANTYPE,
-					   			  NFEBatchConstants.CREDIT_CARD_BL_GROUP_LOANTYPE,
-					   			  parameter.get("DATE_FROM"),
-					   			  parameter.get("DATE_TO"),
-					   			  parameter.get("DATE_FROM"),
-					   			  parameter.get("DATE_TO")};
-			SqlRowSet rowSet = dao.query(sqlParemeters);
-
-			this.generateReport(workbook,
-	                			rowSet,
-	                			NFEBatchConstants.CREDIT_CARD_SHEET_NO,
-	                			NFEBatchConstants.CREDIT_CARD_SHEET_NAME,
-	                			parameter);
-			
-		    rowSet = dao.query(new Object[] { NFEBatchConstants.FIXED_LOAN_GROUP_LOANTYPE,
-		    								  NFEBatchConstants.FIXED_LOAN_GROUP_LOANTYPE,
-	    									  parameter.get("DATE_FROM"),
-											  parameter.get("DATE_TO") });
-
-			this.generateReport(workbook,
-	                			rowSet,
-	                			NFEBatchConstants.FIXED_LOAN_SHEET_NO,
-	                			NFEBatchConstants.FIXED_LOAN_SHEET_NAME,
-	                			parameter);
-			
-		    rowSet = dao.query(new Object[] { NFEBatchConstants.REVOLVING_LOAN_GROUP_LOANTYPE,
-		    								  NFEBatchConstants.REVOLVING_LOAN_GROUP_LOANTYPE,
-	    									  parameter.get("DATE_FROM"),
-											  parameter.get("DATE_TO") });
-
-			this.generateReport(workbook,
-	                			rowSet,
-	                			NFEBatchConstants.REVOLVING_LOAN_SHEET_NO,
-	                			NFEBatchConstants.REVOLVING_LOAN_SHEET_NAME,
-	                			parameter);
-			
-		    rowSet = dao.query(new Object[] { NFEBatchConstants.BUNDLE_GROUP_LOANTYPE,
-		    								  NFEBatchConstants.BUNDLE_GROUP_LOANTYPE,
-	    									  parameter.get("DATE_FROM"),
-											  parameter.get("DATE_TO") });
-
-			this.generateReport(workbook,
-	                			rowSet,
-	                			NFEBatchConstants.BUNDLE_SHEET_NO,
-	                			NFEBatchConstants.BUNDLE_SHEET_NAME,
-	                			parameter);
 	
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Object[] sqlParemeters = 
+				new Object[] {NFEBatchConstants.CREDIT_CARD_GROUP_LOANTYPE,
+				   			  NFEBatchConstants.CREDIT_CARD_BL_GROUP_LOANTYPE,
+				   			  NFEBatchConstants.CREDIT_CARD_GROUP_LOANTYPE,
+				   			  NFEBatchConstants.CREDIT_CARD_BL_GROUP_LOANTYPE,
+				   			  parameter.get("DATE_FROM"),
+				   			  parameter.get("DATE_TO"),
+				   			  parameter.get("DATE_FROM"),
+				   			  parameter.get("DATE_TO")};
+		SqlRowSet rowSet = dao.query(sqlParemeters);
+
+		this.generateReport(workbook,
+                			rowSet,
+                			NFEBatchConstants.CREDIT_CARD_SHEET_NO,
+                			NFEBatchConstants.CREDIT_CARD_SHEET_NAME,
+                			parameter);
+		
+	    rowSet = dao.query(new Object[] { NFEBatchConstants.FIXED_LOAN_GROUP_LOANTYPE,
+	    								  NFEBatchConstants.FIXED_LOAN_GROUP_LOANTYPE,
+    									  parameter.get("DATE_FROM"),
+										  parameter.get("DATE_TO") });
+
+		this.generateReport(workbook,
+                			rowSet,
+                			NFEBatchConstants.FIXED_LOAN_SHEET_NO,
+                			NFEBatchConstants.FIXED_LOAN_SHEET_NAME,
+                			parameter);
+		
+	    rowSet = dao.query(new Object[] { NFEBatchConstants.REVOLVING_LOAN_GROUP_LOANTYPE,
+	    								  NFEBatchConstants.REVOLVING_LOAN_GROUP_LOANTYPE,
+    									  parameter.get("DATE_FROM"),
+										  parameter.get("DATE_TO") });
+
+		this.generateReport(workbook,
+                			rowSet,
+                			NFEBatchConstants.REVOLVING_LOAN_SHEET_NO,
+                			NFEBatchConstants.REVOLVING_LOAN_SHEET_NAME,
+                			parameter);
+		
+	    rowSet = dao.query(new Object[] { NFEBatchConstants.BUNDLE_GROUP_LOANTYPE,
+	    								  NFEBatchConstants.BUNDLE_GROUP_LOANTYPE,
+    									  parameter.get("DATE_FROM"),
+										  parameter.get("DATE_TO") });
+
+		this.generateReport(workbook,
+                			rowSet,
+                			NFEBatchConstants.BUNDLE_SHEET_NO,
+                			NFEBatchConstants.BUNDLE_SHEET_NAME,
+                			parameter);
 		return workbook;
 	}
 
@@ -158,7 +168,7 @@ public class DeclineByCAUBO implements ReportBO {
 							    SqlRowSet rowSet,
 							    int sheetNo,
 							    String sheetName,
-							    Map<String, String> parameter) throws Exception  {
+							    Map<String, String> parameter) throws CommonException  {
 		try {
 			workbook.cloneSheet(sheetNo);
 			workbook.setSheetName(sheetNo, sheetName);
@@ -202,6 +212,11 @@ public class DeclineByCAUBO implements ReportBO {
 							  dataRows, 
 							  dataColumnIndex++,
 							  rowSet.getRow());
+				// CARD_TYPE
+				poi.setObject(curSheet, 
+							  dataRows, 
+							  dataColumnIndex++,
+							  rowSet.getString("CARD_TYPE"));
 				// GROUPLOAN_TYPE
 				poi.setObject(curSheet, 
 							  dataRows, 
@@ -222,67 +237,36 @@ public class DeclineByCAUBO implements ReportBO {
 							  dataRows, 
 							  dataColumnIndex++,
 							  rowSet.getString("THAINAME"));
-				// CARD_TYPE
+				// GROUPPRODUCT_TYPE
 				poi.setObject(curSheet, 
 							  dataRows, 
 							  dataColumnIndex++,
-							  rowSet.getString("CARD_TYPE"));
-				// SOURCE_CODE
-				poi.setObject(curSheet, 
-							  dataRows, 
-							  dataColumnIndex++,
-							  rowSet.getString("SOURCE_CODE"));
-				// AGENT_CODE
-				poi.setObject(curSheet, 
-						      dataRows, 
-						      dataColumnIndex++,
-						      rowSet.getString("AGENT_CODE"));
-				// BRANCH_CODE
-				poi.setObject(curSheet, 
-							  dataRows, 
-							  dataColumnIndex++,
-							  rowSet.getString("BRANCH_CODE"));
-				// PRODUCT_SUBPRODUCT
-				poi.setObject(curSheet, 
-						      dataRows, 
-						      dataColumnIndex++,
-						      rowSet.getString("PRODUCT_SUBPRODUCT"));
-				// REC_DATE
-				poi.setObject(curSheet, 
-						      dataRows, 
-						      dataColumnIndex++,
-						      rowSet.getString("REC_DATE"));
-				// CANCEL_DATE
-				poi.setObject(curSheet, 
-						      dataRows, 
-						      dataColumnIndex++,
-						      rowSet.getString("CANCEL_DATE"));
+							  rowSet.getString("GROUPPRODUCT_TYPE"));
 				// REASON
 				poi.setObject(curSheet, 
 						      dataRows, 
 						      dataColumnIndex++,
 						      rowSet.getString("REASON"));
-				// MEMO_DETAIL
-				poi.setObject(curSheet, 
-						      dataRows, 
-						      dataColumnIndex++,
-						      rowSet.getString("MEMO_DETAIL"));
 				// APP_ANALYST
 				poi.setObject(curSheet, 
 							  dataRows, 
 							  dataColumnIndex++,
 							  rowSet.getString("APP_ANALYST"));
+				// SOURCE_CODE
+				poi.setObject(curSheet, 
+							  dataRows, 
+							  dataColumnIndex++,
+							  rowSet.getString("SOURCE_CODE"));
 		  	
 		        dataRows++;
 		        dataColumnIndex = 0;
 			}
 			
 			workbook.removeSheetAt(templateSheetNo);
-		} catch (SQLException sqlEx) {
-			sqlEx.printStackTrace();
-            throw sqlEx;
-        }
+		} catch (Exception e) {
+			CommonLogger.logStackTrace(e);
+			ErrorUtil.handleSystemException(e);
+		}
 	}
-
 
 }

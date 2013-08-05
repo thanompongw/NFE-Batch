@@ -1,7 +1,6 @@
 package co.th.ktc.nfe.batch.domain;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author temp_dev2

@@ -33,7 +33,7 @@ public class DeclineByCAUTests extends TestCase {
 		
 		Map<String, String> parameter = new HashMap<String, String>();
 		
-		parameter.put("REPORT_DATE", "05/04/2013");
+		parameter.put("REPORT_DATE", "05/08/2013");
 			
 		int status = bo.execute(parameter);
 		

@@ -15,9 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
 
+import co.th.ktc.nfe.batch.exception.BusinessError;
+import co.th.ktc.nfe.batch.exception.CommonException;
 import co.th.ktc.nfe.common.BatchConfiguration;
+import co.th.ktc.nfe.common.CommonLogger;
 import co.th.ktc.nfe.common.CommonPOI;
 import co.th.ktc.nfe.common.DateTimeUtils;
+import co.th.ktc.nfe.common.ErrorUtil;
+import co.th.ktc.nfe.constants.NFEBatchConstants;
 import co.th.ktc.nfe.report.bo.ReportBO;
 import co.th.ktc.nfe.report.dao.AbstractReportDao;
 
@@ -30,18 +35,20 @@ public class PaymentChequePartnerBO implements ReportBO {
 	
 	private static Logger LOG = Logger.getLogger(PaymentChequePartnerBO.class);
 	
+	private static final String FUNCTION_ID = "S3016";
+	
 	private static final String REPORT_FILE_NAME = "PaymentChequePartnerReport";
 	
-	private Integer[] printDateRowColumn = new Integer[] {0, 5};
-	private Integer[] printTimeRowColumn = new Integer[] {1, 5};
-	private Integer[] reportDateRowColumn = new Integer[] {1, 3};
-	private Integer[] pageNoRowColumn = new Integer[] {0, 7};
+	private Integer[] printDateRowColumn = new Integer[] {2, 6};
+	private Integer[] printTimeRowColumn = new Integer[] {3, 6};
+	private Integer[] reportDateRowColumn = new Integer[] {3, 3};
+	private Integer[] pageNoRowColumn = new Integer[] {2, 8};
 	
 	@Resource(name = "paymentChequePartnerDao")
 	private AbstractReportDao dao;
 	
 	@Autowired
-	private BatchConfiguration config;
+	private BatchConfiguration batchConfig;
 	
 	private CommonPOI poi;
 
@@ -54,7 +61,7 @@ public class PaymentChequePartnerBO implements ReportBO {
 	public Integer execute(Map<String, String> parameter) {
 		Integer processStatus = 0;
 		try {
-			poi = new CommonPOI(REPORT_FILE_NAME, config.getPathTemplate());
+			poi = new CommonPOI(REPORT_FILE_NAME, batchConfig.getPathTemplate());
 			
 			String currentDate = null;
 			
@@ -69,6 +76,8 @@ public class PaymentChequePartnerBO implements ReportBO {
 			String fromTimestamp = currentDate + " 00:00:00";
 			String toTimestamp = currentDate + " 23:59:59";
 			
+			LOG.info("Report DateTime From : " + fromTimestamp);
+			LOG.info("Report DateTime To : " + toTimestamp);			
 
 			parameter.put("REPORT_DATE", currentDate);
 			parameter.put("PRINT_DATE", 
@@ -81,7 +90,7 @@ public class PaymentChequePartnerBO implements ReportBO {
 			Workbook report = generateReport(parameter);
 			
 			String fileName = REPORT_FILE_NAME;
-			String dirPath = config.getPathOutput();
+			String dirPath = batchConfig.getPathOutput();
 			
 			currentDate = 
 					DateTimeUtils.convertFormatDateTime(currentDate, 
@@ -89,37 +98,40 @@ public class PaymentChequePartnerBO implements ReportBO {
 														"yyyyMMdd");
 			
 			poi.writeFile(report, fileName, dirPath, currentDate);
-		} catch (Exception e) {
+		} catch (CommonException ce) {
 			processStatus = 1;
-			e.printStackTrace();
-			//TODO: throws error to main function
+			for (BusinessError error : ce.getErrorList().getErrorList()) {
+				CommonLogger.log(NFEBatchConstants.REPORT_APP_ID, 
+								 NFEBatchConstants.SYSTEM_ID, 
+								 FUNCTION_ID, 
+								 error.getErrorkey(), 
+								 String.valueOf(processStatus), 
+								 error.getSubstitutionValues(), 
+								 NFEBatchConstants.ERROR, 
+								 PaymentChequePartnerBO.class);
+			}
 		}
 		return processStatus;
 	}
 
-	public Workbook generateReport(Map<String, String> parameter) {
+	public Workbook generateReport(Map<String, String> parameter) throws CommonException {
 		
 		Workbook workbook = poi.getWorkBook();
 		int detailSheetNo = 0;
 		
 		SqlRowSet rowSet = dao.query(new Object[] {parameter.get("DATE_FROM"),
 												   parameter.get("DATE_TO")});
-		
-		if (rowSet != null && rowSet.isBeforeFirst()) {
 			
-			String sheetName = 
-					DateTimeUtils.convertFormatDateTime(parameter.get("REPORT_DATE"), 
-														DateTimeUtils.DEFAULT_DATE_FORMAT, 
-														"dd-MM-yyyy");
+		String sheetName = 
+				DateTimeUtils.convertFormatDateTime(parameter.get("REPORT_DATE"), 
+													DateTimeUtils.DEFAULT_DATE_FORMAT, 
+													"dd-MM-yyyy");
 
-        	this.generateReport(workbook,
-								rowSet, 
-								detailSheetNo,
-								sheetName, 
-								parameter);
-        } else {
-        	//TODO: throws error to main function
-        }
+    	this.generateReport(workbook,
+							rowSet, 
+							detailSheetNo,
+							sheetName, 
+							parameter);
 		
 		return workbook;
 	}
@@ -128,7 +140,7 @@ public class PaymentChequePartnerBO implements ReportBO {
 							    SqlRowSet rowSet,
 							    int sheetNo,
 							    String sheetName, 
-							    Map<String, String> parameter) {
+							    Map<String, String> parameter) throws CommonException {
 		
 		try {
 			workbook.cloneSheet(sheetNo);
@@ -169,6 +181,8 @@ public class PaymentChequePartnerBO implements ReportBO {
 			
 			double sumTotalAmount = 0.0D;
 			String cardType = null;
+			
+			Integer totalRecord = 0;
 			
 			while (rowSet.next()) {
                 poi.copyRow(sheetNo,
@@ -220,23 +234,26 @@ public class PaymentChequePartnerBO implements ReportBO {
 				dataRows++;
 				
 				sumTotalAmount += rowSet.getDouble("TOTAL_AMOUNT");
+				totalRecord++;
 			}
 			
-			// Card Type
-			poi.setObject(curSheet, 
-						  4, 
-						  1, 
-						  cardType);
-			//TOTAL_AMOUNT.
-			poi.setObject(curSheet, 
-					  	  dataRows + 1, 
-					  	  dataColumnIndex - 1,
-					  	  sumTotalAmount);
+			if (totalRecord != 0) {
+				// Card Type
+				poi.setObject(curSheet, 
+							  4, 
+							  1, 
+							  cardType);
+				//TOTAL_AMOUNT.
+				poi.setObject(curSheet, 
+						  	  dataRows + 1, 
+						  	  dataColumnIndex - 1,
+						  	  sumTotalAmount);
+			}
 			
 			workbook.removeSheetAt(templateSheetNo);
 		} catch (Exception e) {
-			e.printStackTrace();
-			//TODO: throws error to main function
+			CommonLogger.logStackTrace(e);
+			ErrorUtil.handleSystemException(e);
 		}
 	}
 

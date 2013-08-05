@@ -9,6 +9,38 @@ package co.th.ktc.nfe.constants;
  */
 public interface NFEBatchConstants {
 	
+	public static final String UNDEFINED_ERR = "undefined_err";
+	public static final String ERR_CONCURRENT_LOCK = "concurrency_by_locked";
+	public static final String DATA_USED = "data_used";
+	public static final String CON_FAILED = "con_failed";
+	
+ 	public static final String LOG_INFO = "I";
+ 	public static final String LOG_WARNING = "W";
+ 	public static final String LOG_ERROR = "E";
+ 	public static final String LOG_FATAL = "F";
+ 	public static final String LOG_DEBUG = "D";
+ 	
+ 	public static final int DEBUG = 1;
+ 	public static final int INFO = 2;
+ 	public static final int WARN = 3;
+ 	public static final int ERROR = 4;
+ 	public static final int FATAL = 5;
+ 	
+ 	public static final String PROCESSING = "P";
+    public static final String SEND = "Y";
+    public static final String SEND_FLAG = "SB";
+    public static final String NOT_SEND = "N";
+    public static final String START_PROCESS = "S";
+    public static final String END_PROCESS = "E";
+ 	
+ 	public static final String REPORT_APP_ID = "APSR001";
+ 	public static final String BATCH_APP_ID = "APSB001";
+ 	public static final String SYSTEM_ID = "APS";
+ 	
+ 	public static final int DEST_FILE = 1;
+ 	public static final int DEST_DB = 2;
+ 	public static final int DEST_BOTH = 3;
+	
 	public static final String CREDIT_CARD_SHEET_NAME = "Credit Card";
 	public static final String BUNDLE_SHEET_NAME = "Bundle";
 	public static final String FIXED_LOAN_SHEET_NAME = "Personal Loan";

@@ -15,9 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
 
+import co.th.ktc.nfe.batch.exception.BusinessError;
+import co.th.ktc.nfe.batch.exception.CommonException;
 import co.th.ktc.nfe.common.BatchConfiguration;
+import co.th.ktc.nfe.common.CommonLogger;
 import co.th.ktc.nfe.common.CommonPOI;
 import co.th.ktc.nfe.common.DateTimeUtils;
+import co.th.ktc.nfe.common.ErrorUtil;
+import co.th.ktc.nfe.constants.NFEBatchConstants;
 import co.th.ktc.nfe.report.bo.ReportBO;
 import co.th.ktc.nfe.report.dao.AbstractReportDao;
 
@@ -30,6 +35,8 @@ public class ApplicationRecieveGoodRightBO implements ReportBO {
 	
 	private static Logger LOG = Logger.getLogger(ApplicationRecieveGoodRightBO.class);
 	
+	private static final String FUNCTION_ID = "S3001";
+	
 	private static final String REPORT_FILE_NAME = "ApplicationReceiveGoodrigthReport";
 	
 	private Integer[] printDateRowColumn = new Integer[] {0, 10};
@@ -40,7 +47,7 @@ public class ApplicationRecieveGoodRightBO implements ReportBO {
 	private AbstractReportDao dao;
 	
 	@Autowired
-	private BatchConfiguration config;
+	private BatchConfiguration batchConfig;
 	
 	private CommonPOI poi;
 
@@ -53,11 +60,11 @@ public class ApplicationRecieveGoodRightBO implements ReportBO {
 	public Integer execute(Map<String, String> parameter) {
 		Integer processStatus = 0;
 		try {
-			poi = new CommonPOI(REPORT_FILE_NAME, config.getPathTemplate());
+			poi = new CommonPOI(REPORT_FILE_NAME, batchConfig.getPathTemplate());
 			
 			String currentDate = null;
 			
-			if (parameter == null) {
+			if (parameter == null || parameter.isEmpty()) {
 				parameter = new HashMap<String, String>();
 				currentDate = dao.getSetDate("DD/MM/YYYY");
 			} else {
@@ -67,6 +74,8 @@ public class ApplicationRecieveGoodRightBO implements ReportBO {
 			String fromTimestamp = currentDate + " 00:00:00";
 			String toTimestamp = currentDate + " 23:59:59";
 			
+			LOG.info("Report DateTime From : " + fromTimestamp);
+			LOG.info("Report DateTime To : " + toTimestamp);			
 
 			parameter.put("REPORT_DATE", currentDate);
 			parameter.put("PRINT_DATE", DateTimeUtils.getCurrentDateTime(DateTimeUtils.DEFAULT_DATE_FORMAT));
@@ -77,7 +86,7 @@ public class ApplicationRecieveGoodRightBO implements ReportBO {
 			Workbook report = generateReport(parameter);
 			
 			String fileName = REPORT_FILE_NAME;
-			String dirPath = config.getPathOutput();
+			String dirPath = batchConfig.getPathOutput();
 			
 			currentDate = 
 					DateTimeUtils.convertFormatDateTime(currentDate, 
@@ -85,38 +94,41 @@ public class ApplicationRecieveGoodRightBO implements ReportBO {
 														"yyyyMMdd");
 			
 			poi.writeFile(report, fileName, dirPath, currentDate);
-		} catch (Exception e) {
+		} catch (CommonException ce) {
 			processStatus = 1;
-			e.printStackTrace();
-			//TODO: throws error to main function
+			for (BusinessError error : ce.getErrorList().getErrorList()) {
+				CommonLogger.log(NFEBatchConstants.REPORT_APP_ID, 
+								 NFEBatchConstants.SYSTEM_ID, 
+								 FUNCTION_ID, 
+								 error.getErrorkey(), 
+								 String.valueOf(processStatus), 
+								 error.getSubstitutionValues(), 
+								 NFEBatchConstants.ERROR, 
+								 ApplicationRecieveGoodRightBO.class);
+			}
 		}
 		return processStatus;
 		
 	}
 
-	public Workbook generateReport(Map<String, String> parameter) {
+	public Workbook generateReport(Map<String, String> parameter) throws CommonException {
 		
 		Workbook workbook = poi.getWorkBook();
 		int detailSheetNo = 0;
 		
-		SqlRowSet rowSet = dao.query(new Object[] { parameter.get("DATE_FROM"),
-													parameter.get("DATE_TO")});
+		SqlRowSet rowSet = dao.query(new Object[] {parameter.get("DATE_FROM"),
+												   parameter.get("DATE_TO")});
 		
-		if (rowSet != null && rowSet.isBeforeFirst()) {
-			
-			String sheetName = 
-					DateTimeUtils.convertFormatDateTime(parameter.get("REPORT_DATE"), 
-														DateTimeUtils.DEFAULT_DATE_FORMAT, 
-														"dd-MM-yyyy");
+		String sheetName = 
+				DateTimeUtils.convertFormatDateTime(parameter.get("REPORT_DATE"), 
+													DateTimeUtils.DEFAULT_DATE_FORMAT, 
+													"dd-MM-yyyy");
 
-        	this.generateReport(workbook,
-								rowSet, 
-								detailSheetNo,
-								sheetName, 
-								parameter);
-        } else {
-        	//TODO: throws error to main function
-        }
+    	this.generateReport(workbook,
+							rowSet, 
+							detailSheetNo,
+							sheetName, 
+							parameter);
 		
 		return workbook;
 	}
@@ -125,10 +137,8 @@ public class ApplicationRecieveGoodRightBO implements ReportBO {
 							    SqlRowSet rowSet,
 							    int sheetNo,
 							    String sheetName, 
-							    Map<String, String> parameter) {
-		
+							    Map<String, String> parameter) throws CommonException {
 		try {
-			
 			workbook.cloneSheet(sheetNo);
 			workbook.setSheetName(sheetNo, sheetName);
 			Sheet curSheet = workbook.getSheetAt(sheetNo);
@@ -160,13 +170,13 @@ public class ApplicationRecieveGoodRightBO implements ReportBO {
 			int dataColumnIndex = 0;
 			
 			 while (rowSet.next()) {
-                poi.copyRow(sheetNo,
-                            templateSheetNo,
-                            dataRows,
-                            lastRow,
-                            minColIdx,
-                            maxColIdx - 1
-                            );
+	            poi.copyRow(sheetNo,
+	                        templateSheetNo,
+	                        dataRows,
+	                        lastRow,
+	                        minColIdx,
+	                        maxColIdx - 1
+	                        );
 				//Seq.
 				poi.setObject(curSheet, 
 							  dataRows, 
@@ -216,11 +226,13 @@ public class ApplicationRecieveGoodRightBO implements ReportBO {
 				dataColumnIndex = 0;
 				dataRows++;
 			}
+			 
 			workbook.removeSheetAt(templateSheetNo);
 		} catch (Exception e) {
-			e.printStackTrace();
-			//TODO: throws error to main function
+			CommonLogger.logStackTrace(e);
+			ErrorUtil.handleSystemException(e);
 		}
+		
 	}
 
 }

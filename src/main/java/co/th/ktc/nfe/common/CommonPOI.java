@@ -2,6 +2,7 @@ package co.th.ktc.nfe.common;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,6 +10,8 @@ import java.io.OutputStream;
 import java.sql.SQLException;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DateUtil;
@@ -20,10 +23,13 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
 
+import co.th.ktc.nfe.batch.exception.CommonException;
 import co.th.ktc.nfe.constants.NFEBatchConstants;
 
 @Component(value = "commonPOI")
 public class CommonPOI {
+	
+	private static Logger LOG = Logger.getLogger(CommonPOI.class);
 
     Workbook wb;
     
@@ -35,7 +41,8 @@ public class CommonPOI {
     public CommonPOI() {
     }
 
-    public CommonPOI(String templateName, String pathTemplate) throws Exception {
+    public CommonPOI(String templateName, 
+    		         String pathTemplate) throws CommonException {
         this.wb = prepareWorkbook(templateName, pathTemplate);
     }
 
@@ -47,7 +54,8 @@ public class CommonPOI {
      * @throws SQLException
      * @throws Exception
      */
-    private Workbook prepareWorkbook(String templateName, String pathTemplate) throws Exception {
+    private Workbook prepareWorkbook(String templateName, 
+    		                         String pathTemplate) throws CommonException {
 
     	StringBuilder filePath = new StringBuilder();
     	
@@ -58,12 +66,13 @@ public class CommonPOI {
     	
     	if (!isExistFile(filePath.toString())) {
         	//If not exists then look for .xlsx type
+    		filePath.setLength(0);
         	filePath.append(pathTemplate);
         	filePath.append(templateName);
         	filePath.append("_Template");
         	filePath.append(NFEBatchConstants.XLSX_REPORT_EXTENTION);
         	if (!isExistFile(filePath.toString())){
-        		//TODO: throws error to main function
+        		throw ErrorUtil.generateError("MSTD0013AERR", filePath.toString());
         	}
         }
 
@@ -72,14 +81,22 @@ public class CommonPOI {
         try {
             is = new FileInputStream(template);
             wb = WorkbookFactory.create(is);
-        } catch (Exception e) {
-            throw e;
-        } finally {
+        } catch (FileNotFoundException fne) {
+        	LOG.fatal(fne.getMessage(), fne);
+        	throw ErrorUtil.generateError("MSTD0038AERR", filePath.toString());
+		} catch (InvalidFormatException ife) {
+        	LOG.fatal(ife.getMessage(), ife);
+        	throw ErrorUtil.generateError("MSTD0038AERR", filePath.toString());
+		} catch (IOException ioe) {
+        	LOG.fatal(ioe.getMessage(), ioe);
+        	throw ErrorUtil.generateError("MSTD0038AERR", filePath.toString());
+		} finally {
             template = null;
             if (is != null) {
                 try {
                     is.close();
                 } catch (IOException e) {
+                	//Do Nothing.
                 }
             }
         }
@@ -156,8 +173,7 @@ public class CommonPOI {
      * <p/>
      * @throws Exception
      */
-    public Cell setObject(Cell cell, Object obj)
-            throws Exception {
+    public Cell setObject(Cell cell, Object obj) {
         if (obj != null) {
             if (obj instanceof String) {
                 cell.setCellValue((String) obj);
@@ -173,8 +189,7 @@ public class CommonPOI {
     public Cell setObject(Sheet sheet,
                           int row,
                           int col,
-                          Object obj)
-            throws Exception {
+                          Object obj) {
         Cell cell = createCell(sheet, row, col);
 
         cell = setObject(cell, obj);
@@ -188,8 +203,7 @@ public class CommonPOI {
                           int col,
                           Object obj,
                           CellStyle cellStyle,
-                          int width)
-            throws Exception {
+                          int width) {
         Cell cell = createCell(sheet, row, col);
         cell = setObject(cell, obj);
         if (cellStyle != null) {
@@ -208,8 +222,7 @@ public class CommonPOI {
                           int rowCopy,
                           int col,
                           int copyCol,
-                          Object[] objData)
-            throws Exception {
+                          Object[] objData) {
         Row rowToCopy = sheetCopy.getRow(rowCopy);
 
         for (int i = 0; i < objData.length; i++) {
@@ -243,8 +256,7 @@ public class CommonPOI {
                         int rowCopy,
                         int colStart,
                         int colEnd,
-                        boolean insertRowFlag)
-            throws Exception {
+                        boolean insertRowFlag) {
         if (insertRowFlag) {
             Sheet sheet = wb.getSheetAt(intSheet);
             sheet.shiftRows(row, sheet.getLastRowNum(), 1);
@@ -271,8 +283,7 @@ public class CommonPOI {
                         int row,
                         int rowCopy,
                         int colStart,
-                        int colEnd)
-            throws Exception {
+                        int colEnd) {
         Sheet sheetCopy = wb.getSheetAt(intSheetCopy);
         Sheet sheet = wb.getSheetAt(intSheet);
         Row rowToCopy = sheetCopy.getRow(rowCopy);
@@ -296,8 +307,7 @@ public class CommonPOI {
                         int row,
                         int rowCopy,
                         int colStart,
-                        int colEnd)
-            throws Exception {
+                        int colEnd) {
         Row rowToCopy = sheetCopy.getRow(rowCopy);
         for (int i = colStart; i <= colEnd; i++) {
             Cell cellToCopy = rowToCopy.getCell((i));
@@ -627,8 +637,7 @@ public class CommonPOI {
 
     public void removeRow(Sheet sheet,
                           int rowStart,
-                          int rowEnd)
-            throws Exception {
+                          int rowEnd) {
         Row removeRow = null;
         for (int i = rowStart; i <= rowEnd; i++) {
             removeRow = sheet.getRow(i);
@@ -640,7 +649,7 @@ public class CommonPOI {
     
     public String writeFile(Workbook report, 
 	            			String fileName, 
-	            			String dirPath) throws Exception {
+	            			String dirPath) throws CommonException {
 		String reportFilePath = this.writeFile(report, 
 											   fileName, 
 											   dirPath, 
@@ -661,7 +670,7 @@ public class CommonPOI {
 							String fileName,
 							String dirPath,
 							String date) 
-						throws Exception {
+						throws CommonException {
 		StringBuilder reportFileName = new StringBuilder();
 		String templateExtention = NFEBatchConstants.XLS_REPORT_EXTENTION;
 		if(report instanceof XSSFWorkbook){
@@ -681,15 +690,24 @@ public class CommonPOI {
 		String reportFilePath = new File(dirPath, 
 				reportFileName.toString()).getAbsolutePath();
 		 
-		FileOutputStream fos = new FileOutputStream(reportFilePath);
+		FileOutputStream fos = null;
 		
 		try {
+			fos = new FileOutputStream(reportFilePath);
 			report.write(fos);
-		} catch (Exception io) {
-			
+        } catch (FileNotFoundException fne) {
+        	LOG.fatal(fne.getMessage(), fne);
+        	throw ErrorUtil.generateError("MSTD0038AERR", fileName);
+		} catch (IOException ioe) {
+        	LOG.fatal(ioe.getMessage(), ioe);
+        	throw ErrorUtil.generateError("MSTD0038AERR", fileName); 
 		} finally {
 			if (fos != null) {
-				fos.close();				
+				try {
+					fos.close();
+				} catch (IOException e) {
+					//Do Nothing
+				}				
 			}
 		}
 		

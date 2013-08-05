@@ -7,13 +7,12 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 
 import co.th.ktc.nfe.batch.dao.AbstractBatchDao;
-import co.th.ktc.nfe.constants.NFEBatchConstants;
 
 /**
  * @author temp_dev1
  *
  */
-@Repository(value = "disbursementDao")
+@Repository(value = "disbursementBatchDao")
 public class DisbursementDao extends AbstractBatchDao {
 
 	/**

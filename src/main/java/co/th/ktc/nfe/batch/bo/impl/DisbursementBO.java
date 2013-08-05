@@ -15,11 +15,15 @@ import org.springframework.stereotype.Service;
 
 import co.th.ktc.nfe.batch.bo.BatchBO;
 import co.th.ktc.nfe.batch.dao.AbstractBatchDao;
+import co.th.ktc.nfe.batch.exception.BusinessError;
+import co.th.ktc.nfe.batch.exception.CommonException;
 import co.th.ktc.nfe.common.BatchConfiguration;
+import co.th.ktc.nfe.common.CommonLogger;
 import co.th.ktc.nfe.common.DateTimeUtils;
+import co.th.ktc.nfe.common.ErrorUtil;
 import co.th.ktc.nfe.common.FTPFile;
 import co.th.ktc.nfe.common.FileUtils;
-import co.th.ktc.nfe.report.domain.DateBean;
+import co.th.ktc.nfe.constants.NFEBatchConstants;
 
 /**
  * @author temp_dev1
@@ -30,12 +34,14 @@ public class DisbursementBO implements BatchBO {
 	
 	private static Logger LOG = Logger.getLogger(DisbursementBO.class);
 	
+	private static final String FUNCTION_ID = "SB041";
+	
 	private static final String BATCH_FILE_NAME = "APSDISB01_D";
 	
 	@Autowired
-	private BatchConfiguration config;
+	private BatchConfiguration batchConfig;
 	
-	@Resource(name = "disbursementDao")
+	@Resource(name = "disbursementBatchDao")
 	private AbstractBatchDao dao;
 
 	@Autowired
@@ -68,10 +74,12 @@ public class DisbursementBO implements BatchBO {
 			}
 			
 			if (dao.isDayoff(currentDate)) {
-				//Throw Exception
+				ErrorUtil.generateError("MSTD0002AWRN", currentDate);
 			}
 			
 			String mediaClearingDay = dao.getMediaCleringDay(currentDate);
+			
+			LOG.info("Media Clearing Date : " + mediaClearingDay);
 			
 			if (mediaClearingDay != null && !mediaClearingDay.isEmpty()) {
 
@@ -82,13 +90,16 @@ public class DisbursementBO implements BatchBO {
 						DateTimeUtils.convertFormatDateTime(mediaClearingDay, 
 								"yyMMdd", DateTimeUtils.DEFAULT_DATE_FORMAT) + " 23:59:59";
 				
+				LOG.info("Report DateTime From : " + fromTimestamp);
+				LOG.info("Report DateTime To : " + toTimestamp);
+				
 				parameter.put("DATE_FROM", fromTimestamp);
 				parameter.put("DATE_TO", toTimestamp);
 				
 				// generateReport
 			    write(parameter);
 				
-				String dirPath = config.getPathOutputINet();
+				String dirPath = batchConfig.getPathOutputINet();
 				
 				currentDate = 
 						DateTimeUtils.convertFormatDateTime(currentDate, 
@@ -96,10 +107,18 @@ public class DisbursementBO implements BatchBO {
 															"yyMMdd");
 				file.writeFile(BATCH_FILE_NAME, dirPath, currentDate);
 			}
-		} catch (Exception e) {
+		} catch (CommonException ce) {
 			processStatus = 1;
-			e.printStackTrace();
-			//TODO: throws error to main function
+			for (BusinessError error : ce.getErrorList().getErrorList()) {
+				CommonLogger.log(NFEBatchConstants.REPORT_APP_ID, 
+								 NFEBatchConstants.SYSTEM_ID, 
+								 FUNCTION_ID, 
+								 error.getErrorkey(), 
+								 String.valueOf(processStatus), 
+								 error.getSubstitutionValues(), 
+								 NFEBatchConstants.ERROR, 
+								 DisbursementBO.class);
+			}
 		}
 		
 		return processStatus;
@@ -108,19 +127,24 @@ public class DisbursementBO implements BatchBO {
 	/* (non-Javadoc)
 	 * @see co.th.ktc.nfe.batch.bo.BatchBO#write(java.util.Map)
 	 */
-	public void write(Map<String, String> parameter) {
-			
-		SqlRowSet rowSet = dao.queryHeader(null);
+	public void write(Map<String, String> parameter) throws CommonException {
 		
-		generateFileHeader(rowSet);
+		try {
+			SqlRowSet rowSet = dao.queryHeader(null);
+			
+			generateFileHeader(rowSet);
 
-		rowSet = dao.queryDetail(new Object[] {parameter.get("DATE_FROM"),
-                                               parameter.get("DATE_TO")});
-		generateFileDetail(rowSet);
+			rowSet = dao.queryDetail(new Object[] {parameter.get("DATE_FROM"),
+	                                               parameter.get("DATE_TO")});
+			generateFileDetail(rowSet);
 
-		rowSet = dao.queryTrailer(new Object[] {parameter.get("DATE_FROM"),
-                                                parameter.get("DATE_TO")});
-		generateFileTrailer(rowSet);
+			rowSet = dao.queryTrailer(new Object[] {parameter.get("DATE_FROM"),
+	                                                parameter.get("DATE_TO")});
+			generateFileTrailer(rowSet);
+		} catch (Exception e) {
+			CommonLogger.logStackTrace(e);
+			ErrorUtil.handleSystemException(e);
+        }
 	}
 
 	private void generateFileHeader(SqlRowSet rowSet) {

@@ -22,11 +22,11 @@ public class BatchJobConfigurationTests {
 	private Job job;
 	
 	@Autowired
-	private BatchConfiguration config;
+	private BatchConfiguration batchConfig;
 	
 	@Test
 	public void testSimpleProperties() throws Exception {
-		System.out.println(config.getPathOutput());
+		System.out.println(batchConfig.getPathOutput());
 	}
 	
 	@Test

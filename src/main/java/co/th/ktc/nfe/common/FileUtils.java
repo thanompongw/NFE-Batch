@@ -1,20 +1,24 @@
 package co.th.ktc.nfe.common;
 
 import java.io.File;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
 
+import co.th.ktc.nfe.batch.exception.CommonException;
 import co.th.ktc.nfe.constants.NFEBatchConstants;
 
 @Component(value = "fileUtils")
 public class FileUtils {
 	
-	StringBuilder data;
+	private static Logger LOG = Logger.getLogger(FileUtils.class);
+	
+	@Autowired
+	private ResourceBundleMessageSource messageSource;
     
     /**
      * Buffer size for transferring process
@@ -23,6 +27,8 @@ public class FileUtils {
 
     public static final String ENCODING_UTF8 = "UTF8";
     public static final String ENCODING_TIS620 = "TIS620";
+	
+	private StringBuilder data;
     
     public FileUtils() {
     	data = new StringBuilder();
@@ -47,7 +53,7 @@ public class FileUtils {
 	public String writeFile(String fileName,
 							String dirPath,
 							String date) 
-						throws Exception {
+						throws CommonException {
 		StringBuilder batchFileName = new StringBuilder();
 		StringBuilder batchFileTrigName = new StringBuilder();
 		String fileExtention = NFEBatchConstants.TXT_FILE_EXTENTION;
@@ -70,58 +76,33 @@ public class FileUtils {
 		String batchFilePath = new File(dirPath, 
 				batchFileName.toString()).getAbsolutePath();
 		
-		String batchFileTrigPath = new File(dirPath, 
-				batchFileTrigName.toString()).getAbsolutePath();
-		 
-		File file = new File(batchFilePath);
+		LOG.info(messageSource.getMessage("MSTD0001AINF", 
+									      new Object[] {batchFilePath}, 
+									      null));
 		
-		org.apache.commons.io.FileUtils.writeByteArrayToFile(file, 
-															 String.valueOf(data).getBytes(ENCODING_UTF8));
-		
-		File fileTrig = new File(batchFileTrigPath);
-		
-		org.apache.commons.io.FileUtils.writeStringToFile(fileTrig, "");
+		try {
+			
+			String batchFileTrigPath = new File(dirPath, 
+					batchFileTrigName.toString()).getAbsolutePath();
+			 
+			File file = new File(batchFilePath);
+			
+			org.apache.commons.io.FileUtils.writeByteArrayToFile(file, 
+																 String.valueOf(data).getBytes(ENCODING_UTF8));
+			
+
+			File fileTrig = new File(batchFileTrigPath);
+			
+			org.apache.commons.io.FileUtils.writeStringToFile(fileTrig, "");
+		} catch (UnsupportedEncodingException uee) {
+        	LOG.fatal(uee.getMessage(), uee);
+        	throw ErrorUtil.generateError("MSTD0038AERR", fileName); 
+		} catch (IOException ioe) {
+        	LOG.fatal(ioe.getMessage(), ioe);
+        	throw ErrorUtil.generateError("MSTD0038AERR", fileName); 
+		}
 		
 		return batchFilePath;
-	}
-	
-	/**
-	* Method to create excel file to destination.
-	* @param fileName report file name
-	* @param dirPath  path for create report file
-	* @param date     not null : system will append date value to end of report file name
-	*                 null : system will skip step for append date value
-	* @throws Exception
-	*/
-	public List<Map<String, Object>> readFile(String fileName,
-						   					  String dirPath,
-						   					  String date,
-						   					  Map<String, Integer> fixLenghtMap) 
-						   							  throws Exception {
-		StringBuilder batchFileName = new StringBuilder();
-		String fileExtention = NFEBatchConstants.TXT_FILE_EXTENTION;
-		
-		if (date == null || date.isEmpty()) {
-			batchFileName.append(fileName);
-			batchFileName.append(fileExtention);
-		} else {
-			batchFileName.append(fileName);
-//			batchFileName.append("_");
-			batchFileName.append(date);
-			
-			batchFileName.append(fileExtention);
-		}
-		
-		String batchFilePath = new File(dirPath, 
-				batchFileName.toString()).getAbsolutePath();
-		 
-		File file = new File(batchFilePath);
-		
-		if (!file.exists()) {
-			
-		}
-		
-		return null;
 	}
 	
 	/**
@@ -138,7 +119,7 @@ public class FileUtils {
 							String dirPath,
 							String date,
 							String type) 
-						throws Exception {
+						throws CommonException {
 		StringBuilder batchFileName = new StringBuilder();
 		StringBuilder batchFileTrigName = new StringBuilder();
 		String fileExtention = NFEBatchConstants.TXT_FILE_EXTENTION;
@@ -163,17 +144,31 @@ public class FileUtils {
 		String batchFilePath = new File(dirPath, 
 				batchFileName.toString()).getAbsolutePath();
 		
-		String batchFileTrigPath = new File(dirPath, 
-				batchFileTrigName.toString()).getAbsolutePath();
-		 
-		File file = new File(batchFilePath);
-		
-		org.apache.commons.io.FileUtils.writeByteArrayToFile(file, 
-															 String.valueOf(data).getBytes(ENCODING_UTF8));
-		
-		File fileTrig = new File(batchFileTrigPath);
-		
-		org.apache.commons.io.FileUtils.writeStringToFile(fileTrig, "");
+		LOG.info(messageSource.getMessage("MSTD0001AINF", 
+									      new Object[] {batchFilePath}, 
+									      null));
+
+		try {
+			
+			String batchFileTrigPath = new File(dirPath, 
+					batchFileTrigName.toString()).getAbsolutePath();
+			 
+			File file = new File(batchFilePath);
+			
+			org.apache.commons.io.FileUtils.writeByteArrayToFile(file, 
+																 String.valueOf(data).getBytes(ENCODING_UTF8));
+			
+
+			File fileTrig = new File(batchFileTrigPath);
+			
+			org.apache.commons.io.FileUtils.writeStringToFile(fileTrig, "");
+		} catch (UnsupportedEncodingException uee) {
+        	LOG.fatal(uee.getMessage(), uee);
+        	throw ErrorUtil.generateError("MSTD0038AERR", fileName); 
+		} catch (IOException ioe) {
+        	LOG.fatal(ioe.getMessage(), ioe);
+        	throw ErrorUtil.generateError("MSTD0038AERR", fileName); 
+		}
 		
 		return batchFilePath;
 	}

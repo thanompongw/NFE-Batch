@@ -23,7 +23,12 @@ import org.apache.commons.vfs2.FileSystemOptions;
 import org.apache.commons.vfs2.Selectors;
 import org.apache.commons.vfs2.impl.StandardFileSystemManager;
 import org.apache.commons.vfs2.provider.sftp.SftpFileSystemConfigBuilder;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
+
+import co.th.ktc.nfe.batch.exception.CommonException;
 
 
 /**
@@ -32,6 +37,8 @@ import org.springframework.stereotype.Component;
  */
 @Component(value = "ftpFile")
 public class FTPFile {
+	
+	private static Logger LOG = Logger.getLogger(FTPFile.class);
 
 	//Constants for default values.
 	private static final int DEF_BUF_SIZE = 1024; //Default buffer size.
@@ -45,6 +52,12 @@ public class FTPFile {
 	private FTPClient ftpClient;
 	
 	private StandardFileSystemManager manager;
+	
+	@Autowired
+	private ResourceBundleMessageSource messageSource;
+	
+	@Autowired
+	private BatchConfiguration batchConfig;
 
 	/**
 	 * Constructor of FTPFile class.
@@ -112,7 +125,7 @@ public class FTPFile {
 					   String password,
 					   int port,
 					   int mode)
-			throws Exception {
+			throws CommonException {
 
 		if (mode == MODE_FTP) {
 			uploadFTP(fileName, 
@@ -154,7 +167,7 @@ public class FTPFile {
 					      String userName,
 					      String password,
 					      int port)
-			throws Exception {
+			throws CommonException {
 
 		//The declaration of variables.
 		boolean isFileExist = false; //File Exist Flag.
@@ -176,9 +189,9 @@ public class FTPFile {
 			//Check Reply Code.
 			if (!FTPReply.isPositiveCompletion(replyCode)) {
 				ftpClient.disconnect();
-				//MSTD1035AERR: Failed to connect to FTP Server [{0}].
-//				throw ErrorUtil.generateError("MSTD1035AERR",
-//						serverName;);
+				// MSTD1035AERR: Failed to connect to FTP Server [{0}].
+				throw ErrorUtil.generateError("MSTD1035AERR",
+											  serverName);
 			}
 
 			//Log in FTP server.
@@ -189,8 +202,7 @@ public class FTPFile {
 				msgArgs[2] = password;
 				//MSTD1036AERR: Failed to log in FTP Server. FTP Server :
 				// [{0}], User Name : [{1}], Password : [{2}].
-//				throw ErrorUtil.generateError("MSTD1036AERR",
-//						alstrMsgArgs, 0);
+				throw ErrorUtil.generateError("MSTD1036AERR", msgArgs, 0);
 			}
 
 			//Create InputStream object.
@@ -235,8 +247,7 @@ public class FTPFile {
 						// uploaded file is not same with size of source file.
 						// Size of uploaded file : [{0}]byte, Size of source
 						// file : [{1}]byte.
-//						throw ErrorUtil.generateError("MSTD1037AERR",
-//								msgArgs, 0);
+						throw ErrorUtil.generateError("MSTD1037AERR", msgArgs, 0);
 					}
 				}
 			}
@@ -245,33 +256,30 @@ public class FTPFile {
 			if (!isFileExist) {
 				//MSTD1038AERR: Failed to upload the file. Uploaded File
 				// doesn't exist in Upload Location.
-//				throw ErrorUtil.generateError("MSTD1038AERR", null);
+				throw ErrorUtil.generateError("MSTD1038AERR", null);
 			}
 
 			//Delete the temporary file.
 			(new File(localFilePath + fileName)).delete();
 		} catch (SocketTimeoutException se) {
-//			CommonLogger.logStackTrace(se);
+			LOG.fatal(se.getMessage(), se);
 			//MSTD1042AERR: FTP Timeout occurs. Current Timeout :
 			// [{0}millisecond] Please check value of "ftp_timeout" in
-			// Standard.properties.
-//			throw ErrorUtil.generateError("MSTD1042AERR", String
-//					.valueOf(timeout));
+			// batch.properties.
+			throw ErrorUtil.generateError("MSTD1042AERR", String.valueOf(DEF_TIMEOUT));
 		} catch (UnknownHostException ue) {
-//			CommonLogger.logStackTrace(ue);
+			LOG.fatal(ue.getMessage(), ue);
 			//MSTD1035AERR: Failed to connect to FTP Server [{0}].
-//			throw ErrorUtil.generateError("MSTD1035AERR",
-//					serverName;);
+			throw ErrorUtil.generateError("MSTD1035AERR", serverName);
 		} catch (FileNotFoundException fe) {
-//			CommonLogger.logStackTrace(fe);
-//			throw ErrorUtil.generateError(objConResolver
-//					.getProperty(FILE_NOT_EXIST), fileID);
+			LOG.fatal(fe.getMessage(), fe);
+			throw ErrorUtil.generateError(batchConfig.getFileNotExists(), fileName);
 		} catch (IOException ie) {
-//			CommonLogger.logStackTrace(ie);
-//			ErrorUtil.handleSystemException(ie);
+			LOG.fatal(ie.getMessage(), ie);
+			ErrorUtil.handleSystemException(ie);
 		} catch (Exception e) {
-//			CommonLogger.logStackTrace(e);
-			throw e;
+			LOG.fatal(e.getMessage(), e);
+			ErrorUtil.handleSystemException(e);
 		} finally {
 			try {
 				//Logout from FTP server.
@@ -298,7 +306,7 @@ public class FTPFile {
 	 * @param : fileID - File ID.
 	 * @param : tempUpLocation - Temporary Upload Location.
 	 * @param : uploadLocation - Upload Location.
-	 * @throws : Exception
+	 * @throws CommonException 
 	 */
 	public void uploadSFTP(String fileName,
 					       String localFilePath, 
@@ -306,11 +314,13 @@ public class FTPFile {
 					       String serverName,
 					       String userName,
 					       String password,
-					       int port) {
+					       int port) throws CommonException {
 		 
 	    File localFile = new File(localFilePath + fileName);
 	    if (!localFile.exists()) {
-	    	
+			//MSTD1038AERR: Failed to upload the file. Uploaded File
+			// doesn't exist in Upload Location.
+			throw ErrorUtil.generateError("MSTD1038AERR", null);
 	    }
 	    
 	    FileObject localFileObj = null;
@@ -334,23 +344,21 @@ public class FTPFile {
 	        remoteFileObj.copyFrom(localFileObj, Selectors.SELECT_SELF);
 	        
 	    } catch (FileSystemException fse) {
-			// TODO Auto-generated catch block
-	    	fse.printStackTrace();
+			LOG.fatal(fse.getMessage(), fse);
+			ErrorUtil.handleSystemException(fse);
 		} finally {
 			if (localFileObj != null) {
 				try {
 					localFileObj.close();
 				} catch (FileSystemException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					//Do nothing.
 				}
 			}
 			if (remoteFileObj != null) {
 				try {
 					remoteFileObj.close();
 				} catch (FileSystemException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					//Do nothing.
 				}
 			}
 	    	if (manager != null) {
@@ -376,7 +384,7 @@ public class FTPFile {
 						   String userName,
 						   String password,
 						   int port)
-			throws Exception {
+			throws CommonException {
 
 		//The declaration of variables.
 		String[] msgArgs = null; //String Array for message.
@@ -393,8 +401,7 @@ public class FTPFile {
 			if (!FTPReply.isPositiveCompletion(replyCode)) {
 				ftpClient.disconnect();
 				//MSTD1035AERR: Failed to connect to FTP Server [{0}].
-//				throw ErrorUtil.generateError("MSTD1035AERR",
-//						serverName;);
+				throw ErrorUtil.generateError("MSTD1035AERR", serverName);
 			}
 
 			//Log in FTP server.
@@ -405,8 +412,7 @@ public class FTPFile {
 				msgArgs[2] = password;
 				//MSTD1036AERR: Failed to log in FTP Server. FTP Server :
 				// [{0}], User Name : [{1}], Password : [{2}].
-//				throw ErrorUtil.generateError("MSTD1036AERR",
-//						alstrMsgArgs, 0);
+				throw ErrorUtil.generateError("MSTD1036AERR", msgArgs, 0);
 			}
 
 			//Set Local Passive Mode.
@@ -416,9 +422,6 @@ public class FTPFile {
 			//Set Default buffer size
 			ftpClient.setBufferSize(DEF_BUF_SIZE);
 
-			//Create DateTime String.(yyyyMMddhhssmm)
-//			strDateTime = CSTD0065DateUtil.format(Calendar.getInstance()
-//					.getTime(), "yyyyMMddhhssmm");
 			//Create FileOutputStream object.
 			os = new FileOutputStream(tempDownLocation + fileName);
 
@@ -434,35 +437,27 @@ public class FTPFile {
 			//Begin: add checking whether file is exist or no in server
 			if (!isRetrieveSuccess) {
 				//MSTD1060AERR: File ID [{0}] does not exist in server.
-//				throw ErrorUtil
-//						.generateError("MSTD1060AERR", fileID);
-				System.out.println("isRetrieveSuccess : " + isRetrieveSuccess);
+				throw ErrorUtil.generateError("MSTD1060AERR", fileName);
 			}
 			//End: add checking whether file is exist or no in server
 			//Close FileOutputStream object.
 			//fouStream.close();
 		} catch (SocketTimeoutException se) {
-			se.printStackTrace();
-//			CommonLogger.logStackTrace(se);
+			LOG.fatal(se.getMessage(), se);
 			//MSTD1042AERR: FTP Timeout occurs. Current Timeout :
 			// [{0}millisecond] Please check value of "ftp_timeout" in
 			// Standard.properties.
-//			throw ErrorUtil.generateError("MSTD1042AERR", String
-//					.valueOf(timeout));
+			throw ErrorUtil.generateError("MSTD1042AERR", String.valueOf(DEF_TIMEOUT));
 		} catch (UnknownHostException ue) {
-			ue.printStackTrace();
-//			CommonLogger.logStackTrace(ue);
+			LOG.fatal(ue.getMessage(), ue);
 			//MSTD1035AERR: Failed to connect to FTP Server [{0}].
-//			throw ErrorUtil.generateError("MSTD1035AERR",
-//					serverName;);
+			throw ErrorUtil.generateError("MSTD1035AERR", serverName);
 		} catch (IOException ie) {
-			ie.printStackTrace();
-//			CommonLogger.logStackTrace(ie);
-//			ErrorUtil.handleSystemException(ie);
+			LOG.fatal(ie.getMessage(), ie);
+			ErrorUtil.handleSystemException(ie);
 		} catch (Exception e) {
-			e.printStackTrace();
-//			CommonLogger.logStackTrace(e);
-			throw e;
+			LOG.fatal(e.getMessage(), e);
+			ErrorUtil.handleSystemException(e);
 		} finally {
 			try {
 				//Begin: add Close FileOutputStream object by
@@ -504,7 +499,7 @@ public class FTPFile {
 						  String userName,
 						  String password,
 						  int port)
-			throws Exception {
+			throws CommonException {
 
 		//The declaration of variables.
 		boolean isSucceed = false; //File Exist Flag.
@@ -521,8 +516,7 @@ public class FTPFile {
 			if (!FTPReply.isPositiveCompletion(replyCode)) {
 				ftpClient.disconnect();
 				//MSTD1035AERR: Failed to connect to FTP Server [{0}].
-//				throw ErrorUtil.generateError("MSTD1035AERR",
-//						serverName;);
+				throw ErrorUtil.generateError("MSTD1035AERR", serverName);
 			}
 
 			//Log in FTP server.
@@ -533,8 +527,7 @@ public class FTPFile {
 				msgArgs[2] = password;
 				//MSTD1036AERR: Failed to log in FTP Server. FTP Server :
 				// [{0}], User Name : [{1}], Password : [{2}].
-//				throw ErrorUtil.generateError("MSTD1036AERR",
-//						alstrMsgArgs, 0);
+				throw ErrorUtil.generateError("MSTD1036AERR", msgArgs, 0);
 			}
 
 			//Set Local Passive Mode.
@@ -547,32 +540,28 @@ public class FTPFile {
 			isSucceed = ftpClient.deleteFile(location + fileName);
 			if (!isSucceed) {
 				//MSTD1040AERR: Failed to delete the file. File ID [{0}].
-//				throw ErrorUtil
-//						.generateError("MSTD1040AERR", srtFileID);
+				throw ErrorUtil.generateError("MSTD1040AERR", fileName);
 			}
 
 		} catch (SocketTimeoutException se) {
-//			CommonLogger.logStackTrace(se);
-			//MSTD1042AERR: FTP Timeout occurrs. Current Timeout :
+			LOG.fatal(se.getMessage(), se);
+			//MSTD1042AERR: FTP Timeout occurs. Current Timeout :
 			// [{0}millisecond] Please check value of "ftp_timeout" in
-			// Standard.properties.
-//			throw ErrorUtil.generateError("MSTD1042AERR", String
-//					.valueOf(timeout));
+			// batch.properties.
+			throw ErrorUtil.generateError("MSTD1042AERR", String.valueOf(DEF_TIMEOUT));
 		} catch (UnknownHostException ue) {
-//			CommonLogger.logStackTrace(ue);
+			LOG.fatal(ue.getMessage(), ue);
 			//MSTD1035AERR: Failed to connect to FTP Server [{0}].
-//			throw ErrorUtil.generateError("MSTD1035AERR",
-//					serverName;);
+			throw ErrorUtil.generateError("MSTD1035AERR", serverName);
 		} catch (FileNotFoundException fe) {
-//			CommonLogger.logStackTrace(fe);
-//			throw ErrorUtil.generateError(objConResolver
-//					.getProperty(FILE_NOT_EXIST), srtFileID);
+			LOG.fatal(fe.getMessage(), fe);
+			throw ErrorUtil.generateError(batchConfig.getFileNotExists(), fileName);
 		} catch (IOException ie) {
-//			CommonLogger.logStackTrace(ie);
-//			ErrorUtil.handleSystemException(ie);
+			LOG.fatal(ie.getMessage(), ie);
+			ErrorUtil.handleSystemException(ie);
 		} catch (Exception e) {
-//			CommonLogger.logStackTrace(e);
-			throw e;
+			LOG.fatal(e.getMessage(), e);
+			ErrorUtil.handleSystemException(e);
 		} finally {
 			try {
 				//Logout from FTP server.
@@ -619,22 +608,23 @@ public class FTPFile {
 			}
 			if (!isFileExist) {
 				//MSTD1060AERR: File ID [{0}] does not exist in server.
-//				throw ErrorUtil
-//						.generateError("MSTD1060AERR", strFileID);
+				throw ErrorUtil.generateError("MSTD1060AERR", fileName);
 			}
 		} catch (SocketTimeoutException se) {
-//			CommonLogger.logStackTrace(se);
+			LOG.fatal(se.getMessage(), se);
 			//MSTD1042AERR: FTP Timeout occurs. Current Timeout :
 			// [{0}millisecond] Please check value of "ftp_timeout" in
-			// Standard.properties.
-//			throw ErrorUtil.generateError("MSTD1042AERR", String
-//					.valueOf(timeout));
-		} catch (IOException e) {
-//			CommonLogger.logStackTrace(e);
-//			ErrorUtil.handleSystemException(e);
+			// batch.properties.
+			throw ErrorUtil.generateError("MSTD1042AERR", String.valueOf(DEF_TIMEOUT));
+		} catch (FileNotFoundException fe) {
+			LOG.fatal(fe.getMessage(), fe);
+			throw ErrorUtil.generateError(batchConfig.getFileNotExists(), fileName);
+		} catch (IOException ie) {
+			LOG.fatal(ie.getMessage(), ie);
+			ErrorUtil.handleSystemException(ie);
 		} catch (Exception e) {
-//			CommonLogger.logStackTrace(e);
-			throw e;
+			LOG.fatal(e.getMessage(), e);
+			ErrorUtil.handleSystemException(e);
 		} 
 	}
 

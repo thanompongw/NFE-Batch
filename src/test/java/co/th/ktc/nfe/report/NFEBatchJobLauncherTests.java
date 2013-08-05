@@ -1,11 +1,13 @@
 package co.th.ktc.nfe.report;
 
+import java.util.Date;
+
 import junit.framework.TestCase;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
@@ -15,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@ContextConfiguration(locations={"/module-context.xml"})
+@ContextConfiguration(locations={"/nfe-batch-context.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class NFEBatchJobLauncherTests extends TestCase {
 	
@@ -29,7 +31,12 @@ public class NFEBatchJobLauncherTests extends TestCase {
 	public void testExecute() {
 		
 		try {
-			jobLauncher.run(job, new JobParameters());
+			
+			JobParametersBuilder builder = new JobParametersBuilder();
+			
+			builder.addDate("REPORT_DATE", new Date(System.currentTimeMillis()));
+			
+			jobLauncher.run(job, builder.toJobParameters());
 		} catch (JobExecutionAlreadyRunningException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -40,6 +47,9 @@ public class NFEBatchJobLauncherTests extends TestCase {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JobParametersInvalidException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-2.1.xsd">
+
+	<description>NFE job to get you started. 
+		It provides a skeleton for a typical batch application.
+	</description>
+	
+	<bean id="batchConfig" class="co.th.ktc.nfe.common.BatchConfiguration" />
+	
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource" abstract="false"
+	      scope="singleton" lazy-init="default">
+	    <property name="basename" value="messages"/>
+	</bean>
+	
+	<!-- 1.1 Configuring a JobLauncher asynchronously -->
+	<bean id="taskExecutor" class="org.springframework.core.task.SimpleAsyncTaskExecutor" />
+ 	
+ 	<!-- 1.2 Configuring a job, step, flow -->
+	<batch:job id="APSJOB001" >
+		<batch:split id="parallelProcessing" task-executor="taskExecutor">
+			<!-- <batch:flow>
+				<batch:step id="SR001" >
+					<batch:tasklet ref="applicationPending45DaysTask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SR002" >
+					<batch:tasklet ref="applicationReceiveTask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SR003" >
+					<batch:tasklet ref="applicationRecieveGoodRightTask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SR004" >
+					<batch:tasklet ref="approveReportTask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SR005" >
+					<batch:tasklet ref="bbcTask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SR006" >
+					<batch:tasklet ref="cancelAfterApproveTask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SR007" >
+					<batch:tasklet ref="cancelByCAUTask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SR008" >
+					<batch:tasklet ref="cancelByOATask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SR009" >
+					<batch:tasklet ref="cauPerformanceTask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SR010" >
+					<batch:tasklet ref="clOfYearlyIncome10Task" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SR011" >
+					<batch:tasklet ref="creditCardYearlyIncomeTask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SR012" >
+					<batch:tasklet ref="declineByCAUTask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SR014" >
+					<batch:tasklet ref="distributionTask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SR015" >
+					<batch:tasklet ref="oaPerformanceTask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SR016" >
+					<batch:tasklet ref="paymentChequePartnerTask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SR017" >
+					<batch:tasklet ref="penrollTask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SR018" >
+					<batch:tasklet ref="rejectByOATask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SR019" >
+					<batch:tasklet ref="staffInterestRateTask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SR020" >
+					<batch:tasklet ref="trackingStatusTask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SR021" >
+					<batch:tasklet ref="unsualIncomeTask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SR022" >
+					<batch:tasklet ref="wallStreetTask" />
+				</batch:step>
+			</batch:flow> -->
+			<batch:flow>
+				<batch:step id="SB001" >
+					<batch:tasklet ref="autoReceiveApplicationTask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SB002" >
+					<batch:tasklet ref="card51Task" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SB003" >
+					<batch:tasklet ref="declineLoanWeeklyTask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SB040" next="SB041" >
+					<batch:tasklet ref="montranTask" />
+				</batch:step>
+				<batch:step id="SB041" parent="SB040" next="SB042" >
+					<batch:tasklet ref="disbursementBatchTask" allow-start-if-complete="true" />
+				</batch:step>
+				<batch:step id="SB042" >
+					<batch:tasklet ref="disbursementReportTask" allow-start-if-complete="true" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SB005" >
+					<batch:tasklet ref="LA01Task" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SB006" >
+					<batch:tasklet ref="LA02Task" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SB007" >
+					<batch:tasklet ref="LA03Task" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SB008" >
+					<batch:tasklet ref="LA04Task" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SB009" >
+					<batch:tasklet ref="LA05Task" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SB010" >
+					<batch:tasklet ref="LR01Task" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SB011" >
+					<batch:tasklet ref="LR02Task" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SB012" >
+					<batch:tasklet ref="LR03Task" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SB013" >
+					<batch:tasklet ref="LR04Task" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SB014" >
+					<batch:tasklet ref="mediaClearingTask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SB015" >
+					<batch:tasklet ref="saleCommissionTask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SB016" >
+					<batch:tasklet ref="smsCCTask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SB017" >
+					<batch:tasklet ref="smsRLTask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SB018" >
+					<batch:tasklet ref="smsIncompleteDocTask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SB019" >
+					<batch:tasklet ref="smsCLMainCardTask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SB020" >
+					<batch:tasklet ref="smsCLRevolvingLaonTask" />
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="SB021" >
+					<batch:tasklet ref="smsCLSupplementaryCardTask" />
+				</batch:step>
+			</batch:flow>
+		</batch:split>
+	</batch:job>
+	
+	<!-- Section 2.1 Tasklet for report.  -->
+ 	<bean id="applicationPending45DaysTask" 
+ 		class="co.th.ktc.nfe.batch.task.ApplicationPending45DaysTask" />
+ 		
+ 	<bean id="applicationReceiveTask" 
+ 		class="co.th.ktc.nfe.batch.task.ApplicationReceiveTask" />
+	    
+ 	<bean id="applicationRecieveGoodRightTask" 
+ 		class="co.th.ktc.nfe.batch.task.ApplicationRecieveGoodRightTask" />
+	    
+ 	<bean id="approveReportTask" 
+ 		class="co.th.ktc.nfe.batch.task.ApproveReportTask" />
+	    
+ 	<bean id="bbcTask" 
+ 		class="co.th.ktc.nfe.batch.task.BBCTask" />
+	    
+ 	<bean id="cancelAfterApproveTask" 
+ 		class="co.th.ktc.nfe.batch.task.CancelAfterApproveTask" />
+	    
+ 	<bean id="cancelByCAUTask" 
+ 		class="co.th.ktc.nfe.batch.task.CancelByCAUTask" />
+	    
+ 	<bean id="cancelByOATask" 
+ 		class="co.th.ktc.nfe.batch.task.CancelByOATask" />
+	    
+ 	<bean id="cauPerformanceTask" 
+ 		class="co.th.ktc.nfe.batch.task.CAUPerformanceTask" />
+	    
+ 	<bean id="clOfYearlyIncome10Task" 
+ 		class="co.th.ktc.nfe.batch.task.CLOfYearlyIncome10Task" />
+	    
+ 	<bean id="creditCardYearlyIncomeTask" 
+ 		class="co.th.ktc.nfe.batch.task.CreditCardYearlyIncomeTask" />
+	    
+ 	<bean id="declineByCAUTask" 
+ 		class="co.th.ktc.nfe.batch.task.DeclineByCAUTask" />
+	    
+ 	<bean id="disbursementReportTask" 
+ 		class="co.th.ktc.nfe.batch.task.DisbursementReportTask" />
+	    
+ 	<bean id="distributionTask" 
+ 		class="co.th.ktc.nfe.batch.task.DistributionTask" />
+	    
+ 	<bean id="oaPerformanceTask" 
+ 		class="co.th.ktc.nfe.batch.task.OAPerformanceTask" />
+	    
+ 	<bean id="paymentChequePartnerTask" 
+ 		class="co.th.ktc.nfe.batch.task.PaymentChequePartnerTask" />
+	    
+ 	<bean id="penrollTask" 
+ 		class="co.th.ktc.nfe.batch.task.PenrollTask" />
+	    
+ 	<bean id="rejectByOATask" 
+ 		class="co.th.ktc.nfe.batch.task.RejectByOATask" />
+	    
+ 	<bean id="staffInterestRateTask" 
+ 		class="co.th.ktc.nfe.batch.task.StaffInterestRateTask" />
+	    
+ 	<bean id="trackingStatusTask" 
+ 		class="co.th.ktc.nfe.batch.task.TrackingStatusTask" />
+	    
+ 	<bean id="unsualIncomeTask" 
+ 		class="co.th.ktc.nfe.batch.task.UnsualIncomeTask" />
+	    
+ 	<bean id="wallStreetTask" 
+ 		class="co.th.ktc.nfe.batch.task.WallStreetTask" />
+ 		
+	<!-- Section 2.2 Tasklet for batch.  -->
+	
+ 	<bean id="autoReceiveApplicationTask" 
+ 		class="co.th.ktc.nfe.batch.task.AutoReceiveApplicationTask" />
+	
+ 	<bean id="card51Task" 
+ 		class="co.th.ktc.nfe.batch.task.Card51Task" />
+	
+ 	<bean id="declineLoanWeeklyTask" 
+ 		class="co.th.ktc.nfe.batch.task.DeclineLoanWeeklyTask" />
+	
+ 	<bean id="disbursementBatchTask" 
+ 		class="co.th.ktc.nfe.batch.task.DisbursementBatchTask" />
+	
+ 	<bean id="LA01Task" 
+ 		class="co.th.ktc.nfe.batch.task.LA01Task" />
+	
+ 	<bean id="LA02Task" 
+ 		class="co.th.ktc.nfe.batch.task.LA02Task" />
+	
+ 	<bean id="LA03Task" 
+ 		class="co.th.ktc.nfe.batch.task.LA03Task" />
+	
+ 	<bean id="LA04Task" 
+ 		class="co.th.ktc.nfe.batch.task.LA04Task" />
+	
+ 	<bean id="LA05Task" 
+ 		class="co.th.ktc.nfe.batch.task.LA05Task" />
+	
+ 	<bean id="LR01Task" 
+ 		class="co.th.ktc.nfe.batch.task.LR01Task" />
+	
+ 	<bean id="LR02Task" 
+ 		class="co.th.ktc.nfe.batch.task.LR02Task" />
+	
+ 	<bean id="LR03Task" 
+ 		class="co.th.ktc.nfe.batch.task.LR03Task" />
+	
+ 	<bean id="LR04Task" 
+ 		class="co.th.ktc.nfe.batch.task.LR04Task" />
+	
+ 	<bean id="mediaClearingTask" 
+ 		class="co.th.ktc.nfe.batch.task.MediaClearingTask" />
+	
+ 	<bean id="montranTask" 
+ 		class="co.th.ktc.nfe.batch.task.MontranTask" />
+	
+ 	<bean id="saleCommissionTask" 
+ 		class="co.th.ktc.nfe.batch.task.SaleCommissionTask" />
+	
+ 	<bean id="smsCCTask" 
+ 		class="co.th.ktc.nfe.batch.task.SMSCCTask" />
+	
+ 	<bean id="smsCLMainCardTask" 
+ 		class="co.th.ktc.nfe.batch.task.SMSCLMainCardTask" />
+	
+ 	<bean id="smsCLRevolvingLaonTask" 
+ 		class="co.th.ktc.nfe.batch.task.SMSCLRevolvingLaonTask" />
+	
+ 	<bean id="smsCLSupplementaryCardTask" 
+ 		class="co.th.ktc.nfe.batch.task.SMSCLSupplementaryCardTask" />
+	
+ 	<bean id="smsIncompleteDocTask" 
+ 		class="co.th.ktc.nfe.batch.task.SMSIncompleteDocTask" />
+	
+ 	<bean id="smsRLTask" 
+ 		class="co.th.ktc.nfe.batch.task.SMSRLTask" />
+	
+</beans>

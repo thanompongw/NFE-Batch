@@ -1,6 +1,5 @@
 package co.th.ktc.nfe.report.bo.impl;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,9 +18,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
 
+import co.th.ktc.nfe.batch.exception.BusinessError;
+import co.th.ktc.nfe.batch.exception.CommonException;
 import co.th.ktc.nfe.common.BatchConfiguration;
+import co.th.ktc.nfe.common.CommonLogger;
 import co.th.ktc.nfe.common.CommonPOI;
 import co.th.ktc.nfe.common.DateTimeUtils;
+import co.th.ktc.nfe.common.ErrorUtil;
 import co.th.ktc.nfe.constants.NFEBatchConstants;
 import co.th.ktc.nfe.report.bo.ReportBO;
 import co.th.ktc.nfe.report.dao.AbstractReportDao;
@@ -30,6 +33,8 @@ import co.th.ktc.nfe.report.dao.AbstractReportDao;
 public class DistributionBO implements ReportBO {
 	
 	private static Logger LOG = Logger.getLogger(DistributionBO.class);
+	
+	private static final String FUNCTION_ID = "S3014";
 	
 	private static final String REPORT_CC17_FILE_NAME = "CC17";
 	private static final String REPORT_PL17_FILE_NAME = "PL17";
@@ -46,7 +51,7 @@ public class DistributionBO implements ReportBO {
 	private AbstractReportDao dao;
 	
 	@Autowired
-	private BatchConfiguration config;
+	private BatchConfiguration batchConfig;
 	
 	private CommonPOI poi;
 
@@ -76,6 +81,9 @@ public class DistributionBO implements ReportBO {
 			String fromTimestamp = currentDate + " 00:00:00";
 			String toTimestamp = currentDate + " 23:59:59";
 			
+			LOG.info("Report DateTime From : " + fromTimestamp);
+			LOG.info("Report DateTime To : " + toTimestamp);
+			
 			parameter.put("REPORT_DATE", currentDate);
 			parameter.put("PRINT_DATE", DateTimeUtils.getCurrentDateTime(DateTimeUtils.DEFAULT_DATE_FORMAT));
 			parameter.put("PRINT_TIME", DateTimeUtils.getCurrentDateTime(DateTimeUtils.DEFAULT_TIME_FORMAT));
@@ -84,7 +92,7 @@ public class DistributionBO implements ReportBO {
 			
 			for (String fileType : fileTypes) {
 			
-				poi = new CommonPOI(fileType, config.getPathTemplate());
+				poi = new CommonPOI(fileType, batchConfig.getPathTemplate());
 				
 				parameter.put("FILE_TYPE", fileType);
 				
@@ -92,7 +100,7 @@ public class DistributionBO implements ReportBO {
 			    report = generateReport(parameter);			
 				
 				String fileName = fileType;
-				String dirPath = config.getPathOutput();
+				String dirPath = batchConfig.getPathOutput();
 				
 				String reportDate = 
 						DateTimeUtils.convertFormatDateTime(currentDate, 
@@ -101,16 +109,24 @@ public class DistributionBO implements ReportBO {
 				
 				poi.writeFile(report, fileName, dirPath, reportDate);
 			}
-		} catch (Exception e) {
+		} catch (CommonException ce) {
 			processStatus = 1;
-			e.printStackTrace();
-			//TODO: throws error to main function
+			for (BusinessError error : ce.getErrorList().getErrorList()) {
+				CommonLogger.log(NFEBatchConstants.REPORT_APP_ID, 
+								 NFEBatchConstants.SYSTEM_ID, 
+								 FUNCTION_ID, 
+								 error.getErrorkey(), 
+								 String.valueOf(processStatus), 
+								 error.getSubstitutionValues(), 
+								 NFEBatchConstants.ERROR, 
+								 DistributionBO.class);
+			}
 		}
 		return processStatus;
 		
 	}
 
-	public Workbook generateReport(Map<String, String> parameter) {
+	public Workbook generateReport(Map<String, String> parameter) throws CommonException {
 		
 		Workbook workbook = poi.getWorkBook();
 		
@@ -120,14 +136,62 @@ public class DistributionBO implements ReportBO {
 		statusCodes.add(NFEBatchConstants.DECLINE_STATUS_CODE);
 		statusCodes.add(NFEBatchConstants.REJECT_STATUS_CODE);
 		
-		try {
-			if (parameter != null && !parameter.isEmpty()) {
-				if (parameter.get("FILE_TYPE").equals(REPORT_CC17_FILE_NAME)) {
+		if (parameter != null && !parameter.isEmpty()) {
+			if (parameter.get("FILE_TYPE").equals(REPORT_CC17_FILE_NAME)) {
+				
+				workbook.cloneSheet(NFEBatchConstants.CREDIT_CARD_SHEET_NO);
+				workbook.setSheetName(NFEBatchConstants.CREDIT_CARD_SHEET_NO, 
+									  NFEBatchConstants.CREDIT_CARD_SHEET_NAME);
+				Sheet curSheet = workbook.getSheetAt(NFEBatchConstants.CREDIT_CARD_SHEET_NO);
+				int templateSheetNo = workbook.getNumberOfSheets() - 1;
+				
+				for (String statusCode : statusCodes) {
+					String statusTrackingCode = null;
+					if (statusCode.equals(NFEBatchConstants.REJECT_STATUS_CODE)) {
+						statusTrackingCode = NFEBatchConstants.REJECT_STATUS_CODE;
+					} else {
+						statusTrackingCode = NFEBatchConstants.FINAL_RESOLVE_STATUS_CODE;
+					}
+					Object[] sqlParemeters = 
+							new Object[] {statusCode,
+										  statusTrackingCode,
+				   			  			  parameter.get("DATE_FROM"),
+				   			  			  parameter.get("DATE_TO"),
+				   			  			  statusCode,
+				   			  			  statusTrackingCode,
+				   			  			  parameter.get("DATE_FROM"),
+				   			  			  parameter.get("DATE_TO")};
+					SqlRowSet rowSet = dao.query(sqlParemeters);
 					
-					workbook.cloneSheet(NFEBatchConstants.CREDIT_CARD_SHEET_NO);
-					workbook.setSheetName(NFEBatchConstants.CREDIT_CARD_SHEET_NO, 
-										  NFEBatchConstants.CREDIT_CARD_SHEET_NAME);
-					Sheet curSheet = workbook.getSheetAt(NFEBatchConstants.CREDIT_CARD_SHEET_NO);
+					parameter.put("STATUS_CODE", statusCode);
+
+					this.generateReport(workbook,
+										curSheet,
+			                			rowSet,
+			                			NFEBatchConstants.CREDIT_CARD_SHEET_NO,
+			                			parameter);
+				}
+				
+				workbook.removeSheetAt(templateSheetNo);
+			} else {
+				List<String> groupProductTypes = new ArrayList<String>();
+				groupProductTypes.add(NFEBatchConstants.FIXED_LOAN_GROUP_LOANTYPE);
+				groupProductTypes.add(NFEBatchConstants.REVOLVING_LOAN_GROUP_LOANTYPE);
+				
+				for (int i = 0; i < groupProductTypes.size(); i++) {
+					String groupProductType = groupProductTypes.get(i);
+					
+					String sheetName = null;
+					if (groupProductType.equals(NFEBatchConstants.FIXED_LOAN_GROUP_LOANTYPE)) {
+						sheetName = NFEBatchConstants.FIXED_LOAN_SHEET_NAME;
+					} else {
+						sheetName = NFEBatchConstants.REVOLVING_LOAN_SHEET_NAME;
+					}
+					
+					workbook.cloneSheet(i);
+					workbook.setSheetName(i, sheetName);
+					Sheet curSheet = workbook.getSheetAt(i);
+					
 					int templateSheetNo = workbook.getNumberOfSheets() - 1;
 					
 					for (String statusCode : statusCodes) {
@@ -139,13 +203,12 @@ public class DistributionBO implements ReportBO {
 						}
 						Object[] sqlParemeters = 
 								new Object[] {statusCode,
+											  groupProductType,
+											  groupProductType,
 											  statusTrackingCode,
 					   			  			  parameter.get("DATE_FROM"),
-					   			  			  parameter.get("DATE_TO"),
-					   			  			  statusCode,
-					   			  			  statusTrackingCode,
-					   			  			  parameter.get("DATE_FROM"),
 					   			  			  parameter.get("DATE_TO")};
+						
 						SqlRowSet rowSet = dao.query(sqlParemeters);
 						
 						parameter.put("STATUS_CODE", statusCode);
@@ -153,65 +216,13 @@ public class DistributionBO implements ReportBO {
 						this.generateReport(workbook,
 											curSheet,
 				                			rowSet,
-				                			NFEBatchConstants.CREDIT_CARD_SHEET_NO,
+				                			i,
 				                			parameter);
 					}
 					
 					workbook.removeSheetAt(templateSheetNo);
-				} else {
-					List<String> groupProductTypes = new ArrayList<String>();
-					groupProductTypes.add(NFEBatchConstants.FIXED_LOAN_GROUP_LOANTYPE);
-					groupProductTypes.add(NFEBatchConstants.REVOLVING_LOAN_GROUP_LOANTYPE);
-					
-					for (int i = 0; i < groupProductTypes.size(); i++) {
-						String groupProductType = groupProductTypes.get(i);
-						
-						String sheetName = null;
-						if (groupProductType.equals(NFEBatchConstants.FIXED_LOAN_GROUP_LOANTYPE)) {
-							sheetName = NFEBatchConstants.FIXED_LOAN_SHEET_NAME;
-						} else {
-							sheetName = NFEBatchConstants.REVOLVING_LOAN_SHEET_NAME;
-						}
-						
-						workbook.cloneSheet(i);
-						workbook.setSheetName(i, sheetName);
-						Sheet curSheet = workbook.getSheetAt(i);
-						
-						int templateSheetNo = workbook.getNumberOfSheets() - 1;
-						
-						for (String statusCode : statusCodes) {
-							String statusTrackingCode = null;
-							if (statusCode.equals(NFEBatchConstants.REJECT_STATUS_CODE)) {
-								statusTrackingCode = NFEBatchConstants.REJECT_STATUS_CODE;
-							} else {
-								statusTrackingCode = NFEBatchConstants.FINAL_RESOLVE_STATUS_CODE;
-							}
-							Object[] sqlParemeters = 
-									new Object[] {statusCode,
-												  groupProductType,
-												  groupProductType,
-												  statusTrackingCode,
-						   			  			  parameter.get("DATE_FROM"),
-						   			  			  parameter.get("DATE_TO")};
-							
-							SqlRowSet rowSet = dao.query(sqlParemeters);
-							
-							parameter.put("STATUS_CODE", statusCode);
-
-							this.generateReport(workbook,
-												curSheet,
-					                			rowSet,
-					                			i,
-					                			parameter);
-						}
-						
-						workbook.removeSheetAt(templateSheetNo);
-					}
 				}
 			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 
 		return workbook;
@@ -221,7 +232,7 @@ public class DistributionBO implements ReportBO {
 								Sheet curSheet,
 							    SqlRowSet rowSet,
 							    int sheetNo,
-							    Map<String, String> parameter) throws Exception {
+							    Map<String, String> parameter) throws CommonException {
 		
 		try {
 			
@@ -463,10 +474,10 @@ public class DistributionBO implements ReportBO {
 					      dataRows, 
 					      dataColumnIndex++,
 					      countTotal);
-		} catch (SQLException sqlEx) {
-			sqlEx.printStackTrace();
-            throw sqlEx;
-        }
+		} catch (Exception e) {
+			CommonLogger.logStackTrace(e);
+			ErrorUtil.handleSystemException(e);
+		}
 	}
 
 }

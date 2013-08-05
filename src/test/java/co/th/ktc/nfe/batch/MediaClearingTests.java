@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import co.th.ktc.nfe.batch.bo.BatchBO;
 
-@ContextConfiguration(locations={"/batch-context.xml"})
+@ContextConfiguration(locations={"/nfe-batch-context.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class MediaClearingTests extends TestCase {
 	

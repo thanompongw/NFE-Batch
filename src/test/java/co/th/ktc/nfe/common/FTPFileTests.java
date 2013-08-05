@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author temp_dev2
  *
  */
-@ContextConfiguration(locations={"/batch-context.xml"})
+@ContextConfiguration(locations={"/nfe-batch-context.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class FTPFileTests {
 	
@@ -25,7 +25,7 @@ public class FTPFileTests {
 	FTPFile ftpFile;
 	
 	@Autowired
-	private BatchConfiguration config;
+	private BatchConfiguration batchConfig;
 
 	/**
 	 * Test method for {@link co.th.ktc.nfe.common.FTPFile#transferTargetFileToServer(java.lang.String, java.lang.String, java.lang.String)}.
@@ -47,11 +47,11 @@ public class FTPFileTests {
 			String fileNameString = 
 					ftpFile.download("MEDIACLR_LNDISB_D130716_out.TXT", 
 							         "/data02/PRD/KTBCORP/KTC/APS/", 
-							         config.getPathTemp(),
-							         config.getFtpHost(),
-							         config.getFtpUserName(),
-							         config.getFtpPassword(),
-							         Integer.parseInt(config.getFtpPort()));
+							         batchConfig.getPathTemp(),
+							         batchConfig.getFtpHost(),
+							         batchConfig.getFtpUserName(),
+							         batchConfig.getFtpPassword(),
+							         Integer.parseInt(batchConfig.getFtpPort()));
 			System.out.println(fileNameString);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

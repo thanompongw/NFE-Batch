@@ -1,6 +1,5 @@
 package co.th.ktc.nfe.report.bo.impl;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,21 +10,25 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import co.th.ktc.nfe.batch.exception.BusinessError;
+import co.th.ktc.nfe.batch.exception.CommonException;
 import co.th.ktc.nfe.common.BatchConfiguration;
+import co.th.ktc.nfe.common.CommonLogger;
 import co.th.ktc.nfe.common.CommonPOI;
 import co.th.ktc.nfe.common.DateTimeUtils;
+import co.th.ktc.nfe.common.ErrorUtil;
 import co.th.ktc.nfe.constants.NFEBatchConstants;
 import co.th.ktc.nfe.report.bo.ReportBO;
 import co.th.ktc.nfe.report.dao.AbstractReportDao;
-import co.th.ktc.nfe.report.dao.impl.ApproveDao;
 
 @Service(value = "disbursementReportService")
 public class DisbursementBO implements ReportBO {
 	
 	private static Logger LOG = Logger.getLogger(DisbursementBO.class);
+	
+	private static final String FUNCTION_ID = "S3013";
 	
 	private static final String REPORT_FILE_NAME = "DisbursementReport";
 	
@@ -33,7 +36,7 @@ public class DisbursementBO implements ReportBO {
 	private AbstractReportDao dao;
 	
 	@Autowired
-	private BatchConfiguration config;
+	private BatchConfiguration batchConfig;
 	
 	private CommonPOI poi;
 
@@ -48,7 +51,7 @@ public class DisbursementBO implements ReportBO {
 		Workbook report = null;
 		try {
 			
-			poi = new CommonPOI(REPORT_FILE_NAME, config.getPathTemplate());
+			poi = new CommonPOI(REPORT_FILE_NAME, batchConfig.getPathTemplate());
 			String currentDate = null;
 			
 			if (parameter == null) {
@@ -61,6 +64,8 @@ public class DisbursementBO implements ReportBO {
 			
 			String mediaClearingDay = dao.getMediaCleringDay(currentDate);
 			
+			LOG.info("Media Clearing Date : " + mediaClearingDay);
+			
 			if (mediaClearingDay != null && !mediaClearingDay.isEmpty()) {
 
 				String fromTimestamp =
@@ -69,6 +74,9 @@ public class DisbursementBO implements ReportBO {
 				String toTimestamp = 
 						DateTimeUtils.convertFormatDateTime(mediaClearingDay, 
 								"yyMMdd", DateTimeUtils.DEFAULT_DATE_FORMAT) + " 23:59:59";
+				
+				LOG.info("Report DateTime From : " + fromTimestamp);
+				LOG.info("Report DateTime To : " + toTimestamp);
 				
 				parameter.put("REPORT_DATE", currentDate);
 				parameter.put("PRINT_DATE", 
@@ -83,7 +91,7 @@ public class DisbursementBO implements ReportBO {
 			}			
 			
 			String fileName = REPORT_FILE_NAME;
-			String dirPath = config.getPathOutput();
+			String dirPath = batchConfig.getPathOutput();
 			
 			currentDate = 
 					DateTimeUtils.convertFormatDateTime(currentDate, 
@@ -91,48 +99,50 @@ public class DisbursementBO implements ReportBO {
 														"yyyyMMdd");
 			
 			poi.writeFile(report, fileName, dirPath, currentDate);
-		} catch (Exception e) {
+		} catch (CommonException ce) {
 			processStatus = 1;
-			e.printStackTrace();
-			//TODO: throws error to main function
+			for (BusinessError error : ce.getErrorList().getErrorList()) {
+				CommonLogger.log(NFEBatchConstants.REPORT_APP_ID, 
+								 NFEBatchConstants.SYSTEM_ID, 
+								 FUNCTION_ID, 
+								 error.getErrorkey(), 
+								 String.valueOf(processStatus), 
+								 error.getSubstitutionValues(), 
+								 NFEBatchConstants.ERROR, 
+								 DisbursementBO.class);
+			}
 		}
 		return processStatus;
 		
 	}
 
-	public Workbook generateReport(Map<String, String> parameter) {
+	public Workbook generateReport(Map<String, String> parameter) throws CommonException {
 		
 		Workbook workbook = poi.getWorkBook();
 		
+		Object[] sqlParemeters = 
+				new Object[] {parameter.get("DATE_FROM"),
+				   			  parameter.get("DATE_TO"),
+				   			  NFEBatchConstants.SUCCESS_FLAG};
+		SqlRowSet rowSet = dao.query(sqlParemeters);
+
+		this.generateReport(workbook,
+                			rowSet,
+                			NFEBatchConstants.SUCCESS_SHEET_NO,
+                			NFEBatchConstants.SUCCESS_SHEET_NAME,
+                			parameter);
+		sqlParemeters = 
+				new Object[] {parameter.get("DATE_FROM"),
+				   			  parameter.get("DATE_TO"),
+				   			  NFEBatchConstants.UNSUCCESS_FLAG};
 		
-		try {
-			Object[] sqlParemeters = 
-					new Object[] {parameter.get("DATE_FROM"),
-					   			  parameter.get("DATE_TO"),
-					   			  NFEBatchConstants.SUCCESS_FLAG};
-			SqlRowSet rowSet = dao.query(sqlParemeters);
+	    rowSet = dao.query(sqlParemeters);
 
-			this.generateReport(workbook,
-	                			rowSet,
-	                			NFEBatchConstants.SUCCESS_SHEET_NO,
-	                			NFEBatchConstants.SUCCESS_SHEET_NAME,
-	                			parameter);
-			sqlParemeters = 
-					new Object[] {parameter.get("DATE_FROM"),
-					   			  parameter.get("DATE_TO"),
-					   			  NFEBatchConstants.UNSUCCESS_FLAG};
-			
-		    rowSet = dao.query(sqlParemeters);
-
-			this.generateReport(workbook,
-	                			rowSet,
-	                			NFEBatchConstants.UNSUCCESS_SHEET_NO,
-	                			NFEBatchConstants.UNSUCCESS_SHEET_NAME,
-	                			parameter);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		this.generateReport(workbook,
+                			rowSet,
+                			NFEBatchConstants.UNSUCCESS_SHEET_NO,
+                			NFEBatchConstants.UNSUCCESS_SHEET_NAME,
+                			parameter);
 
 		return workbook;
 	}
@@ -141,7 +151,7 @@ public class DisbursementBO implements ReportBO {
 							    SqlRowSet rowSet,
 							    int sheetNo,
 							    String sheetName,
-							    Map<String, String> parameter) throws Exception {
+							    Map<String, String> parameter) throws CommonException {
 		
 		try {
 			
@@ -237,10 +247,10 @@ public class DisbursementBO implements ReportBO {
 			}
 
 			workbook.removeSheetAt(templateSheetNo);
-		} catch (SQLException sqlEx) {
-			sqlEx.printStackTrace();
-            throw sqlEx;
-        }
+		} catch (Exception e) {
+			CommonLogger.logStackTrace(e);
+			ErrorUtil.handleSystemException(e);
+		}
 	}
 
 }

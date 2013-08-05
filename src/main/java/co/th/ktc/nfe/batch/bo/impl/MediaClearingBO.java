@@ -15,9 +15,14 @@ import org.springframework.stereotype.Service;
 
 import co.th.ktc.nfe.batch.bo.BatchBO;
 import co.th.ktc.nfe.batch.dao.AbstractBatchDao;
+import co.th.ktc.nfe.batch.exception.BusinessError;
+import co.th.ktc.nfe.batch.exception.CommonException;
 import co.th.ktc.nfe.common.BatchConfiguration;
+import co.th.ktc.nfe.common.CommonLogger;
 import co.th.ktc.nfe.common.DateTimeUtils;
+import co.th.ktc.nfe.common.ErrorUtil;
 import co.th.ktc.nfe.common.FileUtils;
+import co.th.ktc.nfe.constants.NFEBatchConstants;
 import co.th.ktc.nfe.report.domain.DateBean;
 
 /**
@@ -29,10 +34,12 @@ public class MediaClearingBO implements BatchBO {
 	
 	private static Logger LOG = Logger.getLogger(MediaClearingBO.class);
 	
+	private static final String FUNCTION_ID = "SB014";
+	
 	private static final String BATCH_FILE_NAME = "MEDIACLR_LNDISB_D";
 	
 	@Autowired
-	private BatchConfiguration config;
+	private BatchConfiguration batchConfig;
 	
 	@Resource(name = "mediaClearingDao")
 	private AbstractBatchDao dao;
@@ -73,13 +80,16 @@ public class MediaClearingBO implements BatchBO {
 						DateTimeUtils.toString(dateBean.getDateTo(), 
 								   DateTimeUtils.DEFAULT_DATE_FORMAT) + " 23:59:59";
 				
+				LOG.info("Report DateTime From : " + fromTimestamp);
+				LOG.info("Report DateTime To : " + toTimestamp);
+				
 				parameter.put("DATE_FROM", fromTimestamp);
 				parameter.put("DATE_TO", toTimestamp);
 				
 				// generateReport
 			    write(parameter);
 				
-				String dirPath = config.getPathOutputINet();
+				String dirPath = batchConfig.getPathOutputINet();
 				
 				currentDate = 
 						DateTimeUtils.convertFormatDateTime(currentDate, 
@@ -87,10 +97,18 @@ public class MediaClearingBO implements BatchBO {
 															"yyMMdd");
 				file.writeFile(BATCH_FILE_NAME, dirPath, currentDate);
 			}
-		} catch (Exception e) {
+		} catch (CommonException ce) {
 			processStatus = 1;
-			e.printStackTrace();
-			//TODO: throws error to main function
+			for (BusinessError error : ce.getErrorList().getErrorList()) {
+				CommonLogger.log(NFEBatchConstants.REPORT_APP_ID, 
+								 NFEBatchConstants.SYSTEM_ID, 
+								 FUNCTION_ID, 
+								 error.getErrorkey(), 
+								 String.valueOf(processStatus), 
+								 error.getSubstitutionValues(), 
+								 NFEBatchConstants.ERROR, 
+								 MediaClearingBO.class);
+			}
 		}
 		
 		return processStatus;
@@ -99,32 +117,36 @@ public class MediaClearingBO implements BatchBO {
 	/* (non-Javadoc)
 	 * @see co.th.ktc.nfe.batch.bo.BatchBO#write(java.util.Map)
 	 */
-	public void write(Map<String, String> parameter) {
-		
-		Integer totalRecord = dao.size(new Object[] {parameter.get("DATE_FROM"),
-										 	   	     parameter.get("DATE_TO")});
-		
-		Integer totalRound = new Integer((int) Math.ceil(totalRecord / 100.00));
-		
-		for (int i = 1; i <= totalRound; i++) {
+	public void write(Map<String, String> parameter) throws CommonException {
+		try {
+			Integer totalRecord = dao.size(new Object[] {parameter.get("DATE_FROM"),
+											 	   	     parameter.get("DATE_TO")});
 			
-			SqlRowSet rowSet = dao.queryHeader(new Object[] {i,
-					                                         parameter.get("DATE_FROM"),
-											 	   			 parameter.get("DATE_TO"),
-											 	   			 i,
-											 	   			 i});
+			Integer totalRound = new Integer((int) Math.ceil(totalRecord / 100.00));
 			
-			generateFileHeader(rowSet);
+			for (int i = 1; i <= totalRound; i++) {
+				
+				SqlRowSet rowSet = dao.queryHeader(new Object[] {i,
+						                                         parameter.get("DATE_FROM"),
+												 	   			 parameter.get("DATE_TO"),
+												 	   			 i,
+												 	   			 i});
+				
+				generateFileHeader(rowSet);
 
-			
-			rowSet = dao.queryDetail(new Object[] {i, 
-					                               parameter.get("DATE_FROM"),
-	                                               parameter.get("DATE_TO"),
-	                                               i,
-	                                               i});
-			
-			generateFileDetail(rowSet);
-		}
+				
+				rowSet = dao.queryDetail(new Object[] {i, 
+						                               parameter.get("DATE_FROM"),
+		                                               parameter.get("DATE_TO"),
+		                                               i,
+		                                               i});
+				
+				generateFileDetail(rowSet);
+			}			
+		} catch (Exception e) {
+			CommonLogger.logStackTrace(e);
+			ErrorUtil.handleSystemException(e);
+        }
 	}
 
 	private void generateFileHeader(SqlRowSet rowSet) {

@@ -27,8 +27,12 @@ import org.springframework.transaction.annotation.Transactional;
 import co.th.ktc.nfe.batch.bo.BatchBO;
 import co.th.ktc.nfe.batch.dao.AbstractBatchDao;
 import co.th.ktc.nfe.batch.domain.MontranDetailBean;
+import co.th.ktc.nfe.batch.exception.BusinessError;
+import co.th.ktc.nfe.batch.exception.CommonException;
 import co.th.ktc.nfe.common.BatchConfiguration;
+import co.th.ktc.nfe.common.CommonLogger;
 import co.th.ktc.nfe.common.DateTimeUtils;
+import co.th.ktc.nfe.common.ErrorUtil;
 import co.th.ktc.nfe.common.FTPFile;
 import co.th.ktc.nfe.common.FileUtils;
 import co.th.ktc.nfe.constants.NFEBatchConstants;
@@ -43,10 +47,12 @@ public class MontranBO implements BatchBO {
 	
 	private static Logger LOG = Logger.getLogger(MontranBO.class);
 	
+	private static final String FUNCTION_ID = "SB040";
+	
 	private static final String BATCH_FILE_NAME = "MEDIACLR_LNDISB_D";
 	
 	@Autowired
-	private BatchConfiguration config;
+	private BatchConfiguration batchConfig;
 	
 	@Resource(name = "montranDao")
 	private AbstractBatchDao dao;
@@ -81,10 +87,12 @@ public class MontranBO implements BatchBO {
 			}
 			
 			if (dao.isDayoff(currentDate)) {
-				//Throw Exception
+				ErrorUtil.generateError("MSTD0002AWRN", currentDate);
 			}
 			
 			String mediaClearingDate = dao.getMediaCleringDay(currentDate);
+			
+			LOG.info("Media Clearing Date : " + mediaClearingDate);
 			
 			if (mediaClearingDate != null && !mediaClearingDate.isEmpty()) {
 				download(mediaClearingDate);
@@ -93,19 +101,27 @@ public class MontranBO implements BatchBO {
 						DateTimeUtils.convertFormatDateTime(currentDate, 
 															DateTimeUtils.DEFAULT_DATE_FORMAT, 
 															"ddMMyy");
+				
+				LOG.info("Effective Date : " + effectiveDate);
 				List<MontranDetailBean> motranDetailBeans = 
 						read(mediaClearingDate, effectiveDate);
 				
 				dao.delete(null);
 				
 				insertMotran(motranDetailBeans);
-				
-				write(parameter);
 			}
-		} catch (Exception e) {
+		} catch (CommonException ce) {
 			processStatus = 1;
-			e.printStackTrace();
-			//TODO: throws error to main function
+			for (BusinessError error : ce.getErrorList().getErrorList()) {
+				CommonLogger.log(NFEBatchConstants.REPORT_APP_ID, 
+								 NFEBatchConstants.SYSTEM_ID, 
+								 FUNCTION_ID, 
+								 error.getErrorkey(), 
+								 String.valueOf(processStatus), 
+								 error.getSubstitutionValues(), 
+								 NFEBatchConstants.ERROR, 
+								 MontranBO.class);
+			}
 		}
 		
 		return processStatus;
@@ -114,12 +130,12 @@ public class MontranBO implements BatchBO {
 	/* (non-Javadoc)
 	 * @see co.th.ktc.nfe.batch.bo.BatchBO#write(java.util.Map)
 	 */
-	public void write(Map<String, String> parameter) {
+	public void write(Map<String, String> parameter) throws CommonException {
 		
 	}
 	
 	private List<MontranDetailBean> read(String mediaClearingDate, 
-			                             String effectiveDate) {
+			                             String effectiveDate) throws CommonException {
 		BeanReader in = null;
 		List<MontranDetailBean> motranDetailBeans = new ArrayList<MontranDetailBean>();
 		try {
@@ -135,7 +151,7 @@ public class MontranBO implements BatchBO {
 			fileName.append("out");
 			fileName.append(NFEBatchConstants.TXT_FILE_EXTENTION);
 			
-			String localTempPath = config.getPathTemp();
+			String localTempPath = batchConfig.getPathTemp();
 			
 			File file = new File(localTempPath + fileName.toString());
 			InputStream is = new ByteArrayInputStream(
@@ -157,8 +173,9 @@ public class MontranBO implements BatchBO {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
+			CommonLogger.logStackTrace(e);
+			ErrorUtil.handleSystemException(e);
+        } finally {
 			if (in != null) {
 				in.close();
 			}
@@ -166,7 +183,7 @@ public class MontranBO implements BatchBO {
 		return motranDetailBeans;
 	}
 	
-	private void download(String mediaClearingDate) {
+	private void download(String mediaClearingDate) throws CommonException {
 		
 		StringBuilder fileName = new StringBuilder();
 		fileName.append(BATCH_FILE_NAME);
@@ -176,35 +193,35 @@ public class MontranBO implements BatchBO {
 		fileName.append(NFEBatchConstants.TXT_FILE_EXTENTION);
 		
 		String remoteServerPath = dao.getConfigRemotePath(null) + "OLD/";
-		String localTempPath = config.getPathTemp();
-		String hostName = config.getFtpHost();
-		String userName = config.getFtpUserName();
-		String password = config.getFtpPassword();
-		Integer port = Integer.valueOf(config.getFtpPort());
+		String localTempPath = batchConfig.getPathTemp();
+		String hostName = batchConfig.getFtpHost();
+		String userName = batchConfig.getFtpUserName();
+		String password = batchConfig.getFtpPassword();
+		Integer port = Integer.valueOf(batchConfig.getFtpPort());
 		
-		try {
-			ftpFile.download(fileName.toString(), 
-							 remoteServerPath, 
-							 localTempPath, 
-							 hostName, 
-							 userName, 
-							 password, 
-							 port);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		ftpFile.download(fileName.toString(), 
+						 remoteServerPath, 
+						 localTempPath, 
+						 hostName, 
+						 userName, 
+						 password, 
+						 port);
 	}
 	
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-	private void insertMotran(List<MontranDetailBean> montranDetailBeans) {
-		
-		Object[] parameter = null;
-		
-		for (MontranDetailBean montranDetailBean : montranDetailBeans) {
-			parameter = new Object[] {montranDetailBean};
-			dao.insert(parameter);
-		}
+	private void insertMotran(List<MontranDetailBean> montranDetailBeans) throws CommonException {
+		try {
+
+			Object[] parameter = null;
+			
+			for (MontranDetailBean montranDetailBean : montranDetailBeans) {
+				parameter = new Object[] {montranDetailBean};
+				dao.insert(parameter);
+			}
+		} catch (Exception e) {
+			CommonLogger.logStackTrace(e);
+			ErrorUtil.handleSystemException(e);
+        }
 	}
 
 }
