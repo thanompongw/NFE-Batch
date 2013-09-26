@@ -29,7 +29,7 @@ import co.th.ktc.nfe.constants.NFEBatchConstants;
  *
  */
 @Service(value = "smsCLMainCardService")
-public class SMSCLMainCardBO implements BatchBO {
+public class SMSCLMainCardBO extends BatchBO {
 	
 	private static Logger LOG = Logger.getLogger(SMSCLMainCardBO.class);
 	

@@ -29,7 +29,7 @@ import co.th.ktc.nfe.constants.NFEBatchConstants;
  *
  */
 @Service(value = "card51Service")
-public class Card51BO implements BatchBO {
+public class Card51BO extends BatchBO {
 	
 	private static Logger LOG = Logger.getLogger(Card51BO.class);
 	

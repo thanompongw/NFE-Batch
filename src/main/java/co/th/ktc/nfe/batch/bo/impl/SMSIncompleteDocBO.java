@@ -29,7 +29,7 @@ import co.th.ktc.nfe.constants.NFEBatchConstants;
  *
  */
 @Service(value = "smsIncompleteDocService")
-public class SMSIncompleteDocBO implements BatchBO {
+public class SMSIncompleteDocBO extends BatchBO {
 	
 	private static Logger LOG = Logger.getLogger(SMSIncompleteDocBO.class);
 	

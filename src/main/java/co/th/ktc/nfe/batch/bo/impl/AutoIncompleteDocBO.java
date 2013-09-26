@@ -30,7 +30,7 @@ import co.th.ktc.nfe.constants.NFEBatchConstants;
  *
  */
 @Service(value = "autoIncompleteDocService")
-public class AutoIncompleteDocBO implements BatchBO {
+public class AutoIncompleteDocBO extends BatchBO {
 	
 	private static Logger LOG = Logger.getLogger(AutoIncompleteDocBO.class);
 	

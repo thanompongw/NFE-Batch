@@ -30,7 +30,7 @@ import co.th.ktc.nfe.constants.NFEBatchConstants;
  *
  */
 @Service(value = "disbursementService")
-public class DisbursementBO implements BatchBO {
+public class DisbursementBO extends BatchBO {
 	
 	private static Logger LOG = Logger.getLogger(DisbursementBO.class);
 	

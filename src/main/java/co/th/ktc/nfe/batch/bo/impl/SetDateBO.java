@@ -25,7 +25,7 @@ import co.th.ktc.nfe.constants.NFEBatchConstants;
  *
  */
 @Service(value = "setDateService")
-public class SetDateBO implements BatchBO {
+public class SetDateBO extends BatchBO {
 	
 	private static Logger LOG = Logger.getLogger(SetDateBO.class);
 	

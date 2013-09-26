@@ -29,7 +29,7 @@ import co.th.ktc.nfe.constants.NFEBatchConstants;
  *
  */
 @Service(value = "declineLoanWeeklyService")
-public class DeclineLoanWeeklyBO implements BatchBO {
+public class DeclineLoanWeeklyBO extends BatchBO {
 	
 	private static Logger LOG = Logger.getLogger(DeclineLoanWeeklyBO.class);
 	

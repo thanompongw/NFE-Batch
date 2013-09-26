@@ -30,7 +30,7 @@ import co.th.ktc.nfe.report.domain.DateBean;
  *
  */
 @Service(value = "mediaClearingService")
-public class MediaClearingBO implements BatchBO {
+public class MediaClearingBO extends BatchBO {
 	
 	private static Logger LOG = Logger.getLogger(MediaClearingBO.class);
 	

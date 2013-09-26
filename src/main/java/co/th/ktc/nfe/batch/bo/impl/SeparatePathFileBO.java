@@ -27,7 +27,7 @@ import co.th.ktc.nfe.constants.NFEBatchConstants;
  *
  */
 @Service(value = "separatePathFileService")
-public class SeparatePathFileBO implements BatchBO {
+public class SeparatePathFileBO extends BatchBO {
 	
 	private static Logger LOG = Logger.getLogger(SeparatePathFileBO.class);
 	

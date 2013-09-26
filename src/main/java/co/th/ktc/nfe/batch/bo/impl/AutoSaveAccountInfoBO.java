@@ -33,7 +33,7 @@ import co.th.ktc.nfe.constants.NFEBatchConstants;
  *
  */
 @Service(value = "autoImportApplicationService")
-public class AutoSaveAccountInfoBO implements BatchBO {
+public class AutoSaveAccountInfoBO extends BatchBO {
 	
 	private static Logger LOG = Logger.getLogger(AutoSaveAccountInfoBO.class);
 	

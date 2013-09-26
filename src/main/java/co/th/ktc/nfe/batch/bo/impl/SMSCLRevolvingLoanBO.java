@@ -29,7 +29,7 @@ import co.th.ktc.nfe.constants.NFEBatchConstants;
  *
  */
 @Service(value = "smsCLRevolvingLoanService")
-public class SMSCLRevolvingLoanBO implements BatchBO {
+public class SMSCLRevolvingLoanBO extends BatchBO {
 	
 	private static Logger LOG = Logger.getLogger(SMSCLRevolvingLoanBO.class);
 	

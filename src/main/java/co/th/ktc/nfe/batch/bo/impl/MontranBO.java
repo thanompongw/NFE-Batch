@@ -43,7 +43,7 @@ import co.th.ktc.nfe.constants.NFEBatchConstants;
  */
 @Service(value = "montranService")
 @Transactional(readOnly = true)
-public class MontranBO implements BatchBO {
+public class MontranBO extends BatchBO {
 	
 	private static Logger LOG = Logger.getLogger(MontranBO.class);
 	

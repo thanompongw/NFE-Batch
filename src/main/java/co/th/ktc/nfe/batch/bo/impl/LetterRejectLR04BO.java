@@ -29,7 +29,7 @@ import co.th.ktc.nfe.constants.NFEBatchConstants;
  *
  */
 @Service(value = "letterRejectLR04Service")
-public class LetterRejectLR04BO implements BatchBO {
+public class LetterRejectLR04BO extends BatchBO {
 	
 	private static Logger LOG = Logger.getLogger(LetterRejectLR04BO.class);
 	

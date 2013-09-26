@@ -35,7 +35,7 @@ import co.th.ktc.nfe.constants.NFEBatchConstants;
  *
  */
 @Service(value = "autoImportApplicationService")
-public class AutoImportApplicationBO implements BatchBO {
+public class AutoImportApplicationBO extends BatchBO {
 	
 	private static Logger LOG = Logger.getLogger(AutoImportApplicationBO.class);
 	
@@ -119,7 +119,6 @@ public class AutoImportApplicationBO implements BatchBO {
 		
 		int lastRow = sheet.getLastRowNum();
 		int minColIx = sheet.getRow(lastRow).getFirstCellNum();
-		int maxColIx = sheet.getRow(lastRow).getLastCellNum();
 		
 		int dataRows = 1;
 		
@@ -282,16 +281,16 @@ public class AutoImportApplicationBO implements BatchBO {
 	
 	private void validateMandatory(ApplicationBean applicationBean) throws CommonException {
 
-		if (applicationBean.getBarcode1() == null) {
-			ErrorUtil.generateError("MSTD0002AWRN", "Barcode1");
-		} else if (applicationBean.getBarcode1().length() > 19) {
+		String barcode1 = applicationBean.getBarcode1();
+		if (isEmpty(barcode1)) {
+			ErrorUtil.generateError("MSTD0031AERR", "Barcode1");
+		} else if (barcode1.length() > 19) {
 			String[] args = new String[2];
 			
 			args[0] = "Barcode1";
 			args[1] = "19";
-			ErrorUtil.generateError("MSTD0002AWRN", args, 0);				
+			ErrorUtil.generateError("MSTD0051AERR", args, 0);				
 		} else {
-			String barcode1 = applicationBean.getBarcode1();
 			String sourceCode = barcode1.substring(0, 3);
 			
 			if (!sourceCode.equals("MGM")) {
@@ -301,70 +300,140 @@ public class AutoImportApplicationBO implements BatchBO {
 			applicationBean.setBarcode1(barcode1);
 		}
 		
-		if (applicationBean.getBarcode2() == null) {
-			ErrorUtil.generateError("MSTD0002AWRN", "Barcode1");
-		} else if (applicationBean.getBarcode1().length() == 10) {
+		if (isEmpty(applicationBean.getBarcode2())) {
+			ErrorUtil.generateError("MSTD0031AERR", "Barcode2");
+		} else if (applicationBean.getBarcode2().length() != 10) {
 			String[] args = new String[2];
 			
 			args[0] = "Barcode2";
 			args[1] = "10";
-			ErrorUtil.generateError("MSTD0002AWRN", args, 0);				
+			ErrorUtil.generateError("MSTD0054AERR", args, 0);				
 		}
 		
-		if (applicationBean.getEvidenceType() == null) {
-			
+		if (isEmpty(applicationBean.getEvidenceType())) {
+			ErrorUtil.generateError("MSTD0031AERR", "EvidenceType");
+		} else {
+			/*"Must be in 
+			Select 'X'
+			From nfe_ms_evidencetype 
+			Where evidencetype_id = :EvidenceType
+			and evidencetype_status = 'A'"*/
 		}
 		
-		if (applicationBean.getCitizenId() == null) {
-			
+		String citizenId = applicationBean.getCitizenId();
+		
+		if (isEmpty(citizenId)) {
+			ErrorUtil.generateError("MSTD0031AERR", "CitizenId");
+		} else {
+			if (applicationBean.getEvidenceType().equals("1")) {
+				if (citizenId.length() != 13) {
+					String[] args = new String[2];
+					
+					args[0] = "CitizenId";
+					args[1] = "13";
+					ErrorUtil.generateError("MSTD0054AERR", args, 0);
+				}
+				int sum = 0;
+		        for (int i = 0; i < 12; i++) {
+		            sum += citizenId.charAt(i) * (citizenId.length() - i);
+			        if ((11 - sum % 11) % 10 != citizenId.charAt(12)) {
+			        	ErrorUtil.generateError("MSTD0043AERR", "CitizenId");
+			        }
+		        }
+			}
+
 		}
 		
-		if (applicationBean.getCardType() == null) {
-			
+		String cardType = applicationBean.getCardType();
+		
+		if (isEmpty(cardType)) {
+			ErrorUtil.generateError("MSTD0031AERR", "CardType");
+		} else {
+			if (!cardType.equals("M") && !cardType.equals("S")) {
+				ErrorUtil.generateError("MSTD0043AERR", "CardType");
+			}
 		}
 		
-		if (applicationBean.getIsApplyMainWithSup() == null) {
-			
+		String isApplyMainWithSup = applicationBean.getIsApplyMainWithSup();
+		
+		if (isEmpty(isApplyMainWithSup)) {
+			ErrorUtil.generateError("MSTD0031AERR", "ISApplyMainWithSup");
+		} else {
+			if (cardType.equals("M")) {
+				if (!isApplyMainWithSup.equals("Y") && !isApplyMainWithSup.equals("N")) {
+					ErrorUtil.generateError("MSTD0043AERR", "IsApplyMainWithSup");
+				}
+			} else if (cardType.equals("S")) {
+
+				if (isEmpty(applicationBean.getMainCardNo())) {
+					ErrorUtil.generateError("MSTD0031AERR", "MainCardNo");
+				}
+				
+				if (!isApplyMainWithSup.equals("N")) {
+					ErrorUtil.generateError("MSTD0043AERR", "IsApplyMainWithSup");
+				}
+			}
 		}
 		
-		if (applicationBean.getMainCardNo() == null) {
-			
+		if (isEmpty(applicationBean.getApplicantType())) {
+			ErrorUtil.generateError("MSTD0031AERR", "ApplicantType");
+		} else {
+			/*"Must be in 
+			Select applicanttype_id 
+			From nfe_ms_applicanttype
+			Where  application_status = 'A'"*/		
 		}
 		
-		if (applicationBean.getApplicantType() == null) {
-			
+		if (isEmpty(applicationBean.getPrefixName())) {
+			ErrorUtil.generateError("MSTD0031AERR", "PrefixName");
+		} else {
+			/*"Must be in 
+			Select prefixname_id
+			From nfe_ms_prefixname
+			Where prefixname_status = 'A'"*/		
 		}
 		
-		if (applicationBean.getPrefixName() == null) {
-			
+		String sex = applicationBean.getSex();
+		
+		if (isEmpty(sex)) {
+			ErrorUtil.generateError("MSTD0031AERR", "Sex");
+		} else {
+			if (!sex.equals("M") && !sex.equals("F")) {
+				ErrorUtil.generateError("MSTD0043AERR", "Sex");
+			}
 		}
 		
-		if (applicationBean.getSex() == null) {
-			
+		if (isEmpty(applicationBean.getThaiFname())) {
+			ErrorUtil.generateError("MSTD0031AERR", "ThaiFName");
 		}
 		
-		if (applicationBean.getThaiFname() == null) {
-			
+		if (isEmpty(applicationBean.getThaiLname())) {
+			ErrorUtil.generateError("MSTD0031AERR", "ThaiLName");
 		}
 		
-		if (applicationBean.getThaiLname() == null) {
-			
+		if (isEmpty(applicationBean.getEngFname())) {
+			ErrorUtil.generateError("MSTD0031AERR", "EngFName");
 		}
 		
-		if (applicationBean.getEngFname() == null) {
-			
+		if (isEmpty(applicationBean.getEngLname())) {
+			ErrorUtil.generateError("MSTD0031AERR", "EngLName");
 		}
 		
-		if (applicationBean.getEngLname() == null) {
-			
+		String dateOfBirth = applicationBean.getDob();
+		if (isEmpty(dateOfBirth)) {
+			ErrorUtil.generateError("MSTD0031AERR", "Dob");
+		} else {
+			if (!isValidDate(dateOfBirth)) {
+				ErrorUtil.generateError("MSTD0043AERR", "DOB");
+			}
 		}
-		
-		if (applicationBean.getDob() == null) {
-			
-		}
-		
-		if (applicationBean.getIsChkNCB() == null) {
-			
+		String isChkNCB = applicationBean.getIsChkNCB();
+		if (isEmpty(isChkNCB)) {
+			ErrorUtil.generateError("MSTD0031AERR", "IsChkNCB");
+		} else {
+			if (!isChkNCB.equals("Y") && !isChkNCB.equals("N")) {
+				ErrorUtil.generateError("MSTD0043AERR", "IsChkNCB");
+			}
 		}
 	}
 

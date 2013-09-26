@@ -29,7 +29,7 @@ import co.th.ktc.nfe.constants.NFEBatchConstants;
  *
  */
 @Service(value = "smsRLService")
-public class SMSRLBO implements BatchBO {
+public class SMSRLBO extends BatchBO {
 	
 	private static Logger LOG = Logger.getLogger(SMSRLBO.class);
 	

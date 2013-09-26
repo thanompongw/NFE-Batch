@@ -30,7 +30,7 @@ import co.th.ktc.nfe.constants.NFEBatchConstants;
  *
  */
 @Service(value = "autoValidationApplicationService")
-public class AutoValidationApplicationBO implements BatchBO {
+public class AutoValidationApplicationBO extends BatchBO {
 	
 	private static Logger LOG = Logger.getLogger(AutoValidationApplicationBO.class);
 	

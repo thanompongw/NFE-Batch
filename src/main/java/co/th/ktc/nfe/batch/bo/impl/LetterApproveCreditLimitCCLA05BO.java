@@ -29,7 +29,7 @@ import co.th.ktc.nfe.constants.NFEBatchConstants;
  *
  */
 @Service(value = "letterApproveCreditLimitCCLA05Service")
-public class LetterApproveCreditLimitCCLA05BO implements BatchBO {
+public class LetterApproveCreditLimitCCLA05BO extends BatchBO {
 	
 	private static Logger LOG = Logger.getLogger(LetterApproveCreditLimitCCLA05BO.class);
 	

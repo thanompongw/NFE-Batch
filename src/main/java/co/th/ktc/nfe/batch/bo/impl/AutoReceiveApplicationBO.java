@@ -29,7 +29,7 @@ import co.th.ktc.nfe.constants.NFEBatchConstants;
  *
  */
 @Service(value = "autoReceiveApplicationService")
-public class AutoReceiveApplicationBO implements BatchBO {
+public class AutoReceiveApplicationBO extends BatchBO {
 	
 	private static Logger LOG = Logger.getLogger(AutoReceiveApplicationBO.class);
 	

@@ -28,7 +28,7 @@ import co.th.ktc.nfe.constants.NFEBatchConstants;
  *
  */
 @Service(value = "uploadService")
-public class UploadBO implements BatchBO {
+public class UploadBO extends BatchBO {
 	
 	private static Logger LOG = Logger.getLogger(UploadBO.class);
 	

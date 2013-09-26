@@ -29,7 +29,7 @@ import co.th.ktc.nfe.constants.NFEBatchConstants;
  *
  */
 @Service(value = "saleCommisionService")
-public class SaleCommissionBO implements BatchBO {
+public class SaleCommissionBO extends BatchBO {
 	
 	private static Logger LOG = Logger.getLogger(SaleCommissionBO.class);
 	
