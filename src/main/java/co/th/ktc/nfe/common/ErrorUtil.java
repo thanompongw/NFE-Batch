@@ -9,7 +9,7 @@
  * Environment	 	        :  
  * Author					:  thanompongw
  * Version					:  1.0
- * Creation Date            :  9 ау.╓. 2555
+ * Creation Date            :  9 О©╫О©╫.О©╫. 2555
  *
  * Modification History	    :
  * Version	   Date		   Person Name		Chng Req No		Remarks
@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
 
 import co.th.ktc.nfe.batch.exception.BusinessError;
@@ -37,14 +36,7 @@ import co.th.ktc.nfe.batch.exception.ErrorList;
 @Component
 public class ErrorUtil {
 	
-	private static ResourceBundleMessageSource messageSource;
-	
 	private static BatchConfiguration batchConfig;
-
-    @Autowired
-    public void setMessageSource(ResourceBundleMessageSource messageSource) {
-    	ErrorUtil.messageSource = messageSource;
-    }
 
     @Autowired
     public void setBatchConfig(BatchConfiguration batchConfig){
@@ -65,9 +57,9 @@ public class ErrorUtil {
                     for (int j = 0; j < formattedSubsValues.length; j++) {
                        formattedSubsValues[j] = removeSpChar(stSubsValues[j]);
                     }
-                    message = messageSource.getMessage(be.getErrorkey(), formattedSubsValues, null);
+                    message = MessageUtils.getMessage(be.getErrorkey(), formattedSubsValues);
                 } else {
-                    message = messageSource.getMessage(be.getErrorkey(), null, null);
+                    message = MessageUtils.getMessage(be.getErrorkey());
                 }
                 messages.add(message);
             }
@@ -75,54 +67,54 @@ public class ErrorUtil {
         return messages;
     }
 	
-	public static void generateError(CommonException eNew,
-	                                 String stKey,
-	                                 String[] stErrArg,
-	                                 int errFlag) {
-		ErrorList obErrList = eNew.getErrorList();
+	public static void generateError(CommonException e,
+	                                 String errorCode,
+	                                 String[] msgArgs,
+	                                 int errorIdx) {
+		ErrorList obErrList = e.getErrorList();
 		
 		if (obErrList == null) {
 			obErrList = new ErrorList();
 		}
 		
-		obErrList.addError(stKey, stErrArg);
-		eNew.setErrIndex(errFlag);
-		eNew.setErrorList(obErrList);
+		obErrList.addError(errorCode, msgArgs);
+		e.setErrIndex(errorIdx);
+		e.setErrorList(obErrList);
 	}
 	
-	public static void generateError(CommonException eNew,
-	                                 String stKey,
-	                                 String stErrArg,
-	                                 int errFlag) {
-		ErrorList obErrList = eNew.getErrorList();
+	public static void generateError(CommonException e,
+	                                 String errorCode,
+	                                 String msgArgs,
+	                                 int errorIdx) {
+		ErrorList obErrList = e.getErrorList();
 		
 		if (obErrList == null) {
 			obErrList = new ErrorList();
 		}
 		
-		String[] stErrMsg = { stErrArg };
-		obErrList.addError(stKey, stErrMsg);
-		eNew.setErrIndex(errFlag);
-		eNew.setErrorList(obErrList);
+		String[] stErrMsg = { msgArgs };
+		obErrList.addError(errorCode, stErrMsg);
+		e.setErrIndex(errorIdx);
+		e.setErrorList(obErrList);
 	}
 	
-	public static void generateError(CommonException eNew, String stKey, String stErrArg) {
-		ErrorList obErrList = eNew.getErrorList();
+	public static void generateError(CommonException e, String errorCode, String msgArgs) {
+		ErrorList obErrList = e.getErrorList();
 		
 		if (obErrList == null) {
 			obErrList = new ErrorList();
 		}
-		if (stErrArg != null) {
-			String[] stErrMsg = { removeSpChar(stErrArg) };
-			obErrList.addError(stKey, stErrMsg);
+		if (msgArgs != null) {
+			String[] stErrMsg = { removeSpChar(msgArgs) };
+			obErrList.addError(errorCode, stErrMsg);
 		} else {
-			obErrList.addError(stKey);
+			obErrList.addError(errorCode);
 		}
-		eNew.setErrorList(obErrList);
+		e.setErrorList(obErrList);
 	}
 	
-	public static void generateError(CommonException eNew, ErrorList errList) {
-		ErrorList obErrList = eNew.getErrorList();
+	public static void generateError(CommonException e, ErrorList errList) {
+		ErrorList obErrList = e.getErrorList();
 		
 		if (obErrList == null) {
 			obErrList = new ErrorList();
@@ -132,24 +124,28 @@ public class ErrorUtil {
 			arrErrList.addAll(errList.getErrorList());
 			obErrList = new ErrorList(arrErrList);
 		}
-		eNew.setErrorList(obErrList);
+		e.setErrorList(obErrList);
 	}
 	
-	public static CommonException generateError(String stKey, String stErrArg) {
-		CommonException e = new CommonException(stKey);
-		generateError(e, stKey, stErrArg);
+	public static CommonException generateError(String errorCode, String msgArgs) {
+		CommonException e = new CommonException(errorCode);
+		generateError(e, errorCode, msgArgs);
 		return e;
 	}
 	
-	public static CommonException generateError(String stKey, String stErrArg, int intErrorIndex) {
-		CommonException e = new CommonException(stKey);
-		generateError(e, stKey, stErrArg, intErrorIndex);
+	public static CommonException generateError(String errorCode, 
+												String msgArgs, 
+												int errorIdx) {
+		CommonException e = new CommonException(errorCode);
+		generateError(e, errorCode, msgArgs, errorIdx);
 		return e;
 	}
 	
-	public static CommonException generateError(String stKey, String[] stErrArg, int intErrFlag) {
-		CommonException e = new CommonException(stKey);
-		generateError(e, stKey, stErrArg, intErrFlag);
+	public static CommonException generateError(String errorCode, 
+												String[] msgArgs, 
+												int errorFlag) {
+		CommonException e = new CommonException(errorCode);
+		generateError(e, errorCode, msgArgs, errorFlag);
 		return e;
 	}
 	
@@ -158,9 +154,11 @@ public class ErrorUtil {
 	}
 	
 	public static String removeSpChar(String stSource) {
-		return stSource == null ? "" : (((stSource.replace((char) 0xd, (char) 0x0))
-		        .replace((char) 0xa, (char) 0x0)).replace('\'', (char) 0x0)).replace('\"',
-		                                                                             (char) 0x0);
+		return stSource == null ? "" : 
+			(((stSource.replace((char) 0xd, (char) 0x0))
+		        .replace((char) 0xa, (char) 0x0))
+		        .replace('\'', (char) 0x0))
+		        .replace('\"', (char) 0x0);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -182,33 +180,19 @@ public class ErrorUtil {
 	 * @throws CommonException
 	 */
 	public static void handleCommonException(SQLException e) throws CommonException {
-		String errorMsg = null;
 		if (e.getErrorCode() == 54) {
-			errorMsg = messageSource.getMessage(batchConfig.getConcurrencyLocked(), 
-												null, 
-												null);
-			throw ErrorUtil.generateError(errorMsg,
-			                              null);
+			throw ErrorUtil.generateError(batchConfig.getConcurrencyLocked(),
+			                              e.getMessage());
 		} else if (e.getMessage().toLowerCase().indexOf("io exception") > -1) {
-			errorMsg = messageSource.getMessage(batchConfig.getConnectionFailed(), 
-											    null, 
-											    null);
-			throw generateError(errorMsg, null);
+			throw ErrorUtil.generateError(batchConfig.getConnectionFailed(), null);
 		} else {
-			errorMsg = messageSource.getMessage(batchConfig.getUndefinedError(), 
-				    						    null, 
-				    						    null);
-			throw ErrorUtil.generateError(errorMsg,
+			throw ErrorUtil.generateError(batchConfig.getUndefinedError(),
 			                              e.getMessage());
 		}
 	}
 	
 	public static void handleSystemException(Exception e) throws CommonException {
-
-		String errorMsg = messageSource.getMessage(batchConfig.getUndefinedError(), 
-			    						          null, 
-			    						          null);
-		throw ErrorUtil.generateError(errorMsg,
+		throw ErrorUtil.generateError(batchConfig.getUndefinedError(),
 		                              e.getMessage());
 	}
 }

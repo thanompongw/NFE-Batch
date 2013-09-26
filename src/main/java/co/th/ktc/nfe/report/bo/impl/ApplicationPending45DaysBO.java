@@ -24,7 +24,7 @@ import co.th.ktc.nfe.batch.exception.CommonException;
 import co.th.ktc.nfe.common.BatchConfiguration;
 import co.th.ktc.nfe.common.CommonLogger;
 import co.th.ktc.nfe.common.CommonPOI;
-import co.th.ktc.nfe.common.DateTimeUtils;
+import co.th.ktc.nfe.common.DateUtils;
 import co.th.ktc.nfe.common.ErrorUtil;
 import co.th.ktc.nfe.constants.NFEBatchConstants;
 import co.th.ktc.nfe.report.bo.ReportBO;
@@ -46,12 +46,14 @@ public class ApplicationPending45DaysBO implements ReportBO {
 	
 	private static final String REPORT_FILE_NAME = "NewAppTrackingByDailyReport";
 	
-	
 	@Resource(name = "applicationPending45DaysDao")
 	private AbstractReportDao dao;
 	
 	@Autowired
 	private BatchConfiguration batchConfig;
+	
+	@Autowired
+	private DateUtils dateUtils;
 	
 	private CommonPOI poi;
 
@@ -68,7 +70,7 @@ public class ApplicationPending45DaysBO implements ReportBO {
 			
 			String currentDate = null;
 			
-			if (parameter == null) {
+			if (parameter == null || parameter.isEmpty()) {
 				parameter = new HashMap<String, String>();
 				currentDate = dao.getSetDate("DD/MM/YYYY");
 			} else {
@@ -82,8 +84,8 @@ public class ApplicationPending45DaysBO implements ReportBO {
 			LOG.info("Report DateTime To : " + toTimestamp);
 			
 			parameter.put("REPORT_DATE", currentDate);
-			parameter.put("PRINT_DATE",DateTimeUtils.getCurrentDateTime(DateTimeUtils.DEFAULT_DATE_FORMAT));
-			parameter.put("PRINT_TIME",DateTimeUtils.getCurrentDateTime(DateTimeUtils.DEFAULT_TIME_FORMAT));
+			parameter.put("PRINT_DATE", dateUtils.getCurrentDateTime(DateUtils.DEFAULT_DATE_FORMAT));
+			parameter.put("PRINT_TIME", dateUtils.getCurrentDateTime(DateUtils.DEFAULT_TIME_FORMAT));
 			parameter.put("DATE_FROM", fromTimestamp);
 			parameter.put("DATE_TO", toTimestamp);
 			
@@ -94,9 +96,9 @@ public class ApplicationPending45DaysBO implements ReportBO {
 			String dirPath = batchConfig.getPathOutput();
 			
 			currentDate = 
-					DateTimeUtils.convertFormatDateTime(currentDate, 
-														DateTimeUtils.DEFAULT_DATE_FORMAT, 
-														"yyyyMMdd");
+					dateUtils.convertFormatDateTime(currentDate, 
+													DateUtils.DEFAULT_DATE_FORMAT, 
+													"yyyyMMdd");
 			
 			poi.writeFile(report, fileName, dirPath, currentDate);
 		} catch (CommonException ce) {
@@ -190,12 +192,13 @@ public class ApplicationPending45DaysBO implements ReportBO {
 		Double percentage = null;
 		
 		for (DateBean businessDate : businessDates) {
+			totalRecieveApp = 0;
 			pendingBean = new ApplicationPendingBean();
-			buDateFrom = DateTimeUtils.toString((Date) businessDate.getDateFrom(), 
-											    DateTimeUtils.DEFAULT_DATE_FORMAT);
+			buDateFrom = dateUtils.toString((Date) businessDate.getDateFrom(), 
+											DateUtils.DEFAULT_DATE_FORMAT);
 			
-			buDateTo = DateTimeUtils.toString((Date) businessDate.getDateTo(), 
-					  						  DateTimeUtils.DEFAULT_DATE_FORMAT);
+			buDateTo = dateUtils.toString((Date) businessDate.getDateTo(), 
+					  					  DateUtils.DEFAULT_DATE_FORMAT);
 			
 			pendingBean.setBusinessDate(buDateTo);
 			
@@ -219,22 +222,24 @@ public class ApplicationPending45DaysBO implements ReportBO {
 			remainApp = totalRecieveApp;
 			
 			for (int i = 0; i < remainDates.size(); i++) {
+				percentage = 0.0D;
+				totalFinalApp = 0;
 				remainBean = new RemainBean();
 				remainDate = remainDates.get(i);
 				
-				remainDateFrom = DateTimeUtils.toString((Date) remainDate.getDateFrom(), 
-					    								DateTimeUtils.DEFAULT_DATE_FORMAT);
+				remainDateFrom = dateUtils.toString((Date) remainDate.getDateFrom(), 
+					    							DateUtils.DEFAULT_DATE_FORMAT);
 				
-				remainDateTo = DateTimeUtils.toString((Date) remainDate.getDateTo(), 
-					    							  DateTimeUtils.DEFAULT_DATE_FORMAT);
+				remainDateTo = dateUtils.toString((Date) remainDate.getDateTo(), 
+					    						  DateUtils.DEFAULT_DATE_FORMAT);
 				if (i == 0) {
 					remainDateFrom = buDateFrom;
 					remainDateTo = buDateTo;
 				} else if (i == 7) {
 					i++;
 					remainDate = remainDates.get(remainDates.size() - 1);
-					remainDateTo = DateTimeUtils.toString((Date) remainDate.getDateTo(), 
-						  								  DateTimeUtils.DEFAULT_DATE_FORMAT);
+					remainDateTo = dateUtils.toString((Date) remainDate.getDateTo(), 
+						  							  DateUtils.DEFAULT_DATE_FORMAT);
 				}
 				if (i == remainDates.size() - 1) {
 					sqlParemeters = 
@@ -262,11 +267,13 @@ public class ApplicationPending45DaysBO implements ReportBO {
 				}
 				
 				remainApp -= totalFinalApp;
-				
-				percentage = (double) (remainApp.doubleValue() / totalRecieveApp.doubleValue());
+				if (totalRecieveApp != null && totalRecieveApp.doubleValue() != 0.0D) {
+					percentage = (double) (remainApp.doubleValue() / 
+							               totalRecieveApp.doubleValue());
+				}
 				
 				remainBean.setRemain(remainApp);
-				remainBean.setPercentage(percentage);
+				remainBean.setPercentage(percentage == null ? 0 : percentage);
 				
 				remainApps.add(remainBean);
 			}
@@ -550,8 +557,11 @@ public class ApplicationPending45DaysBO implements ReportBO {
 			sumTotalRemain += sumTotalRemains.get(i);
 		}
 		
-		Double totalPercentage = (double) (sumTotalRemain.doubleValue() 
-				                         / sumTotalReceiveApp.doubleValue());
+		Double totalPercentage = 0.0D;
+		
+		if (sumTotalReceiveApp != null && sumTotalReceiveApp.doubleValue() != 0.0D) {
+			totalPercentage = (double) (sumTotalRemain.doubleValue() / sumTotalReceiveApp.doubleValue());
+		}
 		
 		Map<String, BigDecimal> total = new HashMap<String, BigDecimal>();
 		

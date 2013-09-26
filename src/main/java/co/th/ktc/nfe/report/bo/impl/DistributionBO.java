@@ -23,7 +23,7 @@ import co.th.ktc.nfe.batch.exception.CommonException;
 import co.th.ktc.nfe.common.BatchConfiguration;
 import co.th.ktc.nfe.common.CommonLogger;
 import co.th.ktc.nfe.common.CommonPOI;
-import co.th.ktc.nfe.common.DateTimeUtils;
+import co.th.ktc.nfe.common.DateUtils;
 import co.th.ktc.nfe.common.ErrorUtil;
 import co.th.ktc.nfe.constants.NFEBatchConstants;
 import co.th.ktc.nfe.report.bo.ReportBO;
@@ -53,6 +53,9 @@ public class DistributionBO implements ReportBO {
 	@Autowired
 	private BatchConfiguration batchConfig;
 	
+	@Autowired
+	private DateUtils dateUtils;
+	
 	private CommonPOI poi;
 
 	/**
@@ -70,7 +73,7 @@ public class DistributionBO implements ReportBO {
 			fileTypes.add(REPORT_PL17_FILE_NAME);
 			String currentDate = null;
 			
-			if (parameter == null) {
+			if (parameter == null || parameter.isEmpty()) {
 				parameter = new HashMap<String, String>();
 				currentDate = dao.getSetDate("DD/MM/YYYY");
 				
@@ -85,8 +88,8 @@ public class DistributionBO implements ReportBO {
 			LOG.info("Report DateTime To : " + toTimestamp);
 			
 			parameter.put("REPORT_DATE", currentDate);
-			parameter.put("PRINT_DATE", DateTimeUtils.getCurrentDateTime(DateTimeUtils.DEFAULT_DATE_FORMAT));
-			parameter.put("PRINT_TIME", DateTimeUtils.getCurrentDateTime(DateTimeUtils.DEFAULT_TIME_FORMAT));
+			parameter.put("PRINT_DATE", dateUtils.getCurrentDateTime(DateUtils.DEFAULT_DATE_FORMAT));
+			parameter.put("PRINT_TIME", dateUtils.getCurrentDateTime(DateUtils.DEFAULT_TIME_FORMAT));
 			parameter.put("DATE_FROM", fromTimestamp);
 			parameter.put("DATE_TO", toTimestamp);
 			
@@ -103,9 +106,9 @@ public class DistributionBO implements ReportBO {
 				String dirPath = batchConfig.getPathOutput();
 				
 				String reportDate = 
-						DateTimeUtils.convertFormatDateTime(currentDate, 
-															DateTimeUtils.DEFAULT_DATE_FORMAT, 
-															"yyyyMMdd");
+						dateUtils.convertFormatDateTime(currentDate, 
+														DateUtils.DEFAULT_DATE_FORMAT, 
+														"yyyyMMdd");
 				
 				poi.writeFile(report, fileName, dirPath, reportDate);
 			}

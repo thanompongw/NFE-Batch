@@ -5,22 +5,17 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
 
 import co.th.ktc.nfe.batch.exception.CommonException;
 import co.th.ktc.nfe.constants.NFEBatchConstants;
 
-@Component(value = "fileUtils")
+@Component
 public class FileUtils {
 	
 	private static Logger LOG = Logger.getLogger(FileUtils.class);
-	
-	@Autowired
-	private ResourceBundleMessageSource messageSource;
-    
-    /**
+
+	/**
      * Buffer size for transferring process
      */
     public static final int BUFFER_SIZE = 4096;
@@ -76,9 +71,8 @@ public class FileUtils {
 		String batchFilePath = new File(dirPath, 
 				batchFileName.toString()).getAbsolutePath();
 		
-		LOG.info(messageSource.getMessage("MSTD0001AINF", 
-									      new Object[] {batchFilePath}, 
-									      null));
+		LOG.info(MessageUtils.getMessage("MSTD0001AINF", 
+									     new Object[] {batchFilePath}));
 		
 		try {
 			
@@ -144,9 +138,8 @@ public class FileUtils {
 		String batchFilePath = new File(dirPath, 
 				batchFileName.toString()).getAbsolutePath();
 		
-		LOG.info(messageSource.getMessage("MSTD0001AINF", 
-									      new Object[] {batchFilePath}, 
-									      null));
+		LOG.info(MessageUtils.getMessage("MSTD0001AINF", 
+									      new Object[] {batchFilePath}));
 
 		try {
 			

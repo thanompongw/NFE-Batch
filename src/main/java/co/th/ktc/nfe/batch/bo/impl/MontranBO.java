@@ -31,7 +31,7 @@ import co.th.ktc.nfe.batch.exception.BusinessError;
 import co.th.ktc.nfe.batch.exception.CommonException;
 import co.th.ktc.nfe.common.BatchConfiguration;
 import co.th.ktc.nfe.common.CommonLogger;
-import co.th.ktc.nfe.common.DateTimeUtils;
+import co.th.ktc.nfe.common.DateUtils;
 import co.th.ktc.nfe.common.ErrorUtil;
 import co.th.ktc.nfe.common.FTPFile;
 import co.th.ktc.nfe.common.FileUtils;
@@ -53,6 +53,9 @@ public class MontranBO implements BatchBO {
 	
 	@Autowired
 	private BatchConfiguration batchConfig;
+	
+	@Autowired
+	private DateUtils dateUtils;
 	
 	@Resource(name = "montranDao")
 	private AbstractBatchDao dao;
@@ -79,7 +82,7 @@ public class MontranBO implements BatchBO {
 			file = new FileUtils();
 			String currentDate = null;
 		
-			if (parameter == null) {
+			if (parameter == null || parameter.isEmpty()) {
 				parameter = new HashMap<String, String>();
 				currentDate = dao.getSetDate("DD/MM/YYYY");
 			} else {
@@ -98,9 +101,9 @@ public class MontranBO implements BatchBO {
 				download(mediaClearingDate);
 				
 				String effectiveDate = 
-						DateTimeUtils.convertFormatDateTime(currentDate, 
-															DateTimeUtils.DEFAULT_DATE_FORMAT, 
-															"ddMMyy");
+						dateUtils.convertFormatDateTime(currentDate, 
+														DateUtils.DEFAULT_DATE_FORMAT, 
+														"ddMMyy");
 				
 				LOG.info("Effective Date : " + effectiveDate);
 				List<MontranDetailBean> motranDetailBeans = 
@@ -192,7 +195,7 @@ public class MontranBO implements BatchBO {
 		fileName.append("out");
 		fileName.append(NFEBatchConstants.TXT_FILE_EXTENTION);
 		
-		String remoteServerPath = dao.getConfigRemotePath(null) + "OLD/";
+		String remoteServerPath = dao.getConfigRemotePath(null);
 		String localTempPath = batchConfig.getPathTemp();
 		String hostName = batchConfig.getFtpHost();
 		String userName = batchConfig.getFtpUserName();

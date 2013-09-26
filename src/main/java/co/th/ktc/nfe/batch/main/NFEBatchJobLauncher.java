@@ -1,62 +1,61 @@
+/**
+ * 
+ */
 package co.th.ktc.nfe.batch.main;
 
 import java.util.Date;
 
+import org.apache.log4j.Logger;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParametersBuilder;
-import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
-import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
-import org.springframework.batch.core.repository.JobRestartException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import co.th.ktc.nfe.common.CommonLogger;
 
-@ContextConfiguration(locations={"/report-context.xml"})
+
+/**
+ * @author temp_dev2
+ *
+ */
 public class NFEBatchJobLauncher {
-	
-	private static JobLauncher jobLauncher;
-
-	private static Job job;
 
 	/**
-	 * @param jobLauncher the jobLauncher to set
+	 * Constructor NFEBatchJobLauncher class.
 	 */
-	@Autowired
-	public void setJobLauncher(JobLauncher jobLauncher) {
-		NFEBatchJobLauncher.jobLauncher = jobLauncher;
+	public NFEBatchJobLauncher() {
 	}
 
 	/**
-	 * @param job the job to set
+	 * @param args
 	 */
-	@Autowired
-	public void setJob(Job job) {
-		NFEBatchJobLauncher.job = job;
-	}
-
 	public static void main(String[] args) {
-		
+		String[] springConfig  = {"/nfe-batch-context.xml"};
+	 
+		ApplicationContext context = 
+			new ClassPathXmlApplicationContext(springConfig);
+	 
+		JobLauncher jobLauncher = (JobLauncher) context.getBean("jobLauncher");
+		Job job = (Job) context.getBean("APSJOB001");
+	 
 		try {
 			
 			JobParametersBuilder builder = new JobParametersBuilder();
 			
 			builder.addDate("REPORT_DATE", new Date(System.currentTimeMillis()));
 			
-			jobLauncher.run(job, builder.toJobParameters());
-		} catch (JobExecutionAlreadyRunningException e) {
-			CommonLogger.logStackTrace(e);
-		} catch (JobRestartException e) {
-			CommonLogger.logStackTrace(e);
-		} catch (JobInstanceAlreadyCompleteException e) {
-			CommonLogger.logStackTrace(e);
-		} catch (JobParametersInvalidException e) {
+			JobExecution execution = jobLauncher.run(job, builder.toJobParameters());
+			
+			System.out.println("Exit Status : " + execution.getStatus());
+	 
+		} catch (Exception e) {
 			CommonLogger.logStackTrace(e);
 		}
-		
-		System.exit(0);
+	 
+		System.out.println("Done");
+
 	}
 
 }

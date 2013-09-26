@@ -22,8 +22,8 @@
  	
  	<!-- 1.2 Configuring a job, step, flow -->
 	<batch:job id="APSJOB001" >
-		<batch:split id="parallelProcessing" task-executor="taskExecutor">
-			<!-- <batch:flow>
+		<batch:split id="parallelProcessing" task-executor="taskExecutor" next="SS001">
+			<batch:flow>
 				<batch:step id="SR001" >
 					<batch:tasklet ref="applicationPending45DaysTask" />
 				</batch:step>
@@ -127,7 +127,7 @@
 				<batch:step id="SR022" >
 					<batch:tasklet ref="wallStreetTask" />
 				</batch:step>
-			</batch:flow> -->
+			</batch:flow>
 			<batch:flow>
 				<batch:step id="SB001" >
 					<batch:tasklet ref="autoReceiveApplicationTask" />
@@ -239,7 +239,22 @@
 					<batch:tasklet ref="smsCLSupplementaryCardTask" />
 				</batch:step>
 			</batch:flow>
+			<batch:flow>
+				<batch:step id="SB022" >
+					<batch:tasklet ref="autoIncompleteDocTask" />
+				</batch:step>
+			</batch:flow>
 		</batch:split>
+		<!-- <batch:step id="SS000" next="SS001">
+			<batch:tasklet ref="uploadTask" allow-start-if-complete="true" />
+		</batch:step> -->
+		<!-- <batch:step id="SS001" parent="SS000" next="SS002"> -->
+		<batch:step id="SS001" next="SS002">
+			<batch:tasklet ref="separatePathFileTask"  allow-start-if-complete="true"/>
+		</batch:step>
+ 		<batch:step id="SS002" parent="SS001">
+			<batch:tasklet ref="setDateTask"  allow-start-if-complete="true"/>
+		</batch:step>
 	</batch:job>
 	
 	<!-- Section 2.1 Tasklet for report.  -->
@@ -376,5 +391,17 @@
 	
  	<bean id="smsRLTask" 
  		class="co.th.ktc.nfe.batch.task.SMSRLTask" />
+	
+ 	<bean id="separatePathFileTask" 
+ 		class="co.th.ktc.nfe.batch.task.SeparatePathFileTask" />
+	
+ 	<bean id="uploadTask" 
+ 		class="co.th.ktc.nfe.batch.task.UploadTask" />
+	
+ 	<bean id="autoIncompleteDocTask" 
+ 		class="co.th.ktc.nfe.batch.task.AutoIncompleteDocTask" />
+	
+ 	<bean id="setDateTask" 
+ 		class="co.th.ktc.nfe.batch.task.SetDateTask" />
 	
 </beans>

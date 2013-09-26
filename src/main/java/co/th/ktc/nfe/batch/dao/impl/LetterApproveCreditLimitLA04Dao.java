@@ -76,8 +76,7 @@ public class LetterApproveCreditLimitLA04Dao extends AbstractBatchDao {
 		sql.append("       (SELECT NVL(SLADDRESS_ZIPCODE, ' ') ");
 		sql.append("        FROM NFE_APP_SLADDRESS ");
 		sql.append("        WHERE SLADDRESS_ID > 0 ");
-		sql.append("        AND   SLADDRESS_APPNO = A.CLAPPLICATION_NO ");
-		sql.append("        AND   SLADDRESS_ADDRESSTYPE = A.STMMAILINGFLAG) AS ADDRESSLINE5, ");
+		sql.append("        AND   SLADDRESS_APPNO = T1.CLAPPLICATION_NO) AS ADDRESSLINE5, ");
 		sql.append("       NVL(T2.CLPRODUCT_CARDNUMBER, ' ') AS CARD_NUMBER, ");
 		sql.append("       T2.CLPRODUCT_ACCOUNTCREDITLIMIT AS OLD_CREDIT_LIMIT, ");
 		sql.append("       T4.APPROVE_CREDITLIMIT AS NEW_CREDIT_LIMIT, ");

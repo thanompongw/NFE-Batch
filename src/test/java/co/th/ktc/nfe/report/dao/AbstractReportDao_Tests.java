@@ -16,7 +16,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import co.th.ktc.nfe.common.DateTimeUtils;
+import co.th.ktc.nfe.common.DateUtils;
 import co.th.ktc.nfe.report.domain.DateBean;
 import co.th.ktc.nfe.report.domain.RemainBean;
 

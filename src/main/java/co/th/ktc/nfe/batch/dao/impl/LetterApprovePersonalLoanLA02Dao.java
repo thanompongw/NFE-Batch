@@ -246,7 +246,8 @@ public class LetterApprovePersonalLoanLA02Dao extends AbstractBatchDao {
 		sql.append("AND    EXISTS(SELECT 'X' ");
 		sql.append("              FROM NFE_MS_SUBPRODUCT ");
 		sql.append("              WHERE SUBPRODUCT_ID = T2.APPPRODUCT_SUBPRODUCTID ");
-		sql.append("              AND SUBPRODUCT_PRODUCTID = T2.APPPRODUCT_PRODUCTID) ");
+		sql.append("              AND SUBPRODUCT_PRODUCTID = T2.APPPRODUCT_PRODUCTID ");
+		sql.append("              AND SUBPRODUCT_CODE = 'ULN') ");
 		sql.append("AND    EXISTS(SELECT 'X' ");
 		sql.append("              FROM   NFE_APP_STATUSTRACKING ");
 		sql.append("              WHERE  STATUSTRACKING_ID > 0 ");

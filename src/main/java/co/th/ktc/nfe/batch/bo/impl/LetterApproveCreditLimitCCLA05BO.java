@@ -19,7 +19,7 @@ import co.th.ktc.nfe.batch.exception.BusinessError;
 import co.th.ktc.nfe.batch.exception.CommonException;
 import co.th.ktc.nfe.common.BatchConfiguration;
 import co.th.ktc.nfe.common.CommonLogger;
-import co.th.ktc.nfe.common.DateTimeUtils;
+import co.th.ktc.nfe.common.DateUtils;
 import co.th.ktc.nfe.common.ErrorUtil;
 import co.th.ktc.nfe.common.FileUtils;
 import co.th.ktc.nfe.constants.NFEBatchConstants;
@@ -39,6 +39,9 @@ public class LetterApproveCreditLimitCCLA05BO implements BatchBO {
 	
 	@Autowired
 	private BatchConfiguration batchConfig;
+	
+	@Autowired
+	private DateUtils dateUtils;
 	
 	@Resource(name = "letterApproveCreditLimitLA05Dao")
 	private AbstractBatchDao dao;
@@ -61,7 +64,7 @@ public class LetterApproveCreditLimitCCLA05BO implements BatchBO {
 			file = new FileUtils();
 			String currentDate = null;
 		
-			if (parameter == null) {
+			if (parameter == null || parameter.isEmpty()) {
 				parameter = new HashMap<String, String>();
 				currentDate = dao.getSetDate("DD/MM/YYYY");
 			} else {
@@ -83,9 +86,9 @@ public class LetterApproveCreditLimitCCLA05BO implements BatchBO {
 			String dirPath = batchConfig.getPathOutputCSP();
 			
 			currentDate = 
-					DateTimeUtils.convertFormatDateTime(currentDate, 
-														DateTimeUtils.DEFAULT_DATE_FORMAT, 
-														"yyMMdd");
+					dateUtils.convertFormatDateTime(currentDate, 
+													DateUtils.DEFAULT_DATE_FORMAT, 
+													"yyMMdd");
 			file.writeFile(BATCH_FILE_NAME, dirPath, currentDate);
 		} catch (CommonException ce) {
 			processStatus = 1;

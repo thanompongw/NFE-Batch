@@ -22,6 +22,9 @@ public class BatchConfiguration {
 	@Value("${batch.path.output.SMS}")
 	private String pathOutputSMS;
 
+	@Value("${batch.path.output.Montran}")
+	private String pathOutputMontran;
+
 	@Value("${batch.path.temp}")
 	private String pathTemp;
 
@@ -66,6 +69,21 @@ public class BatchConfiguration {
 
 	@Value("${nodata}")
 	private String dataNotFound;
+
+	@Value("${batch.remotePath.report}")
+	private String remotePathReport;
+
+	@Value("${batch.remotePath.iss}")
+	private String remotePathISS;
+
+	@Value("${batch.remotePath.lms}")
+	private String remotePathLMS;
+
+	@Value("${batch.remotePath.csp}")
+	private String remotePathCSP;
+
+	@Value("${batch.remotePath.ktbcorp}")
+	private String remotePathKTBCorp;
 	
 	/**
 	 * Default Constructor of BatchConfiguration Class.
@@ -109,6 +127,42 @@ public class BatchConfiguration {
 	 */
 	public String getPathOutputSMS() {
 		return pathOutputSMS;
+	}
+
+	/**
+	 * @return the pathOutputMontran
+	 */
+	public String getPathOutputMontran() {
+		return pathOutputMontran;
+	}
+
+	/**
+	 * @param pathOutputMontran the pathOutputMontran to set
+	 */
+	public void setPathOutputMontran(String pathOutputMontran) {
+		this.pathOutputMontran = pathOutputMontran;
+	}
+
+	/**
+	 * @return the remotePath
+	 */
+	public String getRemotePath(String jobId) {
+		
+		String remotePath = "";
+		
+		if (jobId.equals("CSP")) {
+			remotePath = this.remotePathCSP;
+		} else if (jobId.equals("iNet")) {
+			remotePath = this.remotePathKTBCorp;
+		} else if (jobId.equals("SMS")) {
+			remotePath = this.remotePathCSP;
+		} else if (jobId.equals("Montran")) {
+			remotePath = this.remotePathISS;
+		} else {
+			remotePath = this.remotePathReport;
+		}
+		
+		return remotePath;
 	}
 
 	/**

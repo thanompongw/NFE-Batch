@@ -73,11 +73,11 @@ public class SMSCLSupplementaryCardDao extends AbstractBatchDao {
 		sql.append("    AND T3.RESOLVE_APPNO = T1.CLAPPLICATION_NO ");
 		sql.append("    AND T3.RESOLVE_APPPRODUCTID = T2.CLPRODUCT_ID ");
 		sql.append("WHERE T1.CLAPPLICATION_MOBILEPHONE IS NOT NULL ");
-		sql.append("AND T3.RESOLVE_STATUSCODE = '? ");
+		sql.append("AND T3.RESOLVE_STATUSCODE = ? ");
 		sql.append("AND EXISTS(SELECT 'X' ");
 		sql.append("           FROM NFE_SCS_MAPPINGCODE  ");
 		sql.append("           WHERE MAPPINGCODE_SCSCODE = T2.CLPRODUCT_GROUPPRODUCT ");
-		sql.append("           AND MAPPINGCODE_GROUPNAME = 'NFE_MS_GROUPPRODUCTLOANTYPE'   ");
+		sql.append("           AND MAPPINGCODE_GROUPNAME = 'NFE_MS_GROUPPRODUCTLOANTYPE' ");
 		sql.append("           AND MAPPINGCODE_NFECODE = 'C' ) ");
 		sql.append("AND EXISTS(SELECT 'X' ");
 		sql.append("           FROM   NFE_APP_STATUSTRACKING ");

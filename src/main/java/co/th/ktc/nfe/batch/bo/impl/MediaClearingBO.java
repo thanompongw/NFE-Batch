@@ -19,7 +19,7 @@ import co.th.ktc.nfe.batch.exception.BusinessError;
 import co.th.ktc.nfe.batch.exception.CommonException;
 import co.th.ktc.nfe.common.BatchConfiguration;
 import co.th.ktc.nfe.common.CommonLogger;
-import co.th.ktc.nfe.common.DateTimeUtils;
+import co.th.ktc.nfe.common.DateUtils;
 import co.th.ktc.nfe.common.ErrorUtil;
 import co.th.ktc.nfe.common.FileUtils;
 import co.th.ktc.nfe.constants.NFEBatchConstants;
@@ -40,6 +40,9 @@ public class MediaClearingBO implements BatchBO {
 	
 	@Autowired
 	private BatchConfiguration batchConfig;
+	
+	@Autowired
+	private DateUtils dateUtils;
 	
 	@Resource(name = "mediaClearingDao")
 	private AbstractBatchDao dao;
@@ -62,7 +65,7 @@ public class MediaClearingBO implements BatchBO {
 			file = new FileUtils();
 			String currentDate = null;
 		
-			if (parameter == null) {
+			if (parameter == null || parameter.isEmpty()) {
 				parameter = new HashMap<String, String>();
 				currentDate = dao.getSetDate("DD/MM/YYYY");
 			} else {
@@ -74,11 +77,11 @@ public class MediaClearingBO implements BatchBO {
 			if (dateBean != null) {
 
 				String fromTimestamp = 
-						DateTimeUtils.toString(dateBean.getDateFrom(), 
-											   DateTimeUtils.DEFAULT_DATE_FORMAT)  + " 00:00:00";
+						dateUtils.toString(dateBean.getDateFrom(), 
+										   DateUtils.DEFAULT_DATE_FORMAT)  + " 00:00:00";
 				String toTimestamp = 
-						DateTimeUtils.toString(dateBean.getDateTo(), 
-								   DateTimeUtils.DEFAULT_DATE_FORMAT) + " 23:59:59";
+						dateUtils.toString(dateBean.getDateTo(), 
+								   DateUtils.DEFAULT_DATE_FORMAT) + " 23:59:59";
 				
 				LOG.info("Report DateTime From : " + fromTimestamp);
 				LOG.info("Report DateTime To : " + toTimestamp);
@@ -92,9 +95,9 @@ public class MediaClearingBO implements BatchBO {
 				String dirPath = batchConfig.getPathOutputINet();
 				
 				currentDate = 
-						DateTimeUtils.convertFormatDateTime(currentDate, 
-															DateTimeUtils.DEFAULT_DATE_FORMAT, 
-															"yyMMdd");
+						dateUtils.convertFormatDateTime(currentDate, 
+														DateUtils.DEFAULT_DATE_FORMAT, 
+														"yyMMdd");
 				file.writeFile(BATCH_FILE_NAME, dirPath, currentDate);
 			}
 		} catch (CommonException ce) {

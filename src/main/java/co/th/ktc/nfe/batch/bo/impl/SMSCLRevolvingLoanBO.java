@@ -19,7 +19,7 @@ import co.th.ktc.nfe.batch.exception.BusinessError;
 import co.th.ktc.nfe.batch.exception.CommonException;
 import co.th.ktc.nfe.common.BatchConfiguration;
 import co.th.ktc.nfe.common.CommonLogger;
-import co.th.ktc.nfe.common.DateTimeUtils;
+import co.th.ktc.nfe.common.DateUtils;
 import co.th.ktc.nfe.common.ErrorUtil;
 import co.th.ktc.nfe.common.FileUtils;
 import co.th.ktc.nfe.constants.NFEBatchConstants;
@@ -40,6 +40,9 @@ public class SMSCLRevolvingLoanBO implements BatchBO {
 	
 	@Autowired
 	private BatchConfiguration batchConfig;
+	
+	@Autowired
+	private DateUtils dateUtils;
 	
 	@Resource(name = "smsCLRevolvingLoanDao")
 	private AbstractBatchDao dao;
@@ -62,7 +65,7 @@ public class SMSCLRevolvingLoanBO implements BatchBO {
 			file = new FileUtils();
 			String currentDate = null;
 		
-			if (parameter == null) {
+			if (parameter == null || parameter.isEmpty()) {
 				parameter = new HashMap<String, String>();
 				currentDate = dao.getSetDate("DD/MM/YYYY");
 			} else {
@@ -84,22 +87,30 @@ public class SMSCLRevolvingLoanBO implements BatchBO {
 			String dirPath = batchConfig.getPathOutputSMS();
 			
 			currentDate = 
-					DateTimeUtils.convertFormatDateTime(currentDate, 
-														DateTimeUtils.DEFAULT_DATE_FORMAT, 
-														"yyMMdd");
+					dateUtils.convertFormatDateTime(currentDate, 
+													DateUtils.DEFAULT_DATE_FORMAT, 
+													"yyMMdd");
 			String fileName = null;
-			String statusCode = parameter.get("STATUS_CODE");
 			
-			if (statusCode.equals(NFEBatchConstants.APPROVE_STATUS_CODE)) {
-				fileName = BATCH_FILE_APPROVE_NAME;
-			} else if (statusCode.equals(NFEBatchConstants.DECLINE_STATUS_CODE)) {
-				fileName = BATCH_FILE_DECLINE_NAME;
+			for (int i = 0; i < 2; i++) {
+
+				String type = null;
+				
+				if (i == 0) {
+					fileName = BATCH_FILE_APPROVE_NAME;
+				} else if (i == 1) {
+					fileName = BATCH_FILE_DECLINE_NAME;
+				}
+				
+				// generate Batch File
+				parameter.put("STATUS_CODE", type);
+			    write(parameter);
+				
+				file.writeFile(fileName, 
+						       dirPath, 
+						       currentDate, 
+						       NFEBatchConstants.SMS_BATCH_TYPE_REVOLVING);
 			}
-			
-			file.writeFile(fileName, 
-					       dirPath, 
-					       currentDate, 
-					       NFEBatchConstants.SMS_BATCH_TYPE_REVOLVING);
 		} catch (CommonException ce) {
 			processStatus = 1;
 			for (BusinessError error : ce.getErrorList().getErrorList()) {

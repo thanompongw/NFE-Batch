@@ -26,7 +26,7 @@ public class MontranTests extends TestCase {
 		
 		Map<String, String> parameter = new HashMap<String, String>();
 		
-		parameter.put("BATCH_DATE", "10/06/2013");
+		parameter.put("BATCH_DATE", "31/07/2013");
 			
 		int status = bo.execute(parameter);
 		

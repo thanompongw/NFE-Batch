@@ -25,7 +25,6 @@ import org.apache.commons.vfs2.impl.StandardFileSystemManager;
 import org.apache.commons.vfs2.provider.sftp.SftpFileSystemConfigBuilder;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
 
 import co.th.ktc.nfe.batch.exception.CommonException;
@@ -52,9 +51,6 @@ public class FTPFile {
 	private FTPClient ftpClient;
 	
 	private StandardFileSystemManager manager;
-	
-	@Autowired
-	private ResourceBundleMessageSource messageSource;
 	
 	@Autowired
 	private BatchConfiguration batchConfig;
@@ -204,9 +200,12 @@ public class FTPFile {
 				// [{0}], User Name : [{1}], Password : [{2}].
 				throw ErrorUtil.generateError("MSTD1036AERR", msgArgs, 0);
 			}
+			
+			LOG.info("Local File Path : " + localFilePath);
+			LOG.info("File Name : " + fileName);
 
 			//Create InputStream object.
-			is = new FileInputStream(localFilePath + fileName);
+			is = new FileInputStream(localFilePath + "/" + fileName);
 			//Get File Size.
 			fileSize = is.available();
 			//Create BufferedInputStream object.
@@ -216,10 +215,14 @@ public class FTPFile {
 			ftpClient.enterLocalPassiveMode();
 			//Set File Type as binary.
 			ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+			ftpClient.setFileTransferMode(FTP.BINARY_FILE_TYPE);
 			//Set Default buffer size
 			ftpClient.setBufferSize(DEF_BUF_SIZE);
+			
+			LOG.info("Remote File Path : " + remoteFilePath);
+			
 			//Store File.
-			ftpClient.storeFile(remoteFilePath + fileName, bis);
+			ftpClient.storeFile(remoteFilePath  + "/" + fileName, bis);
 
 			//Close BufferedInputStream object.
 			bis.close();
@@ -260,7 +263,7 @@ public class FTPFile {
 			}
 
 			//Delete the temporary file.
-			(new File(localFilePath + fileName)).delete();
+//			(new File(localFilePath + fileName)).delete();
 		} catch (SocketTimeoutException se) {
 			LOG.fatal(se.getMessage(), se);
 			//MSTD1042AERR: FTP Timeout occurs. Current Timeout :
@@ -277,9 +280,6 @@ public class FTPFile {
 		} catch (IOException ie) {
 			LOG.fatal(ie.getMessage(), ie);
 			ErrorUtil.handleSystemException(ie);
-		} catch (Exception e) {
-			LOG.fatal(e.getMessage(), e);
-			ErrorUtil.handleSystemException(e);
 		} finally {
 			try {
 				//Logout from FTP server.
@@ -429,7 +429,6 @@ public class FTPFile {
 
 			String remoteFilePath = upLocation + fileName;
 			
-			System.out.println("remoteFilePath : " + remoteFilePath);
 			//Store File.
 			boolean isRetrieveSuccess = 
 					ftpClient.retrieveFile(remoteFilePath, os);
@@ -455,9 +454,6 @@ public class FTPFile {
 		} catch (IOException ie) {
 			LOG.fatal(ie.getMessage(), ie);
 			ErrorUtil.handleSystemException(ie);
-		} catch (Exception e) {
-			LOG.fatal(e.getMessage(), e);
-			ErrorUtil.handleSystemException(e);
 		} finally {
 			try {
 				//Begin: add Close FileOutputStream object by
@@ -559,9 +555,6 @@ public class FTPFile {
 		} catch (IOException ie) {
 			LOG.fatal(ie.getMessage(), ie);
 			ErrorUtil.handleSystemException(ie);
-		} catch (Exception e) {
-			LOG.fatal(e.getMessage(), e);
-			ErrorUtil.handleSystemException(e);
 		} finally {
 			try {
 				//Logout from FTP server.
@@ -592,7 +585,7 @@ public class FTPFile {
 	 * @throws Exception
 	 */
 	private void isFileExist(String upLocation,
-			                 String fileName) throws Exception {
+			                 String fileName) throws CommonException {
 		org.apache.commons.net.ftp.FTPFile[] ftpFiles = null;
 		boolean isFileExist = false;
 		try {
@@ -622,10 +615,7 @@ public class FTPFile {
 		} catch (IOException ie) {
 			LOG.fatal(ie.getMessage(), ie);
 			ErrorUtil.handleSystemException(ie);
-		} catch (Exception e) {
-			LOG.fatal(e.getMessage(), e);
-			ErrorUtil.handleSystemException(e);
-		} 
+		}
 	}
 
 }

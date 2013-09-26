@@ -19,7 +19,7 @@ import co.th.ktc.nfe.batch.exception.BusinessError;
 import co.th.ktc.nfe.batch.exception.CommonException;
 import co.th.ktc.nfe.common.BatchConfiguration;
 import co.th.ktc.nfe.common.CommonLogger;
-import co.th.ktc.nfe.common.DateTimeUtils;
+import co.th.ktc.nfe.common.DateUtils;
 import co.th.ktc.nfe.common.ErrorUtil;
 import co.th.ktc.nfe.common.FileUtils;
 import co.th.ktc.nfe.constants.NFEBatchConstants;
@@ -39,6 +39,9 @@ public class SMSCLSupplementaryCardBO implements BatchBO {
 	
 	@Autowired
 	private BatchConfiguration batchConfig;
+	
+	@Autowired
+	private DateUtils dateUtils;
 	
 	@Resource(name = "smsCLSupplementaryCardDao")
 	private AbstractBatchDao dao;
@@ -61,7 +64,7 @@ public class SMSCLSupplementaryCardBO implements BatchBO {
 			file = new FileUtils();
 			String currentDate = null;
 		
-			if (parameter == null) {
+			if (parameter == null || parameter.isEmpty()) {
 				parameter = new HashMap<String, String>();
 				currentDate = dao.getSetDate("DD/MM/YYYY");
 			} else {
@@ -77,28 +80,31 @@ public class SMSCLSupplementaryCardBO implements BatchBO {
 			parameter.put("DATE_FROM", fromTimestamp);
 			parameter.put("DATE_TO", toTimestamp);
 			
-			// generate Batch File
-		    write(parameter);
-			
 			String dirPath = batchConfig.getPathOutputSMS();
 			
 			currentDate = 
-					DateTimeUtils.convertFormatDateTime(currentDate, 
-														DateTimeUtils.DEFAULT_DATE_FORMAT, 
-														"yyMMdd");
-			String type = null;
-			String statusCode = parameter.get("STATUS_CODE");
-			
-			if (statusCode.equals(NFEBatchConstants.APPROVE_STATUS_CODE)) {
-				type = NFEBatchConstants.SMS_BATCH_TYPE_SUPPLEMENT_APPROVE;
-			} else if (statusCode.equals(NFEBatchConstants.DECLINE_STATUS_CODE)) {
-				type = NFEBatchConstants.SMS_BATCH_TYPE_SUPPLEMENT_REJECT;
+					dateUtils.convertFormatDateTime(currentDate, 
+													DateUtils.DEFAULT_DATE_FORMAT, 
+													"yyMMdd");
+			for (int i = 0; i < 2; i++) {
+
+				String type = null;
+				
+				if (i == 0) {
+					type = NFEBatchConstants.SMS_BATCH_TYPE_SUPPLEMENT_APPROVE;
+				} else if (i == 1) {
+					type = NFEBatchConstants.SMS_BATCH_TYPE_SUPPLEMENT_REJECT;
+				}
+				
+				// generate Batch File
+				parameter.put("STATUS_CODE", type);
+			    write(parameter);
+				
+				file.writeFile(BATCH_FILE_NAME, 
+						       dirPath, 
+						       currentDate, 
+						       type);
 			}
-			
-			file.writeFile(BATCH_FILE_NAME, 
-					       dirPath, 
-					       currentDate, 
-					       type);
 		} catch (CommonException ce) {
 			processStatus = 1;
 			for (BusinessError error : ce.getErrorList().getErrorList()) {

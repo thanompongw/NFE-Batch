@@ -20,7 +20,7 @@ import co.th.ktc.nfe.batch.exception.CommonException;
 import co.th.ktc.nfe.common.BatchConfiguration;
 import co.th.ktc.nfe.common.CommonLogger;
 import co.th.ktc.nfe.common.CommonPOI;
-import co.th.ktc.nfe.common.DateTimeUtils;
+import co.th.ktc.nfe.common.DateUtils;
 import co.th.ktc.nfe.common.ErrorUtil;
 import co.th.ktc.nfe.constants.NFEBatchConstants;
 import co.th.ktc.nfe.report.bo.ReportBO;
@@ -49,6 +49,9 @@ public class BBCBO implements ReportBO {
 	@Autowired
 	private BatchConfiguration batchConfig;
 	
+	@Autowired
+	private DateUtils dateUtils;
+	
 	private CommonPOI poi;
 
 	/**
@@ -64,7 +67,7 @@ public class BBCBO implements ReportBO {
 			
 			String currentDate = null;
 			
-			if (parameter == null) {
+			if (parameter == null || parameter.isEmpty()) {
 				parameter = new HashMap<String, String>();
 				currentDate = dao.getSetDate("DD/MM/YYYY");
 
@@ -80,9 +83,9 @@ public class BBCBO implements ReportBO {
 			
 			parameter.put("REPORT_DATE", currentDate);
 			parameter.put("PRINT_DATE", 
-					DateTimeUtils.getCurrentDateTime(DateTimeUtils.DEFAULT_DATE_FORMAT));
+					dateUtils.getCurrentDateTime(DateUtils.DEFAULT_DATE_FORMAT));
 			parameter.put("PRINT_TIME", 
-					DateTimeUtils.getCurrentDateTime(DateTimeUtils.DEFAULT_TIME_FORMAT));
+					dateUtils.getCurrentDateTime(DateUtils.DEFAULT_TIME_FORMAT));
 			parameter.put("DATE_FROM", fromTimestamp);
 			parameter.put("DATE_TO", toTimestamp);
 			
@@ -92,9 +95,9 @@ public class BBCBO implements ReportBO {
 			String dirPath = batchConfig.getPathOutput();
 			
 			currentDate = 
-					DateTimeUtils.convertFormatDateTime(currentDate, 
-														DateTimeUtils.DEFAULT_DATE_FORMAT, 
-														"yyyyMMdd");
+					dateUtils.convertFormatDateTime(currentDate, 
+													DateUtils.DEFAULT_DATE_FORMAT, 
+													"yyyyMMdd");
 			
 			poi.writeFile(report, fileName, dirPath, currentDate);
 		} catch (CommonException ce) {
@@ -122,9 +125,9 @@ public class BBCBO implements ReportBO {
 												   parameter.get("DATE_TO")});
 			
 		String sheetName = 
-				DateTimeUtils.convertFormatDateTime(parameter.get("REPORT_DATE"), 
-													DateTimeUtils.DEFAULT_DATE_FORMAT, 
-													"dd-MM-yyyy");
+				dateUtils.convertFormatDateTime(parameter.get("REPORT_DATE"), 
+												DateUtils.DEFAULT_DATE_FORMAT, 
+												"dd-MM-yyyy");
 
     	this.generateReport(workbook,
 							rowSet, 

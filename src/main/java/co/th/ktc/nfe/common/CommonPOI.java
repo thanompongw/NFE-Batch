@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 import co.th.ktc.nfe.batch.exception.CommonException;
 import co.th.ktc.nfe.constants.NFEBatchConstants;
 
-@Component(value = "commonPOI")
+@Component
 public class CommonPOI {
 	
 	private static Logger LOG = Logger.getLogger(CommonPOI.class);
@@ -269,8 +269,8 @@ public class CommonPOI {
      * this method used especially to insert total/ summary in tabular data
      * because the position is depend on row size.
      *
-     * @param intSheet     sheet destination
-     * @param intSheetCopy sheet source
+     * @param sheetNo     sheet destination
+     * @param sheetNoCopy sheet source
      * @param row          row destination
      * @param rowCopy      row copy
      * @param colStart     column start source copy
@@ -278,14 +278,14 @@ public class CommonPOI {
      * <p/>
      * @throws Exception
      */
-    public void copyRow(int intSheet,
-                        int intSheetCopy,
+    public void copyRow(int sheetNo,
+                        int sheetNoCopy,
                         int row,
                         int rowCopy,
                         int colStart,
                         int colEnd) {
-        Sheet sheetCopy = wb.getSheetAt(intSheetCopy);
-        Sheet sheet = wb.getSheetAt(intSheet);
+        Sheet sheetCopy = wb.getSheetAt(sheetNoCopy);
+        Sheet sheet = wb.getSheetAt(sheetNo);
         Row rowToCopy = sheetCopy.getRow(rowCopy);
         for (int i = colStart; i <= colEnd; i++) {
             Cell cellToCopy = rowToCopy.getCell(i);
@@ -485,20 +485,20 @@ public class CommonPOI {
     /**
      * Method to set style into row and column.
      * <p/>
-     * @param intSheet
+     * @param sheetNo
      * @param rowStart
      * @param rowEnd
      * @param colStart
      * @param colEnd
      * @param style
      */
-    public void setStyleRow(int intSheet,
+    public void setStyleRow(int sheetNo,
                             int rowStart,
                             int rowEnd,
                             int colStart,
                             int colEnd,
                             CellStyle style) {
-        Sheet sheet = wb.getSheetAt(intSheet);
+        Sheet sheet = wb.getSheetAt(sheetNo);
         setStyleRow(sheet,
                     rowStart,
                     rowEnd,
@@ -712,5 +712,26 @@ public class CommonPOI {
 		}
 		
 		return reportFilePath;
+	}
+	
+	public Object getObject(Sheet sheet,
+            				int rowIdx,
+            				int colIdx) throws CommonException {
+		
+		Row row = sheet.getRow(rowIdx);
+		
+		Cell cell = row.getCell(colIdx);
+		
+		switch(cell.getCellType()) {
+	        case Cell.CELL_TYPE_BOOLEAN :
+	        	return cell.getBooleanCellValue();
+	        case Cell.CELL_TYPE_NUMERIC :
+	        	return cell.getNumericCellValue();
+	        case Cell.CELL_TYPE_STRING :
+	        	return cell.getStringCellValue();
+	        default : cell.getStringCellValue();
+	    }
+		
+		return null;
 	}
 }

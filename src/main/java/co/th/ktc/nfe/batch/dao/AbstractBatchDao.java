@@ -59,6 +59,22 @@ public abstract class AbstractBatchDao extends JdbcDaoSupport {
 		return remoteServerPath;
 	}
 	
+	public String getConfigByName(String configName) {
+		
+		StringBuilder sql = new StringBuilder();
+		
+		sql.append("SELECT CONFIGURATION_VALUE ");
+		sql.append("FROM NFE_CONFIGURATION ");
+		sql.append("WHERE CONFIGURATION_NAME = ? ");
+		
+		String value = 
+				getJdbcTemplate().queryForObject(sql.toString(), 
+										 		 String.class,
+										 		 configName);
+		
+		return value;
+	}
+	
 	public String getSetDate(String format) {
 		
 		String sql = "SELECT TO_CHAR(NFE_CURRENTDATE, ?) FROM NFE_SETDATE";

@@ -12,7 +12,7 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 
 import co.th.ktc.nfe.batch.bo.BatchBO;
-import co.th.ktc.nfe.common.DateTimeUtils;
+import co.th.ktc.nfe.common.DateUtils;
 
 public class LR01Task implements Tasklet {
 
@@ -35,19 +35,20 @@ public class LR01Task implements Tasklet {
 	public RepeatStatus execute(StepContribution step, ChunkContext context) 
 			throws Exception {
 		
-		Date paramDate = (Date) context.getAttribute("REPORT_DATE");
-		
-		Map<String, String> parameterMap = new HashMap<String, String>();
-		
-		parameterMap.put("REPORT_DATE", DateTimeUtils.toString(paramDate, 
-				                             				   DateTimeUtils.DEFAULT_DATE_FORMAT));
-		
-		Integer processStatus = bo.execute(parameterMap);
+//		Date paramDate = (Date) context.getAttribute("REPORT_DATE");
+//		
+//		Map<String, String> parameterMap = new HashMap<String, String>();
+//		
+//		parameterMap.put("REPORT_DATE", DateTimeUtils.toString(paramDate, 
+//				                             				   DateTimeUtils.DEFAULT_DATE_FORMAT));
+//		
+//		Integer processStatus = bo.execute(parameterMap);
+		Integer processStatus = bo.execute(null);
 
 		if (processStatus == 0) {
 			return RepeatStatus.FINISHED;
 		}
-		return RepeatStatus.CONTINUABLE;
+		return RepeatStatus.FINISHED;
 	}
 
 }

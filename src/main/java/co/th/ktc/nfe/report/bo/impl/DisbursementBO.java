@@ -17,7 +17,7 @@ import co.th.ktc.nfe.batch.exception.CommonException;
 import co.th.ktc.nfe.common.BatchConfiguration;
 import co.th.ktc.nfe.common.CommonLogger;
 import co.th.ktc.nfe.common.CommonPOI;
-import co.th.ktc.nfe.common.DateTimeUtils;
+import co.th.ktc.nfe.common.DateUtils;
 import co.th.ktc.nfe.common.ErrorUtil;
 import co.th.ktc.nfe.constants.NFEBatchConstants;
 import co.th.ktc.nfe.report.bo.ReportBO;
@@ -38,6 +38,9 @@ public class DisbursementBO implements ReportBO {
 	@Autowired
 	private BatchConfiguration batchConfig;
 	
+	@Autowired
+	private DateUtils dateUtils;
+	
 	private CommonPOI poi;
 
 	/**
@@ -54,7 +57,7 @@ public class DisbursementBO implements ReportBO {
 			poi = new CommonPOI(REPORT_FILE_NAME, batchConfig.getPathTemplate());
 			String currentDate = null;
 			
-			if (parameter == null) {
+			if (parameter == null || parameter.isEmpty()) {
 				parameter = new HashMap<String, String>();
 				currentDate = dao.getSetDate("DD/MM/YYYY");
 				
@@ -69,36 +72,36 @@ public class DisbursementBO implements ReportBO {
 			if (mediaClearingDay != null && !mediaClearingDay.isEmpty()) {
 
 				String fromTimestamp =
-						DateTimeUtils.convertFormatDateTime(mediaClearingDay, 
-								"yyMMdd", DateTimeUtils.DEFAULT_DATE_FORMAT) + " 00:00:00";
+						dateUtils.convertFormatDateTime(mediaClearingDay, 
+								"yyMMdd", DateUtils.DEFAULT_DATE_FORMAT) + " 00:00:00";
 				String toTimestamp = 
-						DateTimeUtils.convertFormatDateTime(mediaClearingDay, 
-								"yyMMdd", DateTimeUtils.DEFAULT_DATE_FORMAT) + " 23:59:59";
+						dateUtils.convertFormatDateTime(mediaClearingDay, 
+								"yyMMdd", DateUtils.DEFAULT_DATE_FORMAT) + " 23:59:59";
 				
 				LOG.info("Report DateTime From : " + fromTimestamp);
 				LOG.info("Report DateTime To : " + toTimestamp);
 				
 				parameter.put("REPORT_DATE", currentDate);
 				parameter.put("PRINT_DATE", 
-						DateTimeUtils.getCurrentDateTime(DateTimeUtils.DEFAULT_DATE_FORMAT));
+						dateUtils.getCurrentDateTime(DateUtils.DEFAULT_DATE_FORMAT));
 				parameter.put("PRINT_TIME", 
-						DateTimeUtils.getCurrentDateTime(DateTimeUtils.DEFAULT_TIME_FORMAT));
+						dateUtils.getCurrentDateTime(DateUtils.DEFAULT_TIME_FORMAT));
 				parameter.put("DATE_FROM", fromTimestamp);
 				parameter.put("DATE_TO", toTimestamp);
 			
 				// generateReport
 			    report = generateReport(parameter);
-			}			
-			
-			String fileName = REPORT_FILE_NAME;
-			String dirPath = batchConfig.getPathOutput();
-			
-			currentDate = 
-					DateTimeUtils.convertFormatDateTime(currentDate, 
-														DateTimeUtils.DEFAULT_DATE_FORMAT, 
+				
+				String fileName = REPORT_FILE_NAME;
+				String dirPath = batchConfig.getPathOutput();
+				
+				currentDate = 
+						dateUtils.convertFormatDateTime(currentDate, 
+														DateUtils.DEFAULT_DATE_FORMAT, 
 														"yyyyMMdd");
-			
-			poi.writeFile(report, fileName, dirPath, currentDate);
+				
+				poi.writeFile(report, fileName, dirPath, currentDate);
+			}
 		} catch (CommonException ce) {
 			processStatus = 1;
 			for (BusinessError error : ce.getErrorList().getErrorList()) {

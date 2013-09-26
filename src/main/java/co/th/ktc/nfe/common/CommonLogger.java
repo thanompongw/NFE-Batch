@@ -19,8 +19,6 @@ package co.th.ktc.nfe.common;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
 
 import co.th.ktc.nfe.constants.NFEBatchConstants;
@@ -40,13 +38,6 @@ import co.th.ktc.nfe.constants.NFEBatchConstants;
  */
 @Component
 public class CommonLogger {
-
-	private static ResourceBundleMessageSource messageSource;
-
-	@Autowired
-	public void setMessageSource(ResourceBundleMessageSource messageSource) {
-		CommonLogger.messageSource = messageSource;
-	}
 
 	private static Logger LOG;
 
@@ -146,9 +137,7 @@ public class CommonLogger {
 
 		LOG = Logger.getLogger(className);
 
-		String message = messageSource.getMessage(messageCode, 
-											      msgArgs,
-												  null);
+		String message = MessageUtils.getMessage(messageCode, msgArgs);
 
 		// append module id, function id
 		if ((functionId != null) && (!"".equals(functionId))) {
