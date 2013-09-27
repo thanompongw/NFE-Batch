@@ -4,6 +4,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import co.th.ktc.nfe.batch.exception.CommonException;
 
@@ -52,6 +54,31 @@ public abstract class BatchBO {
 		}
 		
 		return true;
+	}
+	
+	private Pattern pattern;
+	private Matcher matcher;
+ 
+	private static final String EMAIL_PATTERN = 
+		"^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+		+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+ 
+	/**
+	 * Validate email with regular expression
+	 * 
+	 * @param email hex for validation
+	 * @return true valid email, false invalid email
+	 */
+	public Boolean isValidEmail(final String email) {
+		
+		pattern = Pattern.compile(EMAIL_PATTERN);
+		matcher = pattern.matcher(email);
+		
+		return matcher.matches();
+	}
+	
+	public Boolean isNumeric(String value) {
+		return value.matches("-?\\d+(\\.\\d+)?");
 	}
 
 }

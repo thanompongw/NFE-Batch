@@ -147,38 +147,38 @@ public class AutoImportApplicationBO extends BatchBO {
 			applicationBean.setPrefixName((String) poi.getObject(sheet, i, j++));
 			applicationBean.setPrefixNameOth((String) poi.getObject(sheet, i, j++));
 			applicationBean.setSex((String) poi.getObject(sheet, i, j++));
-			applicationBean.setThaiFname((String) poi.getObject(sheet, i, j++));
-			applicationBean.setThaiLname((String) poi.getObject(sheet, i, j++));
-			applicationBean.setEngFname((String) poi.getObject(sheet, i, j++));
-			applicationBean.setEngLname((String) poi.getObject(sheet, i, j++));
+			applicationBean.setThaiFName((String) poi.getObject(sheet, i, j++));
+			applicationBean.setThaiLName((String) poi.getObject(sheet, i, j++));
+			applicationBean.setEngFName((String) poi.getObject(sheet, i, j++));
+			applicationBean.setEngLName((String) poi.getObject(sheet, i, j++));
 			applicationBean.setDob((String) poi.getObject(sheet, i, j++));
 			applicationBean.setIsChkNCB((String) poi.getObject(sheet, i, j++));
 			applicationBean.setRushCard((String) poi.getObject(sheet, i, j++));
 			applicationBean.setNationality((String) poi.getObject(sheet, i, j++));
 			applicationBean.setReligion((String) poi.getObject(sheet, i, j++));
-			applicationBean.setCurrentAddressline1((String) poi.getObject(sheet, i, j++));
-			applicationBean.setCurrentAddressline2((String) poi.getObject(sheet, i, j++));
+			applicationBean.setCurrentAddressLine1((String) poi.getObject(sheet, i, j++));
+			applicationBean.setCurrentAddressLine2((String) poi.getObject(sheet, i, j++));
 			applicationBean.setCurrentAddressProvince((String) poi.getObject(sheet, i, j++));
 			applicationBean.setCurrentAddressAmphur((String) poi.getObject(sheet, i, j++));
 			applicationBean.setCurrentAddressDistrict((String) poi.getObject(sheet, i, j++));
 			applicationBean.setCurrentAddressZipcode((String) poi.getObject(sheet, i, j++));
-			applicationBean.setCurrentAddressPhoneno((String) poi.getObject(sheet, i, j++));
-			applicationBean.setCurrentAddressPhonenoExt((String) poi.getObject(sheet, i, j++));
-			applicationBean.setCurrentAddressMobileno((String) poi.getObject(sheet, i, j++));
+			applicationBean.setCurrentAddressPhoneNo((String) poi.getObject(sheet, i, j++));
+			applicationBean.setCurrentAddressPhoneNoExt((String) poi.getObject(sheet, i, j++));
+			applicationBean.setCurrentAddressMobileNo((String) poi.getObject(sheet, i, j++));
 			applicationBean.setCurrentAddressEmail((String) poi.getObject(sheet, i, j++));
-			applicationBean.setCensusAddressline1((String) poi.getObject(sheet, i, j++));
-			applicationBean.setCensusAddressline2((String) poi.getObject(sheet, i, j++));
+			applicationBean.setCensusAddressLine1((String) poi.getObject(sheet, i, j++));
+			applicationBean.setCensusAddressLine2((String) poi.getObject(sheet, i, j++));
 			applicationBean.setCensusAddressProvince((String) poi.getObject(sheet, i, j++));
 			applicationBean.setCensusAddressAmphur((String) poi.getObject(sheet, i, j++));
 			applicationBean.setCensusAddressDistrict((String) poi.getObject(sheet, i, j++));
 			applicationBean.setCensusAddressZipcode((String) poi.getObject(sheet, i, j++));
-			applicationBean.setCensusAddressPhoneno((String) poi.getObject(sheet, i, j++));
-			applicationBean.setCensusAddressPhonenoext((String) poi.getObject(sheet, i, j++));
-			applicationBean.setCensusAddressMobileno((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAddrtypeYearlive((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAddrtypeType((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAddrtypeStatus((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAddrtypeInstallment((String) poi.getObject(sheet, i, j++));
+			applicationBean.setCensusAddressPhoneNo((String) poi.getObject(sheet, i, j++));
+			applicationBean.setCensusAddressPhoneNoext((String) poi.getObject(sheet, i, j++));
+			applicationBean.setCensusAddressMobileNo((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAddrTypeYearLive((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAddrTypeType((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAddrTypeStatus((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAddrTypeInstallment((String) poi.getObject(sheet, i, j++));
 			applicationBean.setOthersDegree((String) poi.getObject(sheet, i, j++));
 			applicationBean.setOthersOccupation((String) poi.getObject(sheet, i, j++));
 			applicationBean.setOthersOccupationOth((String) poi.getObject(sheet, i, j++));
@@ -186,17 +186,17 @@ public class AutoImportApplicationBO extends BatchBO {
 			applicationBean.setMarriageStatus((String) poi.getObject(sheet, i, j++));
 			applicationBean.setReferenceName((String) poi.getObject(sheet, i, j++));
 			applicationBean.setReferenceRelationship((String) poi.getObject(sheet, i, j++));
-			applicationBean.setReferenceHomePhoneno((String) poi.getObject(sheet, i, j++));
-			applicationBean.setReferenceWorkPhoneno((String) poi.getObject(sheet, i, j++));
-			applicationBean.setReferenceMobilePhoneno((String) poi.getObject(sheet, i, j++));
+			applicationBean.setReferenceHomePhoneNo((String) poi.getObject(sheet, i, j++));
+			applicationBean.setReferenceWorkPhoneNo((String) poi.getObject(sheet, i, j++));
+			applicationBean.setReferenceMobilePhoneNo((String) poi.getObject(sheet, i, j++));
 			applicationBean.setCustomerType((String) poi.getObject(sheet, i, j++));
 			applicationBean.setStaffRateFlag((String) poi.getObject(sheet, i, j++));
 			applicationBean.setMonthlyIncome((String) poi.getObject(sheet, i, j++));
-			applicationBean.setSlcustomerinfoLoanIncome((String) poi.getObject(sheet, i, j++));
-			applicationBean.setSlcustomerinfoCardIncome((String) poi.getObject(sheet, i, j++));
-			applicationBean.setSlcustomerinfoPermanentCredi((String) poi.getObject(sheet, i, j++));
-			applicationBean.setSlcustomerinfoBillingCycle((String) poi.getObject(sheet, i, j++));
-			applicationBean.setSlcustomerinfoEstatementFlag((String) poi.getObject(sheet, i, j++));
+			applicationBean.setSlCustomerInfoLoanIncome((String) poi.getObject(sheet, i, j++));
+			applicationBean.setSlCustomerInfoCardIncome((String) poi.getObject(sheet, i, j++));
+			applicationBean.setSlCustomerInfoPermanentCredit((String) poi.getObject(sheet, i, j++));
+			applicationBean.setSlCustomerInfoBillingCycle((String) poi.getObject(sheet, i, j++));
+			applicationBean.setSlCustomerInfoEstatementFlag((String) poi.getObject(sheet, i, j++));
 			applicationBean.setProductProductId((String) poi.getObject(sheet, i, j++));
 			applicationBean.setProductSubproductId((String) poi.getObject(sheet, i, j++));
 			applicationBean.setProductEmbossname1((String) poi.getObject(sheet, i, j++));
@@ -205,66 +205,66 @@ public class AutoImportApplicationBO extends BatchBO {
 			applicationBean.setProductCycleDate((String) poi.getObject(sheet, i, j++));
 			applicationBean.setProductCreditLimit((String) poi.getObject(sheet, i, j++));
 			applicationBean.setProductPercentInterest((String) poi.getObject(sheet, i, j++));
-			applicationBean.setProductComminteRest((String) poi.getObject(sheet, i, j++));
+			applicationBean.setProductCommInterest((String) poi.getObject(sheet, i, j++));
 			applicationBean.setProductPromotionRate((String) poi.getObject(sheet, i, j++));
 			applicationBean.setProductPromotionTerms((String) poi.getObject(sheet, i, j++));
 			applicationBean.setProductTerm((String) poi.getObject(sheet, i, j++));
 			applicationBean.setProductCashAdvance((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAppoccupationType((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAppoccupationTypeOth((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAppoccupationBusinessType((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAppoccupationBusinessTypeOt((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAppoccupationId((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAppoccupationOth((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAppoccupationWorkplace((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAppoccupationJuristicNo((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAppoccupationJuristicDe((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAppoccupationJuristicRegdate((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAppoccupationAddrline1((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAppoccupationAddrline2((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAppoccupationProvince((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAppoccupationAmphur((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAppoccupationDistrict((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAppoccupationZipcode((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAppoccupationPhoneno1((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAppoccupationPhoneno1Ext((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAppoccupationMobileno((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAppoccupationPosition((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAppoccupationYearOfWork((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAppoccupationRecieveCard((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAppoccupationRecieveBranch((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAppoccupationRecieveBill((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAppoccupationCommunication((String) poi.getObject(sheet, i, j++));
-			applicationBean.setAppoccupationSmeCustomerNo((String) poi.getObject(sheet, i, j++));
-			applicationBean.setBankaccountBank((String) poi.getObject(sheet, i, j++));
-			applicationBean.setBankaccountBankBranch((String) poi.getObject(sheet, i, j++));
-			applicationBean.setBankaccountAccType((String) poi.getObject(sheet, i, j++));
-			applicationBean.setBankaccountAccName((String) poi.getObject(sheet, i, j++));
-			applicationBean.setBankaccountAccNo((String) poi.getObject(sheet, i, j++));
-			applicationBean.setBankaccountOpenPeriod((String) poi.getObject(sheet, i, j++));
-			applicationBean.setBankaccountTmBalance((String) poi.getObject(sheet, i, j++));
-			applicationBean.setBankaccountLmBalance((String) poi.getObject(sheet, i, j++));
-			applicationBean.setLoanaccountAccno((String) poi.getObject(sheet, i, j++));
-			applicationBean.setLoanaccountAcctype((String) poi.getObject(sheet, i, j++));
-			applicationBean.setLoanaccountBank((String) poi.getObject(sheet, i, j++));
-			applicationBean.setLoanaccountIssueDate((String) poi.getObject(sheet, i, j++));
-			applicationBean.setLoanaccountExpireDate((String) poi.getObject(sheet, i, j++));
-			applicationBean.setLoanaccountCreditLimit((String) poi.getObject(sheet, i, j++));
-			applicationBean.setLoanaccountPaymentMethod((String) poi.getObject(sheet, i, j++));
-			applicationBean.setLoanaccountInstallment((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAppOccupationType((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAppOccupationTypeOth((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAppOccupationBusinessType((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAppOccupationBusinessTypeOth((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAppOccupationId((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAppOccupationOth((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAppOccupationWorkplace((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAppOccupationJuristicNo((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAppOccupationJuristicDe((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAppOccupationJuristicRegdate((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAppOccupationAddrline1((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAppOccupationAddrline2((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAppOccupationProvince((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAppOccupationAmphur((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAppOccupationDistrict((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAppOccupationZipcode((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAppOccupationPhoneNo1((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAppOccupationPhoneNo1Ext((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAppOccupationMobileNo((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAppOccupationPosition((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAppOccupationYearOfWork((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAppOccupationRecieveCard((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAppOccupationRecieveBranch((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAppOccupationRecieveBill((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAppOccupationCommunication((String) poi.getObject(sheet, i, j++));
+			applicationBean.setAppOccupationSMECustomerNo((String) poi.getObject(sheet, i, j++));
+			applicationBean.setBankAccountBank((String) poi.getObject(sheet, i, j++));
+			applicationBean.setBankAccountBankBranch((String) poi.getObject(sheet, i, j++));
+			applicationBean.setBankAccountAccType((String) poi.getObject(sheet, i, j++));
+			applicationBean.setBankAccountAccName((String) poi.getObject(sheet, i, j++));
+			applicationBean.setBankAccountAccNo((String) poi.getObject(sheet, i, j++));
+			applicationBean.setBankAccountOpenPeriod((String) poi.getObject(sheet, i, j++));
+			applicationBean.setBankAccountTMBalance((String) poi.getObject(sheet, i, j++));
+			applicationBean.setBankAccountLMBalance((String) poi.getObject(sheet, i, j++));
+			applicationBean.setLoanAccountAccno((String) poi.getObject(sheet, i, j++));
+			applicationBean.setLoanAccountAcctype((String) poi.getObject(sheet, i, j++));
+			applicationBean.setLoanAccountBank((String) poi.getObject(sheet, i, j++));
+			applicationBean.setLoanAccountIssueDate((String) poi.getObject(sheet, i, j++));
+			applicationBean.setLoanAccountExpireDate((String) poi.getObject(sheet, i, j++));
+			applicationBean.setLoanAccountCreditLimit((String) poi.getObject(sheet, i, j++));
+			applicationBean.setLoanAccountPaymentMethod((String) poi.getObject(sheet, i, j++));
+			applicationBean.setLoanAccountInstallment((String) poi.getObject(sheet, i, j++));
 			applicationBean.setTransferDebtAccName((String) poi.getObject(sheet, i, j++));
 			applicationBean.setTransferDebtAccNo((String) poi.getObject(sheet, i, j++));
 			applicationBean.setTransferDebtAccType((String) poi.getObject(sheet, i, j++));
 			applicationBean.setTransferDebtBank((String) poi.getObject(sheet, i, j++));
 			applicationBean.setTransferDebtLastAmount((String) poi.getObject(sheet, i, j++));
-			applicationBean.setTransferloanAccName((String) poi.getObject(sheet, i, j++));
-			applicationBean.setTransferloanAccNo((String) poi.getObject(sheet, i, j++));
-			applicationBean.setTransferloanAccType((String) poi.getObject(sheet, i, j++));
-			applicationBean.setTransferloanBank((String) poi.getObject(sheet, i, j++));
-			applicationBean.setPaymentmethodValue((String) poi.getObject(sheet, i, j++));
-			applicationBean.setPaymentmethodAccName((String) poi.getObject(sheet, i, j++));
-			applicationBean.setPaymentmethodAccNo((String) poi.getObject(sheet, i, j++));
-			applicationBean.setPaymentmethodBank((String) poi.getObject(sheet, i, j++));
+			applicationBean.setTransferLoanAccName((String) poi.getObject(sheet, i, j++));
+			applicationBean.setTransferLoanAccNo((String) poi.getObject(sheet, i, j++));
+			applicationBean.setTransferLoanAccType((String) poi.getObject(sheet, i, j++));
+			applicationBean.setTransferLoanBank((String) poi.getObject(sheet, i, j++));
+			applicationBean.setPaymentMethodValue((String) poi.getObject(sheet, i, j++));
+			applicationBean.setPaymentMethodAccName((String) poi.getObject(sheet, i, j++));
+			applicationBean.setPaymentMethodAccNo((String) poi.getObject(sheet, i, j++));
+			applicationBean.setPaymentMethodBank((String) poi.getObject(sheet, i, j++));
 			
 			try {
 				validateMandatory(applicationBean);
@@ -349,7 +349,8 @@ public class AutoImportApplicationBO extends BatchBO {
 		if (isEmpty(cardType)) {
 			ErrorUtil.generateError("MSTD0031AERR", "CardType");
 		} else {
-			if (!cardType.equals("M") && !cardType.equals("S")) {
+			if (!cardType.equals(NFEBatchConstants.MAIN_CARDTYPE) 
+					&& !cardType.equals(NFEBatchConstants.SUB_CARDTYPE)) {
 				ErrorUtil.generateError("MSTD0043AERR", "CardType");
 			}
 		}
@@ -359,8 +360,9 @@ public class AutoImportApplicationBO extends BatchBO {
 		if (isEmpty(isApplyMainWithSup)) {
 			ErrorUtil.generateError("MSTD0031AERR", "ISApplyMainWithSup");
 		} else {
-			if (cardType.equals("M")) {
-				if (!isApplyMainWithSup.equals("Y") && !isApplyMainWithSup.equals("N")) {
+			if (cardType.equals(NFEBatchConstants.MAIN_CARDTYPE)) {
+				if (!isApplyMainWithSup.equals(NFEBatchConstants.FLAG_YES) 
+						&& !isApplyMainWithSup.equals(NFEBatchConstants.FLAG_NO)) {
 					ErrorUtil.generateError("MSTD0043AERR", "IsApplyMainWithSup");
 				}
 			} else if (cardType.equals("S")) {
@@ -398,24 +400,25 @@ public class AutoImportApplicationBO extends BatchBO {
 		if (isEmpty(sex)) {
 			ErrorUtil.generateError("MSTD0031AERR", "Sex");
 		} else {
-			if (!sex.equals("M") && !sex.equals("F")) {
+			if (!sex.equals(NFEBatchConstants.MALE_SEX) 
+					&& !sex.equals(NFEBatchConstants.FEMALE_SEX)) {
 				ErrorUtil.generateError("MSTD0043AERR", "Sex");
 			}
 		}
 		
-		if (isEmpty(applicationBean.getThaiFname())) {
+		if (isEmpty(applicationBean.getThaiFName())) {
 			ErrorUtil.generateError("MSTD0031AERR", "ThaiFName");
 		}
 		
-		if (isEmpty(applicationBean.getThaiLname())) {
+		if (isEmpty(applicationBean.getThaiLName())) {
 			ErrorUtil.generateError("MSTD0031AERR", "ThaiLName");
 		}
 		
-		if (isEmpty(applicationBean.getEngFname())) {
+		if (isEmpty(applicationBean.getEngFName())) {
 			ErrorUtil.generateError("MSTD0031AERR", "EngFName");
 		}
 		
-		if (isEmpty(applicationBean.getEngLname())) {
+		if (isEmpty(applicationBean.getEngLName())) {
 			ErrorUtil.generateError("MSTD0031AERR", "EngLName");
 		}
 		
@@ -427,13 +430,419 @@ public class AutoImportApplicationBO extends BatchBO {
 				ErrorUtil.generateError("MSTD0043AERR", "DOB");
 			}
 		}
+		
 		String isChkNCB = applicationBean.getIsChkNCB();
 		if (isEmpty(isChkNCB)) {
 			ErrorUtil.generateError("MSTD0031AERR", "IsChkNCB");
 		} else {
-			if (!isChkNCB.equals("Y") && !isChkNCB.equals("N")) {
+			if (!isChkNCB.equals(NFEBatchConstants.FLAG_YES) 
+					&& !isChkNCB.equals(NFEBatchConstants.FLAG_NO)) {
 				ErrorUtil.generateError("MSTD0043AERR", "IsChkNCB");
 			}
+		}
+		
+		if (cardType.equals(NFEBatchConstants.MAIN_CARDTYPE)) {
+
+			if (isEmpty(applicationBean.getNationality())) {
+				ErrorUtil.generateError("MSTD0031AERR", "Nationality");
+			} else {
+				/*"Must be in 
+					Select nationality_id 
+					From nfe_ms_nationality
+					Where nationality_status = 'A'"
+					*/		
+			}
+			
+			if (!isEmpty(applicationBean.getReligion())) {
+				/*"Must be in
+					Select religion_id
+					From nfe_ms_religion
+					Where religion_status ='A'"
+					*/		
+			}
+			
+			if (isEmpty(applicationBean.getCurrentAddressLine1())) {
+				ErrorUtil.generateError("MSTD0031AERR", "Nationality");
+			} else if (applicationBean.getCurrentAddressLine1().length() > 40) {
+				String[] args = new String[2];
+				
+				args[0] = "CurrentAddressline1";
+				args[1] = "19";
+				ErrorUtil.generateError("MSTD0051AERR", args, 0);
+			}
+			
+			if (isEmpty(applicationBean.getCurrentAddressDistrict())) {
+				ErrorUtil.generateError("MSTD0031AERR", "CurrentAddressDistrict");
+			} else {
+
+				/*"
+				 "Must be in 
+					Select district_id
+					 From nfe_ms_district
+					 Where 
+					district_subprovinceid = Column(CURRENT ADDRESSAMPHUR) and 
+					district_status = 'A'"
+					*/	
+			}
+			
+			if (isEmpty(applicationBean.getCurrentAddressAmphur())) {
+				ErrorUtil.generateError("MSTD0031AERR", "CurrentAddressAmphur");
+			} else {
+
+				/*"
+				 "Must be in 
+				select subprovince_id
+				From nfe_ms_subprovince
+				Where 
+				subprovince_provinceid = Column(CURRENT ADDRESSPROVINCE) and
+				subprovince_status = 'A'"
+					*/	
+			}
+			
+			if (isEmpty(applicationBean.getCurrentAddressProvince())) {
+				ErrorUtil.generateError("MSTD0031AERR", "CurrentAddressProvince");
+			} else {
+
+				/*"
+				 "Must be in 
+				Select province_id 
+				From nfe_ms_province 
+				Where province_status = 'A'"
+					*/	
+			}
+			
+			if (isEmpty(applicationBean.getCurrentAddressZipcode())) {
+				ErrorUtil.generateError("MSTD0031AERR", "CurrentAddressZipcode");
+			} else if (applicationBean.getCurrentAddressZipcode().length() != 5) {
+				String[] args = new String[2];
+				
+				args[0] = "CurrentAddressZipcode";
+				args[1] = "5";
+				ErrorUtil.generateError("MSTD0054AERR", args, 0);
+			}
+			
+			String currentAddressPhoneno = applicationBean.getCurrentAddressPhoneNo();
+			
+			if (isEmpty(currentAddressPhoneno)) {
+				ErrorUtil.generateError("MSTD0031AERR", "CurrentAddressPhoneno");
+			} else {
+				// 2. Length must equal NfeConfigValue.PhoneLength
+				if (currentAddressPhoneno.length() != 8) {
+					String[] args = new String[2];
+					
+					args[0] = "CurrentAddressPhoneno";
+					args[1] = "5";
+					ErrorUtil.generateError("MSTD0054AERR", args, 0);
+				}
+				
+				/*1. first 2 characters of Column(CURRENT ADDRESSPHONENO) must = 
+				Select province_phonecode 
+				From nfe_ms_province 
+				Where 
+				province_id = Column(CURRENT ADDRESSPROVINCE)*/
+				
+			}
+			
+			if (!isEmpty(applicationBean.getCurrentAddressMobileNo())) {
+				/*
+				 * "Length must equal NfeConfigValue.MobileLength
+					first 2 characters must exist in Configuration.MobilePrefix"
+				 */		
+			}
+			
+			if (!isEmpty(applicationBean.getCurrentAddressEmail())
+					&& !isValidEmail(applicationBean.getCurrentAddressEmail())) {
+				ErrorUtil.generateError("MSTD0043AERR", "CurrentAddressEmail");
+			}
+			
+			if (!isEmpty(applicationBean.getCensusAddressDistrict())) {
+				/*"
+				 "Must be in 
+					Select district_id
+					 From nfe_ms_district
+					 Where 
+					district_subprovinceid = Column(CURRENT ADDRESSAMPHUR) and 
+					district_status = 'A'"
+					*/	
+			}
+			
+			if (!isEmpty(applicationBean.getCensusAddressAmphur())) {
+				/*"
+				 "Must be in 
+					Select district_id
+					 From nfe_ms_district
+					 Where 
+					district_subprovinceid = Column(CURRENT ADDRESSAMPHUR) and 
+					district_status = 'A'"
+					*/	
+			}
+			
+			if (!isEmpty(applicationBean.getCensusAddressProvince())) {
+				/*"
+				 "Must be in 
+					Select district_id
+					 From nfe_ms_district
+					 Where 
+					district_subprovinceid = Column(CURRENT ADDRESSAMPHUR) and 
+					district_status = 'A'"
+					*/	
+			}
+			
+			if (!isEmpty(applicationBean.getCensusAddressZipcode())
+					&& applicationBean.getCurrentAddressZipcode().length() != 5) {
+				String[] args = new String[2];
+				
+				args[0] = "CensusAddressZipcode";
+				args[1] = "5";
+				ErrorUtil.generateError("MSTD0054AERR", args, 0);
+			}
+			
+			String censusAddressPhoneno = applicationBean.getCensusAddressPhoneNo();
+			
+			if (!isEmpty(censusAddressPhoneno)) {
+				// 2. Length must equal NfeConfigValue.PhoneLength
+				if (censusAddressPhoneno.length() != 8) {
+					String[] args = new String[2];
+					
+					args[0] = "CensusAddressPhoneno";
+					args[1] = "5";
+					ErrorUtil.generateError("MSTD0054AERR", args, 0);
+				}
+				
+				/*1. first 2 characters of Column(CURRENT ADDRESSPHONENO) must = 
+				Select province_phonecode 
+				From nfe_ms_province 
+				Where 
+				province_id = Column(CURRENT ADDRESSPROVINCE)*/
+				
+			}
+			
+			if (!isEmpty(applicationBean.getCensusAddressMobileNo())) {
+				/*
+				 * "Length must equal NfeConfigValue.MobileLength
+					first 2 characters must exist in Configuration.MobilePrefix"
+				 */		
+			}
+			
+			String addrTypeYearLive = applicationBean.getAddrTypeYearLive();
+			
+			if (!isEmpty(applicationBean.getAddrTypeYearLive())) {
+				
+				if (!isNumeric(addrTypeYearLive)) {
+					ErrorUtil.generateError("MSTD0043AERR", "AddrtypeYearlive");
+				} else {
+					Integer month = Integer.valueOf(
+							addrTypeYearLive.substring(addrTypeYearLive.indexOf("."), 
+													   addrTypeYearLive.length()));
+					if (month > 12) {
+						ErrorUtil.generateError("MSTD0043AERR", "AddrtypeYearlive");
+					}
+				}
+			}
+			
+			if (!isEmpty(applicationBean.getAddrTypeType())) {
+				/*
+				 * "Length must equal NfeConfigValue.MobileLength
+					first 2 characters must exist in Configuration.MobilePrefix"
+				 */		
+			}
+			
+			if (!isEmpty(applicationBean.getAddrTypeStatus())) {
+				/*
+				 * "Length must equal NfeConfigValue.MobileLength
+					first 2 characters must exist in Configuration.MobilePrefix"
+				 */		
+			}
+			
+			if (!isEmpty(applicationBean.getAddrTypeStatus())) {
+				/*
+				 * "Length must equal NfeConfigValue.MobileLength
+					first 2 characters must exist in Configuration.MobilePrefix"
+				 */		
+			}
+			
+			if (!isEmpty(applicationBean.getAddrTypeInstallment())) {
+				try {
+					Integer.parseInt(applicationBean.getAddrTypeInstallment());
+				} catch (NumberFormatException e) {
+					ErrorUtil.generateError("MSTD0043AERR", "AddrtypeInstallment");
+				}
+			}
+			
+			if (!isEmpty(applicationBean.getOthersDegree())) {
+				/*
+				 * "Length must equal NfeConfigValue.MobileLength
+					first 2 characters must exist in Configuration.MobilePrefix"
+				 */		
+			}
+			
+			if (!isEmpty(applicationBean.getOthersOccupation())) {
+				/*
+				 * "Length must equal NfeConfigValue.MobileLength
+					first 2 characters must exist in Configuration.MobilePrefix"
+				 */		
+			}
+			
+			if (isEmpty(applicationBean.getOthersWorkplace())) {
+				ErrorUtil.generateError("MSTD0031AERR", "OthersWorkplace");
+			}
+			
+			if (!isEmpty(applicationBean.getMarriageStatus())) {
+				/*
+				 * "Length must equal NfeConfigValue.MobileLength
+					first 2 characters must exist in Configuration.MobilePrefix"
+				 */		
+			}
+			
+			if (!isEmpty(applicationBean.getReferenceRelationship())) {
+				/*
+				 * "Length must equal NfeConfigValue.MobileLength
+					first 2 characters must exist in Configuration.MobilePrefix"
+				 */		
+			}
+			
+			if (!isEmpty(applicationBean.getReferenceHomePhoneNo())) {
+				/*
+				 * "Length must equal NfeConfigValue.MobileLength
+					first 2 characters must exist in Configuration.MobilePrefix"
+				 */		
+			}
+			
+			if (!isEmpty(applicationBean.getReferenceMobilePhoneNo())) {
+				/*
+				 * "Length must equal NfeConfigValue.MobileLength
+					first 2 characters must exist in Configuration.MobilePrefix"
+				 */		
+			}
+			
+			if (!isEmpty(applicationBean.getReferenceWorkPhoneNo())) {
+				/*
+				 * "Length must equal NfeConfigValue.MobileLength
+					first 2 characters must exist in Configuration.MobilePrefix"
+				 */		
+			}
+			
+			if (!isEmpty(applicationBean.getReferenceRelationship())) {
+				/*
+				 * "Length must equal NfeConfigValue.MobileLength
+					first 2 characters must exist in Configuration.MobilePrefix"
+				 */		
+			}
+			
+			if (!isEmpty(applicationBean.getCustomerType())) {
+				/*
+				 * "Length must equal NfeConfigValue.MobileLength
+					first 2 characters must exist in Configuration.MobilePrefix"
+				 */		
+			}
+			
+			String staffRateFlag = applicationBean.getStaffRateFlag();
+			
+			if (!isEmpty(staffRateFlag)) {
+				if (!staffRateFlag.equals(NFEBatchConstants.FLAG_YES) 
+						&& !staffRateFlag.equals(NFEBatchConstants.FLAG_NO)) {
+					ErrorUtil.generateError("MSTD0043AERR", "StaffRateFlag");
+				}
+			}
+			
+			if (isEmpty(applicationBean.getMonthlyIncome())) {
+				ErrorUtil.generateError("MSTD0031AERR", "MonthlyIncome");
+			} else {
+				try {
+					Integer.parseInt(applicationBean.getMonthlyIncome());
+				} catch (NumberFormatException e) {
+					ErrorUtil.generateError("MSTD0043AERR", "MonthlyIncome");
+				}
+			}
+			
+			if (!isEmpty(applicationBean.getOtherIncome())) {
+				try {
+					Integer.parseInt(applicationBean.getOtherIncome());
+				} catch (NumberFormatException e) {
+					ErrorUtil.generateError("MSTD0043AERR", "OtherIncome");
+				}
+			}
+			
+			if (!isEmpty(applicationBean.getSourceOtherIncome())) {
+				
+			}
+			
+			if (isEmpty(applicationBean.getProductProductId())) {
+				ErrorUtil.generateError("MSTD0031AERR", "ProductProductId");
+			}
+			
+			if (isEmpty(applicationBean.getProductSubproductId())) {
+				ErrorUtil.generateError("MSTD0031AERR", "ProductSubproductId");
+			} else {
+				
+			}
+			
+			if (isEmpty(applicationBean.getProductEmbossname1())) {
+				ErrorUtil.generateError("MSTD0031AERR", "ProductEmbossname1");
+			} else {
+				
+			}
+			
+			if (isEmpty(applicationBean.getProductEmbossname2())) {
+				ErrorUtil.generateError("MSTD0031AERR", "ProductEmbossname2");
+			} else {
+				
+			}
+			
+			if (isEmpty(applicationBean.getProductPaymentMethod())) {
+				ErrorUtil.generateError("MSTD0031AERR", "ProductPaymentMethod");
+			} else {
+				
+			}
+			
+			if (isEmpty(applicationBean.getProductCycleDate())) {
+				ErrorUtil.generateError("MSTD0031AERR", "ProductCycleDate");
+			} else {
+				
+			}
+			
+			if (isEmpty(applicationBean.getProductCreditLimit())) {
+				ErrorUtil.generateError("MSTD0031AERR", "ProductCreditLimit");
+			} else {
+				try {
+					Integer.parseInt(applicationBean.getProductCreditLimit());
+				} catch (NumberFormatException e) {
+					ErrorUtil.generateError("MSTD0043AERR", "ProductCreditLimit");
+				}
+			}
+			
+			if (!isEmpty(applicationBean.getProductPercentInterest())) {
+				try {
+					Double.parseDouble(applicationBean.getProductPercentInterest());
+				} catch (NumberFormatException e) {
+					ErrorUtil.generateError("MSTD0043AERR", "ProductPercentInterest");
+				}
+			}
+			
+			if (!isEmpty(applicationBean.getProductCommInterest())) {
+				try {
+					Double.parseDouble(applicationBean.getProductCommInterest());
+				} catch (NumberFormatException e) {
+					ErrorUtil.generateError("MSTD0043AERR", "ProductCommInterest");
+				}
+			}
+			
+			if (!isEmpty(applicationBean.getProductPromotionRate())) {
+				try {
+					Double.parseDouble(applicationBean.getProductPromotionRate());
+				} catch (NumberFormatException e) {
+					ErrorUtil.generateError("MSTD0043AERR", "ProductPromotionRate");
+				}
+			}
+			
+			if (!isEmpty(applicationBean.getProductPromotionTerms())) {
+				try {
+					Integer.parseInt(applicationBean.getProductPromotionTerms());
+				} catch (NumberFormatException e) {
+					ErrorUtil.generateError("MSTD0043AERR", "ProductPromotionTerms");
+				}
+			}
+			
 		}
 	}
 

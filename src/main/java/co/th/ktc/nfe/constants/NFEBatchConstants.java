@@ -82,5 +82,14 @@ public interface NFEBatchConstants {
     
     public static final String SUCCESS_FLAG = "S";
     public static final String UNSUCCESS_FLAG = "U";
+    
+    public static final String FLAG_YES = "Y";
+    public static final String FLAG_NO = "N";
+    
+    public static final String MALE_SEX = "M";
+    public static final String FEMALE_SEX = "F";
+    
+    public static final String MAIN_CARDTYPE = "M";
+    public static final String SUB_CARDTYPE = "S";
 	
 }

@@ -29,38 +29,38 @@ public class ApplicationBean implements Serializable {
 	private String prefixName;
 	private String prefixNameOth;
 	private String sex;
-	private String thaiFname;
-	private String thaiLname;
-	private String engFname;
-	private String engLname;
+	private String thaiFName;
+	private String thaiLName;
+	private String engFName;
+	private String engLName;
 	private String dob;
 	private String isChkNCB;
 	private String rushCard;
 	private String nationality;
 	private String religion;
-	private String currentAddressline1;
-	private String currentAddressline2;
+	private String currentAddressLine1;
+	private String currentAddressLine2;
 	private String currentAddressProvince;
 	private String currentAddressAmphur;
 	private String currentAddressDistrict;
 	private String currentAddressZipcode;
-	private String currentAddressPhoneno;
-	private String currentAddressPhonenoExt;
-	private String currentAddressMobileno;
+	private String currentAddressPhoneNo;
+	private String currentAddressPhoneNoExt;
+	private String currentAddressMobileNo;
 	private String currentAddressEmail;
-	private String censusAddressline1;
-	private String censusAddressline2;
+	private String censusAddressLine1;
+	private String censusAddressLine2;
 	private String censusAddressProvince;
 	private String censusAddressAmphur;
 	private String censusAddressDistrict;
 	private String censusAddressZipcode;
-	private String censusAddressPhoneno;
-	private String censusAddressPhonenoext;
-	private String censusAddressMobileno;
-	private String addrtypeYearlive;
-	private String addrtypeType;
-	private String addrtypeStatus;
-	private String addrtypeInstallment;
+	private String censusAddressPhoneNo;
+	private String censusAddressPhoneNoext;
+	private String censusAddressMobileNo;
+	private String addrTypeYearLive;
+	private String addrTypeType;
+	private String addrTypeStatus;
+	private String addrTypeInstallment;
 	private String othersDegree;
 	private String othersOccupation;
 	private String othersOccupationOth;
@@ -68,17 +68,19 @@ public class ApplicationBean implements Serializable {
 	private String marriageStatus;
 	private String referenceName;
 	private String referenceRelationship;
-	private String referenceHomePhoneno;
-	private String referenceWorkPhoneno;
-	private String referenceMobilePhoneno;
+	private String referenceHomePhoneNo;
+	private String referenceWorkPhoneNo;
+	private String referenceMobilePhoneNo;
 	private String customerType;
 	private String staffRateFlag;
 	private String monthlyIncome;
-	private String slcustomerinfoLoanIncome;
-	private String slcustomerinfoCardIncome;
-	private String slcustomerinfoPermanentCredi;
-	private String slcustomerinfoBillingCycle;
-	private String slcustomerinfoEstatementFlag;
+	private String otherIncome;
+	private String sourceOtherIncome;
+	private String slCustomerInfoLoanIncome;
+	private String slCustomerInfoCardIncome;
+	private String slCustomerInfoPermanentCredit;
+	private String slCustomerInfoBillingCycle;
+	private String slCustomerInfoEstatementFlag;
 	private String productProductId;
 	private String productSubproductId;
 	private String productEmbossname1;
@@ -87,66 +89,66 @@ public class ApplicationBean implements Serializable {
 	private String productCycleDate;
 	private String productCreditLimit;
 	private String productPercentInterest;
-	private String productComminteRest;
+	private String productCommInterest;
 	private String productPromotionRate;
 	private String productPromotionTerms;
 	private String productTerm;
 	private String productCashAdvance;
-	private String appoccupationType;
-	private String appoccupationTypeOth;
-	private String appoccupationBusinessType;
-	private String appoccupationBusinessTypeOt;
-	private String appoccupationId;
-	private String appoccupationOth;
-	private String appoccupationWorkplace;
-	private String appoccupationJuristicNo;
-	private String appoccupationJuristicDe;
-	private String appoccupationJuristicRegdate;
-	private String appoccupationAddrline1;
-	private String appoccupationAddrline2;
-	private String appoccupationProvince;
-	private String appoccupationAmphur;
-	private String appoccupationDistrict;
-	private String appoccupationZipcode;
-	private String appoccupationPhoneno1;
-	private String appoccupationPhoneno1Ext;
-	private String appoccupationMobileno;
-	private String appoccupationPosition;
-	private String appoccupationYearOfWork;
-	private String appoccupationRecieveCard;
-	private String appoccupationRecieveBranch;
-	private String appoccupationRecieveBill;
-	private String appoccupationCommunication;
-	private String appoccupationSmeCustomerNo;
-	private String bankaccountBank;
-	private String bankaccountBankBranch;
-	private String bankaccountAccType;
-	private String bankaccountAccName;
-	private String bankaccountAccNo;
-	private String bankaccountOpenPeriod;
-	private String bankaccountTmBalance;
-	private String bankaccountLmBalance;
-	private String loanaccountAccno;
-	private String loanaccountAcctype;
-	private String loanaccountBank;
-	private String loanaccountIssueDate;
-	private String loanaccountExpireDate;
-	private String loanaccountCreditLimit;
-	private String loanaccountPaymentMethod;
-	private String loanaccountInstallment;
+	private String appOccupationType;
+	private String appOccupationTypeOth;
+	private String appOccupationBusinessType;
+	private String appOccupationBusinessTypeOth;
+	private String appOccupationId;
+	private String appOccupationOth;
+	private String appOccupationWorkplace;
+	private String appOccupationJuristicNo;
+	private String appOccupationJuristicDe;
+	private String appOccupationJuristicRegdate;
+	private String appOccupationAddrline1;
+	private String appOccupationAddrline2;
+	private String appOccupationProvince;
+	private String appOccupationAmphur;
+	private String appOccupationDistrict;
+	private String appOccupationZipcode;
+	private String appOccupationPhoneNo1;
+	private String appOccupationPhoneNo1Ext;
+	private String appOccupationMobileNo;
+	private String appOccupationPosition;
+	private String appOccupationYearOfWork;
+	private String appOccupationRecieveCard;
+	private String appOccupationRecieveBranch;
+	private String appOccupationRecieveBill;
+	private String appOccupationCommunication;
+	private String appOccupationSMECustomerNo;
+	private String bankAccountBank;
+	private String bankAccountBankBranch;
+	private String bankAccountAccType;
+	private String bankAccountAccName;
+	private String bankAccountAccNo;
+	private String bankAccountOpenPeriod;
+	private String bankAccountTMBalance;
+	private String bankAccountLMBalance;
+	private String loanAccountAccno;
+	private String loanAccountAcctype;
+	private String loanAccountBank;
+	private String loanAccountIssueDate;
+	private String loanAccountExpireDate;
+	private String loanAccountCreditLimit;
+	private String loanAccountPaymentMethod;
+	private String loanAccountInstallment;
 	private String transferDebtAccName;
 	private String transferDebtAccNo;
 	private String transferDebtAccType;
 	private String transferDebtBank;
 	private String transferDebtLastAmount;
-	private String transferloanAccName;
-	private String transferloanAccNo;
-	private String transferloanAccType;
-	private String transferloanBank;
-	private String paymentmethodValue;
-	private String paymentmethodAccName;
-	private String paymentmethodAccNo;
-	private String paymentmethodBank;
+	private String transferLoanAccName;
+	private String transferLoanAccNo;
+	private String transferLoanAccType;
+	private String transferLoanBank;
+	private String paymentMethodValue;
+	private String paymentMethodAccName;
+	private String paymentMethodAccNo;
+	private String paymentMethodBank;
 
 	/**
 	 * 
@@ -337,59 +339,59 @@ public class ApplicationBean implements Serializable {
 	}
 
 	/**
-	 * @return the thaiFname
+	 * @return the thaiFName
 	 */
-	public String getThaiFname() {
-		return thaiFname;
+	public String getThaiFName() {
+		return thaiFName;
 	}
 
 	/**
-	 * @param thaiFname the thaiFname to set
+	 * @param thaiFName the thaiFName to set
 	 */
-	public void setThaiFname(String thaiFname) {
-		this.thaiFname = thaiFname;
+	public void setThaiFName(String thaiFName) {
+		this.thaiFName = thaiFName;
 	}
 
 	/**
-	 * @return the thaiLname
+	 * @return the thaiLName
 	 */
-	public String getThaiLname() {
-		return thaiLname;
+	public String getThaiLName() {
+		return thaiLName;
 	}
 
 	/**
-	 * @param thaiLname the thaiLname to set
+	 * @param thaiLName the thaiLName to set
 	 */
-	public void setThaiLname(String thaiLname) {
-		this.thaiLname = thaiLname;
+	public void setThaiLName(String thaiLName) {
+		this.thaiLName = thaiLName;
 	}
 
 	/**
-	 * @return the engFname
+	 * @return the engFName
 	 */
-	public String getEngFname() {
-		return engFname;
+	public String getEngFName() {
+		return engFName;
 	}
 
 	/**
-	 * @param engFname the engFname to set
+	 * @param engFName the engFName to set
 	 */
-	public void setEngFname(String engFname) {
-		this.engFname = engFname;
+	public void setEngFName(String engFName) {
+		this.engFName = engFName;
 	}
 
 	/**
-	 * @return the engLname
+	 * @return the engLName
 	 */
-	public String getEngLname() {
-		return engLname;
+	public String getEngLName() {
+		return engLName;
 	}
 
 	/**
-	 * @param engLname the engLname to set
+	 * @param engLName the engLName to set
 	 */
-	public void setEngLname(String engLname) {
-		this.engLname = engLname;
+	public void setEngLName(String engLName) {
+		this.engLName = engLName;
 	}
 
 	/**
@@ -463,31 +465,31 @@ public class ApplicationBean implements Serializable {
 	}
 
 	/**
-	 * @return the currentAddressline1
+	 * @return the currentAddressLine1
 	 */
-	public String getCurrentAddressline1() {
-		return currentAddressline1;
+	public String getCurrentAddressLine1() {
+		return currentAddressLine1;
 	}
 
 	/**
-	 * @param currentAddressline1 the currentAddressline1 to set
+	 * @param currentAddressLine1 the currentAddressLine1 to set
 	 */
-	public void setCurrentAddressline1(String currentAddressline1) {
-		this.currentAddressline1 = currentAddressline1;
+	public void setCurrentAddressLine1(String currentAddressLine1) {
+		this.currentAddressLine1 = currentAddressLine1;
 	}
 
 	/**
-	 * @return the currentAddressline2
+	 * @return the currentAddressLine2
 	 */
-	public String getCurrentAddressline2() {
-		return currentAddressline2;
+	public String getCurrentAddressLine2() {
+		return currentAddressLine2;
 	}
 
 	/**
-	 * @param currentAddressline2 the currentAddressline2 to set
+	 * @param currentAddressLine2 the currentAddressLine2 to set
 	 */
-	public void setCurrentAddressline2(String currentAddressline2) {
-		this.currentAddressline2 = currentAddressline2;
+	public void setCurrentAddressLine2(String currentAddressLine2) {
+		this.currentAddressLine2 = currentAddressLine2;
 	}
 
 	/**
@@ -547,45 +549,45 @@ public class ApplicationBean implements Serializable {
 	}
 
 	/**
-	 * @return the currentAddressPhoneno
+	 * @return the currentAddressPhoneNo
 	 */
-	public String getCurrentAddressPhoneno() {
-		return currentAddressPhoneno;
+	public String getCurrentAddressPhoneNo() {
+		return currentAddressPhoneNo;
 	}
 
 	/**
-	 * @param currentAddressPhoneno the currentAddressPhoneno to set
+	 * @param currentAddressPhoneNo the currentAddressPhoneNo to set
 	 */
-	public void setCurrentAddressPhoneno(String currentAddressPhoneno) {
-		this.currentAddressPhoneno = currentAddressPhoneno;
+	public void setCurrentAddressPhoneNo(String currentAddressPhoneNo) {
+		this.currentAddressPhoneNo = currentAddressPhoneNo;
 	}
 
 	/**
-	 * @return the currentAddressPhonenoExt
+	 * @return the currentAddressPhoneNoExt
 	 */
-	public String getCurrentAddressPhonenoExt() {
-		return currentAddressPhonenoExt;
+	public String getCurrentAddressPhoneNoExt() {
+		return currentAddressPhoneNoExt;
 	}
 
 	/**
-	 * @param currentAddressPhonenoExt the currentAddressPhonenoExt to set
+	 * @param currentAddressPhoneNoExt the currentAddressPhoneNoExt to set
 	 */
-	public void setCurrentAddressPhonenoExt(String currentAddressPhonenoExt) {
-		this.currentAddressPhonenoExt = currentAddressPhonenoExt;
+	public void setCurrentAddressPhoneNoExt(String currentAddressPhoneNoExt) {
+		this.currentAddressPhoneNoExt = currentAddressPhoneNoExt;
 	}
 
 	/**
-	 * @return the currentAddressMobileno
+	 * @return the currentAddressMobileNo
 	 */
-	public String getCurrentAddressMobileno() {
-		return currentAddressMobileno;
+	public String getCurrentAddressMobileNo() {
+		return currentAddressMobileNo;
 	}
 
 	/**
-	 * @param currentAddressMobileno the currentAddressMobileno to set
+	 * @param currentAddressMobileNo the currentAddressMobileNo to set
 	 */
-	public void setCurrentAddressMobileno(String currentAddressMobileno) {
-		this.currentAddressMobileno = currentAddressMobileno;
+	public void setCurrentAddressMobileNo(String currentAddressMobileNo) {
+		this.currentAddressMobileNo = currentAddressMobileNo;
 	}
 
 	/**
@@ -603,31 +605,31 @@ public class ApplicationBean implements Serializable {
 	}
 
 	/**
-	 * @return the censusAddressline1
+	 * @return the censusAddressLine1
 	 */
-	public String getCensusAddressline1() {
-		return censusAddressline1;
+	public String getCensusAddressLine1() {
+		return censusAddressLine1;
 	}
 
 	/**
-	 * @param censusAddressline1 the censusAddressline1 to set
+	 * @param censusAddressLine1 the censusAddressLine1 to set
 	 */
-	public void setCensusAddressline1(String censusAddressline1) {
-		this.censusAddressline1 = censusAddressline1;
+	public void setCensusAddressLine1(String censusAddressLine1) {
+		this.censusAddressLine1 = censusAddressLine1;
 	}
 
 	/**
-	 * @return the censusAddressline2
+	 * @return the censusAddressLine2
 	 */
-	public String getCensusAddressline2() {
-		return censusAddressline2;
+	public String getCensusAddressLine2() {
+		return censusAddressLine2;
 	}
 
 	/**
-	 * @param censusAddressline2 the censusAddressline2 to set
+	 * @param censusAddressLine2 the censusAddressLine2 to set
 	 */
-	public void setCensusAddressline2(String censusAddressline2) {
-		this.censusAddressline2 = censusAddressline2;
+	public void setCensusAddressLine2(String censusAddressLine2) {
+		this.censusAddressLine2 = censusAddressLine2;
 	}
 
 	/**
@@ -687,101 +689,101 @@ public class ApplicationBean implements Serializable {
 	}
 
 	/**
-	 * @return the censusAddressPhoneno
+	 * @return the censusAddressPhoneNo
 	 */
-	public String getCensusAddressPhoneno() {
-		return censusAddressPhoneno;
+	public String getCensusAddressPhoneNo() {
+		return censusAddressPhoneNo;
 	}
 
 	/**
-	 * @param censusAddressPhoneno the censusAddressPhoneno to set
+	 * @param censusAddressPhoneNo the censusAddressPhoneNo to set
 	 */
-	public void setCensusAddressPhoneno(String censusAddressPhoneno) {
-		this.censusAddressPhoneno = censusAddressPhoneno;
+	public void setCensusAddressPhoneNo(String censusAddressPhoneNo) {
+		this.censusAddressPhoneNo = censusAddressPhoneNo;
 	}
 
 	/**
-	 * @return the censusAddressPhonenoext
+	 * @return the censusAddressPhoneNoext
 	 */
-	public String getCensusAddressPhonenoext() {
-		return censusAddressPhonenoext;
+	public String getCensusAddressPhoneNoext() {
+		return censusAddressPhoneNoext;
 	}
 
 	/**
-	 * @param censusAddressPhonenoext the censusAddressPhonenoext to set
+	 * @param censusAddressPhoneNoext the censusAddressPhoneNoext to set
 	 */
-	public void setCensusAddressPhonenoext(String censusAddressPhonenoext) {
-		this.censusAddressPhonenoext = censusAddressPhonenoext;
+	public void setCensusAddressPhoneNoext(String censusAddressPhoneNoext) {
+		this.censusAddressPhoneNoext = censusAddressPhoneNoext;
 	}
 
 	/**
-	 * @return the censusAddressMobileno
+	 * @return the censusAddressMobileNo
 	 */
-	public String getCensusAddressMobileno() {
-		return censusAddressMobileno;
+	public String getCensusAddressMobileNo() {
+		return censusAddressMobileNo;
 	}
 
 	/**
-	 * @param censusAddressMobileno the censusAddressMobileno to set
+	 * @param censusAddressMobileNo the censusAddressMobileNo to set
 	 */
-	public void setCensusAddressMobileno(String censusAddressMobileno) {
-		this.censusAddressMobileno = censusAddressMobileno;
+	public void setCensusAddressMobileNo(String censusAddressMobileNo) {
+		this.censusAddressMobileNo = censusAddressMobileNo;
 	}
 
 	/**
-	 * @return the addrtypeYearlive
+	 * @return the addrTypeYearLive
 	 */
-	public String getAddrtypeYearlive() {
-		return addrtypeYearlive;
+	public String getAddrTypeYearLive() {
+		return addrTypeYearLive;
 	}
 
 	/**
-	 * @param addrtypeYearlive the addrtypeYearlive to set
+	 * @param addrTypeYearLive the addrTypeYearLive to set
 	 */
-	public void setAddrtypeYearlive(String addrtypeYearlive) {
-		this.addrtypeYearlive = addrtypeYearlive;
+	public void setAddrTypeYearLive(String addrTypeYearLive) {
+		this.addrTypeYearLive = addrTypeYearLive;
 	}
 
 	/**
-	 * @return the addrtypeType
+	 * @return the addrTypeType
 	 */
-	public String getAddrtypeType() {
-		return addrtypeType;
+	public String getAddrTypeType() {
+		return addrTypeType;
 	}
 
 	/**
-	 * @param addrtypeType the addrtypeType to set
+	 * @param addrTypeType the addrTypeType to set
 	 */
-	public void setAddrtypeType(String addrtypeType) {
-		this.addrtypeType = addrtypeType;
+	public void setAddrTypeType(String addrTypeType) {
+		this.addrTypeType = addrTypeType;
 	}
 
 	/**
-	 * @return the addrtypeStatus
+	 * @return the addrTypeStatus
 	 */
-	public String getAddrtypeStatus() {
-		return addrtypeStatus;
+	public String getAddrTypeStatus() {
+		return addrTypeStatus;
 	}
 
 	/**
-	 * @param addrtypeStatus the addrtypeStatus to set
+	 * @param addrTypeStatus the addrTypeStatus to set
 	 */
-	public void setAddrtypeStatus(String addrtypeStatus) {
-		this.addrtypeStatus = addrtypeStatus;
+	public void setAddrTypeStatus(String addrTypeStatus) {
+		this.addrTypeStatus = addrTypeStatus;
 	}
 
 	/**
-	 * @return the addrtypeInstallment
+	 * @return the addrTypeInstallment
 	 */
-	public String getAddrtypeInstallment() {
-		return addrtypeInstallment;
+	public String getAddrTypeInstallment() {
+		return addrTypeInstallment;
 	}
 
 	/**
-	 * @param addrtypeInstallment the addrtypeInstallment to set
+	 * @param addrTypeInstallment the addrTypeInstallment to set
 	 */
-	public void setAddrtypeInstallment(String addrtypeInstallment) {
-		this.addrtypeInstallment = addrtypeInstallment;
+	public void setAddrTypeInstallment(String addrTypeInstallment) {
+		this.addrTypeInstallment = addrTypeInstallment;
 	}
 
 	/**
@@ -883,45 +885,45 @@ public class ApplicationBean implements Serializable {
 	}
 
 	/**
-	 * @return the referenceHomePhoneno
+	 * @return the referenceHomePhoneNo
 	 */
-	public String getReferenceHomePhoneno() {
-		return referenceHomePhoneno;
+	public String getReferenceHomePhoneNo() {
+		return referenceHomePhoneNo;
 	}
 
 	/**
-	 * @param referenceHomePhoneno the referenceHomePhoneno to set
+	 * @param referenceHomePhoneNo the referenceHomePhoneNo to set
 	 */
-	public void setReferenceHomePhoneno(String referenceHomePhoneno) {
-		this.referenceHomePhoneno = referenceHomePhoneno;
+	public void setReferenceHomePhoneNo(String referenceHomePhoneNo) {
+		this.referenceHomePhoneNo = referenceHomePhoneNo;
 	}
 
 	/**
-	 * @return the referenceWorkPhoneno
+	 * @return the referenceWorkPhoneNo
 	 */
-	public String getReferenceWorkPhoneno() {
-		return referenceWorkPhoneno;
+	public String getReferenceWorkPhoneNo() {
+		return referenceWorkPhoneNo;
 	}
 
 	/**
-	 * @param referenceWorkPhoneno the referenceWorkPhoneno to set
+	 * @param referenceWorkPhoneNo the referenceWorkPhoneNo to set
 	 */
-	public void setReferenceWorkPhoneno(String referenceWorkPhoneno) {
-		this.referenceWorkPhoneno = referenceWorkPhoneno;
+	public void setReferenceWorkPhoneNo(String referenceWorkPhoneNo) {
+		this.referenceWorkPhoneNo = referenceWorkPhoneNo;
 	}
 
 	/**
-	 * @return the referenceMobilePhoneno
+	 * @return the referenceMobilePhoneNo
 	 */
-	public String getReferenceMobilePhoneno() {
-		return referenceMobilePhoneno;
+	public String getReferenceMobilePhoneNo() {
+		return referenceMobilePhoneNo;
 	}
 
 	/**
-	 * @param referenceMobilePhoneno the referenceMobilePhoneno to set
+	 * @param referenceMobilePhoneNo the referenceMobilePhoneNo to set
 	 */
-	public void setReferenceMobilePhoneno(String referenceMobilePhoneno) {
-		this.referenceMobilePhoneno = referenceMobilePhoneno;
+	public void setReferenceMobilePhoneNo(String referenceMobilePhoneNo) {
+		this.referenceMobilePhoneNo = referenceMobilePhoneNo;
 	}
 
 	/**
@@ -967,73 +969,102 @@ public class ApplicationBean implements Serializable {
 	}
 
 	/**
-	 * @return the slcustomerinfoLoanIncome
+	 * @return the otherIncome
 	 */
-	public String getSlcustomerinfoLoanIncome() {
-		return slcustomerinfoLoanIncome;
+	public String getOtherIncome() {
+		return otherIncome;
 	}
 
 	/**
-	 * @param slcustomerinfoLoanIncome the slcustomerinfoLoanIncome to set
+	 * @param otherIncome the otherIncome to set
 	 */
-	public void setSlcustomerinfoLoanIncome(String slcustomerinfoLoanIncome) {
-		this.slcustomerinfoLoanIncome = slcustomerinfoLoanIncome;
+	public void setOtherIncome(String otherIncome) {
+		this.otherIncome = otherIncome;
 	}
 
 	/**
-	 * @return the slcustomerinfoCardIncome
+	 * @return the sourceOtherIncome
 	 */
-	public String getSlcustomerinfoCardIncome() {
-		return slcustomerinfoCardIncome;
+	public String getSourceOtherIncome() {
+		return sourceOtherIncome;
 	}
 
 	/**
-	 * @param slcustomerinfoCardIncome the slcustomerinfoCardIncome to set
+	 * @param sourceOtherIncome the sourceOtherIncome to set
 	 */
-	public void setSlcustomerinfoCardIncome(String slcustomerinfoCardIncome) {
-		this.slcustomerinfoCardIncome = slcustomerinfoCardIncome;
+	public void setSourceOtherIncome(String sourceOtherIncome) {
+		this.sourceOtherIncome = sourceOtherIncome;
 	}
 
 	/**
-	 * @return the slcustomerinfoPermanentCredi
+	 * @return the slCustomerInfoLoanIncome
 	 */
-	public String getSlcustomerinfoPermanentCredi() {
-		return slcustomerinfoPermanentCredi;
+	public String getSlCustomerInfoLoanIncome() {
+		return slCustomerInfoLoanIncome;
 	}
 
 	/**
-	 * @param slcustomerinfoPermanentCredi the slcustomerinfoPermanentCredi to set
+	 * @param slCustomerInfoLoanIncome the slCustomerInfoLoanIncome to set
 	 */
-	public void setSlcustomerinfoPermanentCredi(String slcustomerinfoPermanentCredi) {
-		this.slcustomerinfoPermanentCredi = slcustomerinfoPermanentCredi;
+	public void setSlCustomerInfoLoanIncome(String slCustomerInfoLoanIncome) {
+		this.slCustomerInfoLoanIncome = slCustomerInfoLoanIncome;
 	}
 
 	/**
-	 * @return the slcustomerinfoBillingCycle
+	 * @return the slCustomerInfoCardIncome
 	 */
-	public String getSlcustomerinfoBillingCycle() {
-		return slcustomerinfoBillingCycle;
+	public String getSlCustomerInfoCardIncome() {
+		return slCustomerInfoCardIncome;
 	}
 
 	/**
-	 * @param slcustomerinfoBillingCycle the slcustomerinfoBillingCycle to set
+	 * @param slCustomerInfoCardIncome the slCustomerInfoCardIncome to set
 	 */
-	public void setSlcustomerinfoBillingCycle(String slcustomerinfoBillingCycle) {
-		this.slcustomerinfoBillingCycle = slcustomerinfoBillingCycle;
+	public void setSlCustomerInfoCardIncome(String slCustomerInfoCardIncome) {
+		this.slCustomerInfoCardIncome = slCustomerInfoCardIncome;
 	}
 
 	/**
-	 * @return the slcustomerinfoEstatementFlag
+	 * @return the slCustomerInfoPermanentCredit
 	 */
-	public String getSlcustomerinfoEstatementFlag() {
-		return slcustomerinfoEstatementFlag;
+	public String getSlCustomerInfoPermanentCredit() {
+		return slCustomerInfoPermanentCredit;
 	}
 
 	/**
-	 * @param slcustomerinfoEstatementFlag the slcustomerinfoEstatementFlag to set
+	 * @param slCustomerInfoPermanentCredit the slCustomerInfoPermanentCredit to set
 	 */
-	public void setSlcustomerinfoEstatementFlag(String slcustomerinfoEstatementFlag) {
-		this.slcustomerinfoEstatementFlag = slcustomerinfoEstatementFlag;
+	public void setSlCustomerInfoPermanentCredit(
+			String slCustomerInfoPermanentCredit) {
+		this.slCustomerInfoPermanentCredit = slCustomerInfoPermanentCredit;
+	}
+
+	/**
+	 * @return the slCustomerInfoBillingCycle
+	 */
+	public String getSlCustomerInfoBillingCycle() {
+		return slCustomerInfoBillingCycle;
+	}
+
+	/**
+	 * @param slCustomerInfoBillingCycle the slCustomerInfoBillingCycle to set
+	 */
+	public void setSlCustomerInfoBillingCycle(String slCustomerInfoBillingCycle) {
+		this.slCustomerInfoBillingCycle = slCustomerInfoBillingCycle;
+	}
+
+	/**
+	 * @return the slCustomerInfoEstatementFlag
+	 */
+	public String getSlCustomerInfoEstatementFlag() {
+		return slCustomerInfoEstatementFlag;
+	}
+
+	/**
+	 * @param slCustomerInfoEstatementFlag the slCustomerInfoEstatementFlag to set
+	 */
+	public void setSlCustomerInfoEstatementFlag(String slCustomerInfoEstatementFlag) {
+		this.slCustomerInfoEstatementFlag = slCustomerInfoEstatementFlag;
 	}
 
 	/**
@@ -1149,17 +1180,17 @@ public class ApplicationBean implements Serializable {
 	}
 
 	/**
-	 * @return the productComminteRest
+	 * @return the productCommInterest
 	 */
-	public String getProductComminteRest() {
-		return productComminteRest;
+	public String getProductCommInterest() {
+		return productCommInterest;
 	}
 
 	/**
-	 * @param productComminteRest the productComminteRest to set
+	 * @param productCommInterest the productCommInterest to set
 	 */
-	public void setProductComminteRest(String productComminteRest) {
-		this.productComminteRest = productComminteRest;
+	public void setProductCommInterest(String productCommInterest) {
+		this.productCommInterest = productCommInterest;
 	}
 
 	/**
@@ -1219,591 +1250,591 @@ public class ApplicationBean implements Serializable {
 	}
 
 	/**
-	 * @return the appoccupationType
+	 * @return the appOccupationType
 	 */
-	public String getAppoccupationType() {
-		return appoccupationType;
+	public String getAppOccupationType() {
+		return appOccupationType;
 	}
 
 	/**
-	 * @param appoccupationType the appoccupationType to set
+	 * @param appOccupationType the appOccupationType to set
 	 */
-	public void setAppoccupationType(String appoccupationType) {
-		this.appoccupationType = appoccupationType;
+	public void setAppOccupationType(String appOccupationType) {
+		this.appOccupationType = appOccupationType;
 	}
 
 	/**
-	 * @return the appoccupationTypeOth
+	 * @return the appOccupationTypeOth
 	 */
-	public String getAppoccupationTypeOth() {
-		return appoccupationTypeOth;
+	public String getAppOccupationTypeOth() {
+		return appOccupationTypeOth;
 	}
 
 	/**
-	 * @param appoccupationTypeOth the appoccupationTypeOth to set
+	 * @param appOccupationTypeOth the appOccupationTypeOth to set
 	 */
-	public void setAppoccupationTypeOth(String appoccupationTypeOth) {
-		this.appoccupationTypeOth = appoccupationTypeOth;
+	public void setAppOccupationTypeOth(String appOccupationTypeOth) {
+		this.appOccupationTypeOth = appOccupationTypeOth;
 	}
 
 	/**
-	 * @return the appoccupationBusinessType
+	 * @return the appOccupationBusinessType
 	 */
-	public String getAppoccupationBusinessType() {
-		return appoccupationBusinessType;
+	public String getAppOccupationBusinessType() {
+		return appOccupationBusinessType;
 	}
 
 	/**
-	 * @param appoccupationBusinessType the appoccupationBusinessType to set
+	 * @param appOccupationBusinessType the appOccupationBusinessType to set
 	 */
-	public void setAppoccupationBusinessType(String appoccupationBusinessType) {
-		this.appoccupationBusinessType = appoccupationBusinessType;
+	public void setAppOccupationBusinessType(String appOccupationBusinessType) {
+		this.appOccupationBusinessType = appOccupationBusinessType;
 	}
 
 	/**
-	 * @return the appoccupationBusinessTypeOt
+	 * @return the appOccupationBusinessTypeOth
 	 */
-	public String getAppoccupationBusinessTypeOt() {
-		return appoccupationBusinessTypeOt;
+	public String getAppOccupationBusinessTypeOth() {
+		return appOccupationBusinessTypeOth;
 	}
 
 	/**
-	 * @param appoccupationBusinessTypeOt the appoccupationBusinessTypeOt to set
+	 * @param appOccupationBusinessTypeOth the appOccupationBusinessTypeOth to set
 	 */
-	public void setAppoccupationBusinessTypeOt(String appoccupationBusinessTypeOt) {
-		this.appoccupationBusinessTypeOt = appoccupationBusinessTypeOt;
+	public void setAppOccupationBusinessTypeOth(String appOccupationBusinessTypeOth) {
+		this.appOccupationBusinessTypeOth = appOccupationBusinessTypeOth;
 	}
 
 	/**
-	 * @return the appoccupationId
+	 * @return the appOccupationId
 	 */
-	public String getAppoccupationId() {
-		return appoccupationId;
+	public String getAppOccupationId() {
+		return appOccupationId;
 	}
 
 	/**
-	 * @param appoccupationId the appoccupationId to set
+	 * @param appOccupationId the appOccupationId to set
 	 */
-	public void setAppoccupationId(String appoccupationId) {
-		this.appoccupationId = appoccupationId;
+	public void setAppOccupationId(String appOccupationId) {
+		this.appOccupationId = appOccupationId;
 	}
 
 	/**
-	 * @return the appoccupationOth
+	 * @return the appOccupationOth
 	 */
-	public String getAppoccupationOth() {
-		return appoccupationOth;
+	public String getAppOccupationOth() {
+		return appOccupationOth;
 	}
 
 	/**
-	 * @param appoccupationOth the appoccupationOth to set
+	 * @param appOccupationOth the appOccupationOth to set
 	 */
-	public void setAppoccupationOth(String appoccupationOth) {
-		this.appoccupationOth = appoccupationOth;
+	public void setAppOccupationOth(String appOccupationOth) {
+		this.appOccupationOth = appOccupationOth;
 	}
 
 	/**
-	 * @return the appoccupationWorkplace
+	 * @return the appOccupationWorkplace
 	 */
-	public String getAppoccupationWorkplace() {
-		return appoccupationWorkplace;
+	public String getAppOccupationWorkplace() {
+		return appOccupationWorkplace;
 	}
 
 	/**
-	 * @param appoccupationWorkplace the appoccupationWorkplace to set
+	 * @param appOccupationWorkplace the appOccupationWorkplace to set
 	 */
-	public void setAppoccupationWorkplace(String appoccupationWorkplace) {
-		this.appoccupationWorkplace = appoccupationWorkplace;
+	public void setAppOccupationWorkplace(String appOccupationWorkplace) {
+		this.appOccupationWorkplace = appOccupationWorkplace;
 	}
 
 	/**
-	 * @return the appoccupationJuristicNo
+	 * @return the appOccupationJuristicNo
 	 */
-	public String getAppoccupationJuristicNo() {
-		return appoccupationJuristicNo;
+	public String getAppOccupationJuristicNo() {
+		return appOccupationJuristicNo;
 	}
 
 	/**
-	 * @param appoccupationJuristicNo the appoccupationJuristicNo to set
+	 * @param appOccupationJuristicNo the appOccupationJuristicNo to set
 	 */
-	public void setAppoccupationJuristicNo(String appoccupationJuristicNo) {
-		this.appoccupationJuristicNo = appoccupationJuristicNo;
+	public void setAppOccupationJuristicNo(String appOccupationJuristicNo) {
+		this.appOccupationJuristicNo = appOccupationJuristicNo;
 	}
 
 	/**
-	 * @return the appoccupationJuristicDe
+	 * @return the appOccupationJuristicDe
 	 */
-	public String getAppoccupationJuristicDe() {
-		return appoccupationJuristicDe;
+	public String getAppOccupationJuristicDe() {
+		return appOccupationJuristicDe;
 	}
 
 	/**
-	 * @param appoccupationJuristicDe the appoccupationJuristicDe to set
+	 * @param appOccupationJuristicDe the appOccupationJuristicDe to set
 	 */
-	public void setAppoccupationJuristicDe(String appoccupationJuristicDe) {
-		this.appoccupationJuristicDe = appoccupationJuristicDe;
+	public void setAppOccupationJuristicDe(String appOccupationJuristicDe) {
+		this.appOccupationJuristicDe = appOccupationJuristicDe;
 	}
 
 	/**
-	 * @return the appoccupationJuristicRegdate
+	 * @return the appOccupationJuristicRegdate
 	 */
-	public String getAppoccupationJuristicRegdate() {
-		return appoccupationJuristicRegdate;
+	public String getAppOccupationJuristicRegdate() {
+		return appOccupationJuristicRegdate;
 	}
 
 	/**
-	 * @param appoccupationJuristicRegdate the appoccupationJuristicRegdate to set
+	 * @param appOccupationJuristicRegdate the appOccupationJuristicRegdate to set
 	 */
-	public void setAppoccupationJuristicRegdate(String appoccupationJuristicRegdate) {
-		this.appoccupationJuristicRegdate = appoccupationJuristicRegdate;
+	public void setAppOccupationJuristicRegdate(String appOccupationJuristicRegdate) {
+		this.appOccupationJuristicRegdate = appOccupationJuristicRegdate;
 	}
 
 	/**
-	 * @return the appoccupationAddrline1
+	 * @return the appOccupationAddrline1
 	 */
-	public String getAppoccupationAddrline1() {
-		return appoccupationAddrline1;
+	public String getAppOccupationAddrline1() {
+		return appOccupationAddrline1;
 	}
 
 	/**
-	 * @param appoccupationAddrline1 the appoccupationAddrline1 to set
+	 * @param appOccupationAddrline1 the appOccupationAddrline1 to set
 	 */
-	public void setAppoccupationAddrline1(String appoccupationAddrline1) {
-		this.appoccupationAddrline1 = appoccupationAddrline1;
+	public void setAppOccupationAddrline1(String appOccupationAddrline1) {
+		this.appOccupationAddrline1 = appOccupationAddrline1;
 	}
 
 	/**
-	 * @return the appoccupationAddrline2
+	 * @return the appOccupationAddrline2
 	 */
-	public String getAppoccupationAddrline2() {
-		return appoccupationAddrline2;
+	public String getAppOccupationAddrline2() {
+		return appOccupationAddrline2;
 	}
 
 	/**
-	 * @param appoccupationAddrline2 the appoccupationAddrline2 to set
+	 * @param appOccupationAddrline2 the appOccupationAddrline2 to set
 	 */
-	public void setAppoccupationAddrline2(String appoccupationAddrline2) {
-		this.appoccupationAddrline2 = appoccupationAddrline2;
+	public void setAppOccupationAddrline2(String appOccupationAddrline2) {
+		this.appOccupationAddrline2 = appOccupationAddrline2;
 	}
 
 	/**
-	 * @return the appoccupationProvince
+	 * @return the appOccupationProvince
 	 */
-	public String getAppoccupationProvince() {
-		return appoccupationProvince;
+	public String getAppOccupationProvince() {
+		return appOccupationProvince;
 	}
 
 	/**
-	 * @param appoccupationProvince the appoccupationProvince to set
+	 * @param appOccupationProvince the appOccupationProvince to set
 	 */
-	public void setAppoccupationProvince(String appoccupationProvince) {
-		this.appoccupationProvince = appoccupationProvince;
+	public void setAppOccupationProvince(String appOccupationProvince) {
+		this.appOccupationProvince = appOccupationProvince;
 	}
 
 	/**
-	 * @return the appoccupationAmphur
+	 * @return the appOccupationAmphur
 	 */
-	public String getAppoccupationAmphur() {
-		return appoccupationAmphur;
+	public String getAppOccupationAmphur() {
+		return appOccupationAmphur;
 	}
 
 	/**
-	 * @param appoccupationAmphur the appoccupationAmphur to set
+	 * @param appOccupationAmphur the appOccupationAmphur to set
 	 */
-	public void setAppoccupationAmphur(String appoccupationAmphur) {
-		this.appoccupationAmphur = appoccupationAmphur;
+	public void setAppOccupationAmphur(String appOccupationAmphur) {
+		this.appOccupationAmphur = appOccupationAmphur;
 	}
 
 	/**
-	 * @return the appoccupationDistrict
+	 * @return the appOccupationDistrict
 	 */
-	public String getAppoccupationDistrict() {
-		return appoccupationDistrict;
+	public String getAppOccupationDistrict() {
+		return appOccupationDistrict;
 	}
 
 	/**
-	 * @param appoccupationDistrict the appoccupationDistrict to set
+	 * @param appOccupationDistrict the appOccupationDistrict to set
 	 */
-	public void setAppoccupationDistrict(String appoccupationDistrict) {
-		this.appoccupationDistrict = appoccupationDistrict;
+	public void setAppOccupationDistrict(String appOccupationDistrict) {
+		this.appOccupationDistrict = appOccupationDistrict;
 	}
 
 	/**
-	 * @return the appoccupationZipcode
+	 * @return the appOccupationZipcode
 	 */
-	public String getAppoccupationZipcode() {
-		return appoccupationZipcode;
+	public String getAppOccupationZipcode() {
+		return appOccupationZipcode;
 	}
 
 	/**
-	 * @param appoccupationZipcode the appoccupationZipcode to set
+	 * @param appOccupationZipcode the appOccupationZipcode to set
 	 */
-	public void setAppoccupationZipcode(String appoccupationZipcode) {
-		this.appoccupationZipcode = appoccupationZipcode;
+	public void setAppOccupationZipcode(String appOccupationZipcode) {
+		this.appOccupationZipcode = appOccupationZipcode;
 	}
 
 	/**
-	 * @return the appoccupationPhoneno1
+	 * @return the appOccupationPhoneNo1
 	 */
-	public String getAppoccupationPhoneno1() {
-		return appoccupationPhoneno1;
+	public String getAppOccupationPhoneNo1() {
+		return appOccupationPhoneNo1;
 	}
 
 	/**
-	 * @param appoccupationPhoneno1 the appoccupationPhoneno1 to set
+	 * @param appOccupationPhoneNo1 the appOccupationPhoneNo1 to set
 	 */
-	public void setAppoccupationPhoneno1(String appoccupationPhoneno1) {
-		this.appoccupationPhoneno1 = appoccupationPhoneno1;
+	public void setAppOccupationPhoneNo1(String appOccupationPhoneNo1) {
+		this.appOccupationPhoneNo1 = appOccupationPhoneNo1;
 	}
 
 	/**
-	 * @return the appoccupationPhoneno1Ext
+	 * @return the appOccupationPhoneNo1Ext
 	 */
-	public String getAppoccupationPhoneno1Ext() {
-		return appoccupationPhoneno1Ext;
+	public String getAppOccupationPhoneNo1Ext() {
+		return appOccupationPhoneNo1Ext;
 	}
 
 	/**
-	 * @param appoccupationPhoneno1Ext the appoccupationPhoneno1Ext to set
+	 * @param appOccupationPhoneNo1Ext the appOccupationPhoneNo1Ext to set
 	 */
-	public void setAppoccupationPhoneno1Ext(String appoccupationPhoneno1Ext) {
-		this.appoccupationPhoneno1Ext = appoccupationPhoneno1Ext;
+	public void setAppOccupationPhoneNo1Ext(String appOccupationPhoneNo1Ext) {
+		this.appOccupationPhoneNo1Ext = appOccupationPhoneNo1Ext;
 	}
 
 	/**
-	 * @return the appoccupationMobileno
+	 * @return the appOccupationMobileNo
 	 */
-	public String getAppoccupationMobileno() {
-		return appoccupationMobileno;
+	public String getAppOccupationMobileNo() {
+		return appOccupationMobileNo;
 	}
 
 	/**
-	 * @param appoccupationMobileno the appoccupationMobileno to set
+	 * @param appOccupationMobileNo the appOccupationMobileNo to set
 	 */
-	public void setAppoccupationMobileno(String appoccupationMobileno) {
-		this.appoccupationMobileno = appoccupationMobileno;
+	public void setAppOccupationMobileNo(String appOccupationMobileNo) {
+		this.appOccupationMobileNo = appOccupationMobileNo;
 	}
 
 	/**
-	 * @return the appoccupationPosition
+	 * @return the appOccupationPosition
 	 */
-	public String getAppoccupationPosition() {
-		return appoccupationPosition;
+	public String getAppOccupationPosition() {
+		return appOccupationPosition;
 	}
 
 	/**
-	 * @param appoccupationPosition the appoccupationPosition to set
+	 * @param appOccupationPosition the appOccupationPosition to set
 	 */
-	public void setAppoccupationPosition(String appoccupationPosition) {
-		this.appoccupationPosition = appoccupationPosition;
+	public void setAppOccupationPosition(String appOccupationPosition) {
+		this.appOccupationPosition = appOccupationPosition;
 	}
 
 	/**
-	 * @return the appoccupationYearOfWork
+	 * @return the appOccupationYearOfWork
 	 */
-	public String getAppoccupationYearOfWork() {
-		return appoccupationYearOfWork;
+	public String getAppOccupationYearOfWork() {
+		return appOccupationYearOfWork;
 	}
 
 	/**
-	 * @param appoccupationYearOfWork the appoccupationYearOfWork to set
+	 * @param appOccupationYearOfWork the appOccupationYearOfWork to set
 	 */
-	public void setAppoccupationYearOfWork(String appoccupationYearOfWork) {
-		this.appoccupationYearOfWork = appoccupationYearOfWork;
+	public void setAppOccupationYearOfWork(String appOccupationYearOfWork) {
+		this.appOccupationYearOfWork = appOccupationYearOfWork;
 	}
 
 	/**
-	 * @return the appoccupationRecieveCard
+	 * @return the appOccupationRecieveCard
 	 */
-	public String getAppoccupationRecieveCard() {
-		return appoccupationRecieveCard;
+	public String getAppOccupationRecieveCard() {
+		return appOccupationRecieveCard;
 	}
 
 	/**
-	 * @param appoccupationRecieveCard the appoccupationRecieveCard to set
+	 * @param appOccupationRecieveCard the appOccupationRecieveCard to set
 	 */
-	public void setAppoccupationRecieveCard(String appoccupationRecieveCard) {
-		this.appoccupationRecieveCard = appoccupationRecieveCard;
+	public void setAppOccupationRecieveCard(String appOccupationRecieveCard) {
+		this.appOccupationRecieveCard = appOccupationRecieveCard;
 	}
 
 	/**
-	 * @return the appoccupationRecieveBranch
+	 * @return the appOccupationRecieveBranch
 	 */
-	public String getAppoccupationRecieveBranch() {
-		return appoccupationRecieveBranch;
+	public String getAppOccupationRecieveBranch() {
+		return appOccupationRecieveBranch;
 	}
 
 	/**
-	 * @param appoccupationRecieveBranch the appoccupationRecieveBranch to set
+	 * @param appOccupationRecieveBranch the appOccupationRecieveBranch to set
 	 */
-	public void setAppoccupationRecieveBranch(String appoccupationRecieveBranch) {
-		this.appoccupationRecieveBranch = appoccupationRecieveBranch;
+	public void setAppOccupationRecieveBranch(String appOccupationRecieveBranch) {
+		this.appOccupationRecieveBranch = appOccupationRecieveBranch;
 	}
 
 	/**
-	 * @return the appoccupationRecieveBill
+	 * @return the appOccupationRecieveBill
 	 */
-	public String getAppoccupationRecieveBill() {
-		return appoccupationRecieveBill;
+	public String getAppOccupationRecieveBill() {
+		return appOccupationRecieveBill;
 	}
 
 	/**
-	 * @param appoccupationRecieveBill the appoccupationRecieveBill to set
+	 * @param appOccupationRecieveBill the appOccupationRecieveBill to set
 	 */
-	public void setAppoccupationRecieveBill(String appoccupationRecieveBill) {
-		this.appoccupationRecieveBill = appoccupationRecieveBill;
+	public void setAppOccupationRecieveBill(String appOccupationRecieveBill) {
+		this.appOccupationRecieveBill = appOccupationRecieveBill;
 	}
 
 	/**
-	 * @return the appoccupationCommunication
+	 * @return the appOccupationCommunication
 	 */
-	public String getAppoccupationCommunication() {
-		return appoccupationCommunication;
+	public String getAppOccupationCommunication() {
+		return appOccupationCommunication;
 	}
 
 	/**
-	 * @param appoccupationCommunication the appoccupationCommunication to set
+	 * @param appOccupationCommunication the appOccupationCommunication to set
 	 */
-	public void setAppoccupationCommunication(String appoccupationCommunication) {
-		this.appoccupationCommunication = appoccupationCommunication;
+	public void setAppOccupationCommunication(String appOccupationCommunication) {
+		this.appOccupationCommunication = appOccupationCommunication;
 	}
 
 	/**
-	 * @return the appoccupationSmeCustomerNo
+	 * @return the appOccupationSMECustomerNo
 	 */
-	public String getAppoccupationSmeCustomerNo() {
-		return appoccupationSmeCustomerNo;
+	public String getAppOccupationSMECustomerNo() {
+		return appOccupationSMECustomerNo;
 	}
 
 	/**
-	 * @param appoccupationSmeCustomerNo the appoccupationSmeCustomerNo to set
+	 * @param appOccupationSMECustomerNo the appOccupationSMECustomerNo to set
 	 */
-	public void setAppoccupationSmeCustomerNo(String appoccupationSmeCustomerNo) {
-		this.appoccupationSmeCustomerNo = appoccupationSmeCustomerNo;
+	public void setAppOccupationSMECustomerNo(String appOccupationSMECustomerNo) {
+		this.appOccupationSMECustomerNo = appOccupationSMECustomerNo;
 	}
 
 	/**
-	 * @return the bankaccountBank
+	 * @return the bankAccountBank
 	 */
-	public String getBankaccountBank() {
-		return bankaccountBank;
+	public String getBankAccountBank() {
+		return bankAccountBank;
 	}
 
 	/**
-	 * @param bankaccountBank the bankaccountBank to set
+	 * @param bankAccountBank the bankAccountBank to set
 	 */
-	public void setBankaccountBank(String bankaccountBank) {
-		this.bankaccountBank = bankaccountBank;
+	public void setBankAccountBank(String bankAccountBank) {
+		this.bankAccountBank = bankAccountBank;
 	}
 
 	/**
-	 * @return the bankaccountBankBranch
+	 * @return the bankAccountBankBranch
 	 */
-	public String getBankaccountBankBranch() {
-		return bankaccountBankBranch;
+	public String getBankAccountBankBranch() {
+		return bankAccountBankBranch;
 	}
 
 	/**
-	 * @param bankaccountBankBranch the bankaccountBankBranch to set
+	 * @param bankAccountBankBranch the bankAccountBankBranch to set
 	 */
-	public void setBankaccountBankBranch(String bankaccountBankBranch) {
-		this.bankaccountBankBranch = bankaccountBankBranch;
+	public void setBankAccountBankBranch(String bankAccountBankBranch) {
+		this.bankAccountBankBranch = bankAccountBankBranch;
 	}
 
 	/**
-	 * @return the bankaccountAccType
+	 * @return the bankAccountAccType
 	 */
-	public String getBankaccountAccType() {
-		return bankaccountAccType;
+	public String getBankAccountAccType() {
+		return bankAccountAccType;
 	}
 
 	/**
-	 * @param bankaccountAccType the bankaccountAccType to set
+	 * @param bankAccountAccType the bankAccountAccType to set
 	 */
-	public void setBankaccountAccType(String bankaccountAccType) {
-		this.bankaccountAccType = bankaccountAccType;
+	public void setBankAccountAccType(String bankAccountAccType) {
+		this.bankAccountAccType = bankAccountAccType;
 	}
 
 	/**
-	 * @return the bankaccountAccName
+	 * @return the bankAccountAccName
 	 */
-	public String getBankaccountAccName() {
-		return bankaccountAccName;
+	public String getBankAccountAccName() {
+		return bankAccountAccName;
 	}
 
 	/**
-	 * @param bankaccountAccName the bankaccountAccName to set
+	 * @param bankAccountAccName the bankAccountAccName to set
 	 */
-	public void setBankaccountAccName(String bankaccountAccName) {
-		this.bankaccountAccName = bankaccountAccName;
+	public void setBankAccountAccName(String bankAccountAccName) {
+		this.bankAccountAccName = bankAccountAccName;
 	}
 
 	/**
-	 * @return the bankaccountAccNo
+	 * @return the bankAccountAccNo
 	 */
-	public String getBankaccountAccNo() {
-		return bankaccountAccNo;
+	public String getBankAccountAccNo() {
+		return bankAccountAccNo;
 	}
 
 	/**
-	 * @param bankaccountAccNo the bankaccountAccNo to set
+	 * @param bankAccountAccNo the bankAccountAccNo to set
 	 */
-	public void setBankaccountAccNo(String bankaccountAccNo) {
-		this.bankaccountAccNo = bankaccountAccNo;
+	public void setBankAccountAccNo(String bankAccountAccNo) {
+		this.bankAccountAccNo = bankAccountAccNo;
 	}
 
 	/**
-	 * @return the bankaccountOpenPeriod
+	 * @return the bankAccountOpenPeriod
 	 */
-	public String getBankaccountOpenPeriod() {
-		return bankaccountOpenPeriod;
+	public String getBankAccountOpenPeriod() {
+		return bankAccountOpenPeriod;
 	}
 
 	/**
-	 * @param bankaccountOpenPeriod the bankaccountOpenPeriod to set
+	 * @param bankAccountOpenPeriod the bankAccountOpenPeriod to set
 	 */
-	public void setBankaccountOpenPeriod(String bankaccountOpenPeriod) {
-		this.bankaccountOpenPeriod = bankaccountOpenPeriod;
+	public void setBankAccountOpenPeriod(String bankAccountOpenPeriod) {
+		this.bankAccountOpenPeriod = bankAccountOpenPeriod;
 	}
 
 	/**
-	 * @return the bankaccountTmBalance
+	 * @return the bankAccountTMBalance
 	 */
-	public String getBankaccountTmBalance() {
-		return bankaccountTmBalance;
+	public String getBankAccountTMBalance() {
+		return bankAccountTMBalance;
 	}
 
 	/**
-	 * @param bankaccountTmBalance the bankaccountTmBalance to set
+	 * @param bankAccountTMBalance the bankAccountTMBalance to set
 	 */
-	public void setBankaccountTmBalance(String bankaccountTmBalance) {
-		this.bankaccountTmBalance = bankaccountTmBalance;
+	public void setBankAccountTMBalance(String bankAccountTMBalance) {
+		this.bankAccountTMBalance = bankAccountTMBalance;
 	}
 
 	/**
-	 * @return the bankaccountLmBalance
+	 * @return the bankAccountLMBalance
 	 */
-	public String getBankaccountLmBalance() {
-		return bankaccountLmBalance;
+	public String getBankAccountLMBalance() {
+		return bankAccountLMBalance;
 	}
 
 	/**
-	 * @param bankaccountLmBalance the bankaccountLmBalance to set
+	 * @param bankAccountLMBalance the bankAccountLMBalance to set
 	 */
-	public void setBankaccountLmBalance(String bankaccountLmBalance) {
-		this.bankaccountLmBalance = bankaccountLmBalance;
+	public void setBankAccountLMBalance(String bankAccountLMBalance) {
+		this.bankAccountLMBalance = bankAccountLMBalance;
 	}
 
 	/**
-	 * @return the loanaccountAccno
+	 * @return the loanAccountAccno
 	 */
-	public String getLoanaccountAccno() {
-		return loanaccountAccno;
+	public String getLoanAccountAccno() {
+		return loanAccountAccno;
 	}
 
 	/**
-	 * @param loanaccountAccno the loanaccountAccno to set
+	 * @param loanAccountAccno the loanAccountAccno to set
 	 */
-	public void setLoanaccountAccno(String loanaccountAccno) {
-		this.loanaccountAccno = loanaccountAccno;
+	public void setLoanAccountAccno(String loanAccountAccno) {
+		this.loanAccountAccno = loanAccountAccno;
 	}
 
 	/**
-	 * @return the loanaccountAcctype
+	 * @return the loanAccountAcctype
 	 */
-	public String getLoanaccountAcctype() {
-		return loanaccountAcctype;
+	public String getLoanAccountAcctype() {
+		return loanAccountAcctype;
 	}
 
 	/**
-	 * @param loanaccountAcctype the loanaccountAcctype to set
+	 * @param loanAccountAcctype the loanAccountAcctype to set
 	 */
-	public void setLoanaccountAcctype(String loanaccountAcctype) {
-		this.loanaccountAcctype = loanaccountAcctype;
+	public void setLoanAccountAcctype(String loanAccountAcctype) {
+		this.loanAccountAcctype = loanAccountAcctype;
 	}
 
 	/**
-	 * @return the loanaccountBank
+	 * @return the loanAccountBank
 	 */
-	public String getLoanaccountBank() {
-		return loanaccountBank;
+	public String getLoanAccountBank() {
+		return loanAccountBank;
 	}
 
 	/**
-	 * @param loanaccountBank the loanaccountBank to set
+	 * @param loanAccountBank the loanAccountBank to set
 	 */
-	public void setLoanaccountBank(String loanaccountBank) {
-		this.loanaccountBank = loanaccountBank;
+	public void setLoanAccountBank(String loanAccountBank) {
+		this.loanAccountBank = loanAccountBank;
 	}
 
 	/**
-	 * @return the loanaccountIssueDate
+	 * @return the loanAccountIssueDate
 	 */
-	public String getLoanaccountIssueDate() {
-		return loanaccountIssueDate;
+	public String getLoanAccountIssueDate() {
+		return loanAccountIssueDate;
 	}
 
 	/**
-	 * @param loanaccountIssueDate the loanaccountIssueDate to set
+	 * @param loanAccountIssueDate the loanAccountIssueDate to set
 	 */
-	public void setLoanaccountIssueDate(String loanaccountIssueDate) {
-		this.loanaccountIssueDate = loanaccountIssueDate;
+	public void setLoanAccountIssueDate(String loanAccountIssueDate) {
+		this.loanAccountIssueDate = loanAccountIssueDate;
 	}
 
 	/**
-	 * @return the loanaccountExpireDate
+	 * @return the loanAccountExpireDate
 	 */
-	public String getLoanaccountExpireDate() {
-		return loanaccountExpireDate;
+	public String getLoanAccountExpireDate() {
+		return loanAccountExpireDate;
 	}
 
 	/**
-	 * @param loanaccountExpireDate the loanaccountExpireDate to set
+	 * @param loanAccountExpireDate the loanAccountExpireDate to set
 	 */
-	public void setLoanaccountExpireDate(String loanaccountExpireDate) {
-		this.loanaccountExpireDate = loanaccountExpireDate;
+	public void setLoanAccountExpireDate(String loanAccountExpireDate) {
+		this.loanAccountExpireDate = loanAccountExpireDate;
 	}
 
 	/**
-	 * @return the loanaccountCreditLimit
+	 * @return the loanAccountCreditLimit
 	 */
-	public String getLoanaccountCreditLimit() {
-		return loanaccountCreditLimit;
+	public String getLoanAccountCreditLimit() {
+		return loanAccountCreditLimit;
 	}
 
 	/**
-	 * @param loanaccountCreditLimit the loanaccountCreditLimit to set
+	 * @param loanAccountCreditLimit the loanAccountCreditLimit to set
 	 */
-	public void setLoanaccountCreditLimit(String loanaccountCreditLimit) {
-		this.loanaccountCreditLimit = loanaccountCreditLimit;
+	public void setLoanAccountCreditLimit(String loanAccountCreditLimit) {
+		this.loanAccountCreditLimit = loanAccountCreditLimit;
 	}
 
 	/**
-	 * @return the loanaccountPaymentMethod
+	 * @return the loanAccountPaymentMethod
 	 */
-	public String getLoanaccountPaymentMethod() {
-		return loanaccountPaymentMethod;
+	public String getLoanAccountPaymentMethod() {
+		return loanAccountPaymentMethod;
 	}
 
 	/**
-	 * @param loanaccountPaymentMethod the loanaccountPaymentMethod to set
+	 * @param loanAccountPaymentMethod the loanAccountPaymentMethod to set
 	 */
-	public void setLoanaccountPaymentMethod(String loanaccountPaymentMethod) {
-		this.loanaccountPaymentMethod = loanaccountPaymentMethod;
+	public void setLoanAccountPaymentMethod(String loanAccountPaymentMethod) {
+		this.loanAccountPaymentMethod = loanAccountPaymentMethod;
 	}
 
 	/**
-	 * @return the loanaccountInstallment
+	 * @return the loanAccountInstallment
 	 */
-	public String getLoanaccountInstallment() {
-		return loanaccountInstallment;
+	public String getLoanAccountInstallment() {
+		return loanAccountInstallment;
 	}
 
 	/**
-	 * @param loanaccountInstallment the loanaccountInstallment to set
+	 * @param loanAccountInstallment the loanAccountInstallment to set
 	 */
-	public void setLoanaccountInstallment(String loanaccountInstallment) {
-		this.loanaccountInstallment = loanaccountInstallment;
+	public void setLoanAccountInstallment(String loanAccountInstallment) {
+		this.loanAccountInstallment = loanAccountInstallment;
 	}
 
 	/**
@@ -1877,115 +1908,115 @@ public class ApplicationBean implements Serializable {
 	}
 
 	/**
-	 * @return the transferloanAccName
+	 * @return the transferLoanAccName
 	 */
-	public String getTransferloanAccName() {
-		return transferloanAccName;
+	public String getTransferLoanAccName() {
+		return transferLoanAccName;
 	}
 
 	/**
-	 * @param transferloanAccName the transferloanAccName to set
+	 * @param transferLoanAccName the transferLoanAccName to set
 	 */
-	public void setTransferloanAccName(String transferloanAccName) {
-		this.transferloanAccName = transferloanAccName;
+	public void setTransferLoanAccName(String transferLoanAccName) {
+		this.transferLoanAccName = transferLoanAccName;
 	}
 
 	/**
-	 * @return the transferloanAccNo
+	 * @return the transferLoanAccNo
 	 */
-	public String getTransferloanAccNo() {
-		return transferloanAccNo;
+	public String getTransferLoanAccNo() {
+		return transferLoanAccNo;
 	}
 
 	/**
-	 * @param transferloanAccNo the transferloanAccNo to set
+	 * @param transferLoanAccNo the transferLoanAccNo to set
 	 */
-	public void setTransferloanAccNo(String transferloanAccNo) {
-		this.transferloanAccNo = transferloanAccNo;
+	public void setTransferLoanAccNo(String transferLoanAccNo) {
+		this.transferLoanAccNo = transferLoanAccNo;
 	}
 
 	/**
-	 * @return the transferloanAccType
+	 * @return the transferLoanAccType
 	 */
-	public String getTransferloanAccType() {
-		return transferloanAccType;
+	public String getTransferLoanAccType() {
+		return transferLoanAccType;
 	}
 
 	/**
-	 * @param transferloanAccType the transferloanAccType to set
+	 * @param transferLoanAccType the transferLoanAccType to set
 	 */
-	public void setTransferloanAccType(String transferloanAccType) {
-		this.transferloanAccType = transferloanAccType;
+	public void setTransferLoanAccType(String transferLoanAccType) {
+		this.transferLoanAccType = transferLoanAccType;
 	}
 
 	/**
-	 * @return the transferloanBank
+	 * @return the transferLoanBank
 	 */
-	public String getTransferloanBank() {
-		return transferloanBank;
+	public String getTransferLoanBank() {
+		return transferLoanBank;
 	}
 
 	/**
-	 * @param transferloanBank the transferloanBank to set
+	 * @param transferLoanBank the transferLoanBank to set
 	 */
-	public void setTransferloanBank(String transferloanBank) {
-		this.transferloanBank = transferloanBank;
+	public void setTransferLoanBank(String transferLoanBank) {
+		this.transferLoanBank = transferLoanBank;
 	}
 
 	/**
-	 * @return the paymentmethodValue
+	 * @return the paymentMethodValue
 	 */
-	public String getPaymentmethodValue() {
-		return paymentmethodValue;
+	public String getPaymentMethodValue() {
+		return paymentMethodValue;
 	}
 
 	/**
-	 * @param paymentmethodValue the paymentmethodValue to set
+	 * @param paymentMethodValue the paymentMethodValue to set
 	 */
-	public void setPaymentmethodValue(String paymentmethodValue) {
-		this.paymentmethodValue = paymentmethodValue;
+	public void setPaymentMethodValue(String paymentMethodValue) {
+		this.paymentMethodValue = paymentMethodValue;
 	}
 
 	/**
-	 * @return the paymentmethodAccName
+	 * @return the paymentMethodAccName
 	 */
-	public String getPaymentmethodAccName() {
-		return paymentmethodAccName;
+	public String getPaymentMethodAccName() {
+		return paymentMethodAccName;
 	}
 
 	/**
-	 * @param paymentmethodAccName the paymentmethodAccName to set
+	 * @param paymentMethodAccName the paymentMethodAccName to set
 	 */
-	public void setPaymentmethodAccName(String paymentmethodAccName) {
-		this.paymentmethodAccName = paymentmethodAccName;
+	public void setPaymentMethodAccName(String paymentMethodAccName) {
+		this.paymentMethodAccName = paymentMethodAccName;
 	}
 
 	/**
-	 * @return the paymentmethodAccNo
+	 * @return the paymentMethodAccNo
 	 */
-	public String getPaymentmethodAccNo() {
-		return paymentmethodAccNo;
+	public String getPaymentMethodAccNo() {
+		return paymentMethodAccNo;
 	}
 
 	/**
-	 * @param paymentmethodAccNo the paymentmethodAccNo to set
+	 * @param paymentMethodAccNo the paymentMethodAccNo to set
 	 */
-	public void setPaymentmethodAccNo(String paymentmethodAccNo) {
-		this.paymentmethodAccNo = paymentmethodAccNo;
+	public void setPaymentMethodAccNo(String paymentMethodAccNo) {
+		this.paymentMethodAccNo = paymentMethodAccNo;
 	}
 
 	/**
-	 * @return the paymentmethodBank
+	 * @return the paymentMethodBank
 	 */
-	public String getPaymentmethodBank() {
-		return paymentmethodBank;
+	public String getPaymentMethodBank() {
+		return paymentMethodBank;
 	}
 
 	/**
-	 * @param paymentmethodBank the paymentmethodBank to set
+	 * @param paymentMethodBank the paymentMethodBank to set
 	 */
-	public void setPaymentmethodBank(String paymentmethodBank) {
-		this.paymentmethodBank = paymentmethodBank;
+	public void setPaymentMethodBank(String paymentMethodBank) {
+		this.paymentMethodBank = paymentMethodBank;
 	}
 
 }
